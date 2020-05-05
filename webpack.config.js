@@ -8,7 +8,7 @@ const { env } = process;
 
 const options = {
   mode: env.NODE_ENV,
-  entry: './src/index.js',
+  entry: './src/app/index.js',
   output: {
     filename: '[name].js'
   },
@@ -53,7 +53,9 @@ const options = {
     new HtmlWebpackPlugin()
   ],
   devServer: {
-    hot: true
+    hot: true,
+	proxy: {
+	}
   },
   devtool: env.NODE_ENV === 'development' ? 'cheap-module-eval-source-map' : undefined
 };

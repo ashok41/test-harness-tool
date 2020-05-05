@@ -1,0 +1,53 @@
+{
+   "testDataList":[
+      {
+         "testCase":"Age Less than 25 and Greater than 16",
+         "project":"Lending",
+         "startTime":"4/11/2019 11:17:00 AM",
+         "duration":"00:00:01",
+         "status":"Passed"
+      
+},
+      {
+         "testCase":"Age Less than 40 and Greater than 25",
+         "project":"Lending",
+         "startTime":"4/11/2019 11:17:00 AM",
+         "duration":"00:00:01",
+         "status":"Passed"
+      
+},
+      {
+         "testCase":"Age Less than 200 and Greater than 66",
+         "project":"Lending",
+         "startTime":"4/11/2019 11:17:00 AM",
+         "duration":"00:00:02",
+         "status":"Passed"
+      
+},
+      {
+         "testCase":"Age Less than 50 and Greater than 36",
+         "project":"Lending",
+         "startTime":"4/11/2019 11:17:00 AM",
+         "duration":"00:00:03",
+         "status":"Failed"
+      
+},
+      {
+         "testCase":"Age Less than 50 and Greater than 36",
+         "project":"Lending",
+         "startTime":"4/11/2019 11:17:00 AM",
+         "duration":"00:00:02",
+         "status":"Failed"
+      
+}
+   
+],
+   "testCasesRun":5,
+   "failed":2,
+   "failedPercent":40,
+   "warningPercent":0,
+   "warnings":0,
+   "passed":3,
+   "passedPercent":60,
+   "expectedDuration":"00:00:09"
+}
