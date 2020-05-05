@@ -3,7 +3,7 @@ import axios from 'axios';
 import TestLog from './components/testlog'
 import styles from './reports.scss'
 
-function RoutingPage() {
+function Reports() {
   const reportsRef = useRef()
   useEffect(() => {
 	axios.get('reports.json').then((response) => {
@@ -20,5 +20,5 @@ function RoutingPage() {
   );
 }
 
-export default RoutingPage
+export default Reports
 ;

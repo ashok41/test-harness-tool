@@ -4,6 +4,8 @@ import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 import Reports from '../test-harness-tool/reports'
 import Dashboard from '../test-harness-tool/dashboard'
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 render((
  <Router>
    <div>
