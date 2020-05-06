@@ -1,3 +1,32 @@
 .log-wrapper svg {
   display:inherit;
 }
+.log-container {
+	display: flex;
+	ul {
+		padding: 0px;
+		margin: 0px;
+	}
+	ul > li {
+		display: inline-block;
+		list-style-type: none;
+		padding-right: 15px;
+	}
+	i {
+	  background: #000;
+      height: 10px;
+	  width: 10px;
+      border-radius: 50%;
+	  display: inline-block;
+	  margin-right: 0.3em;
+	}
+}
+.log-lables {
+	padding: 28px 0px 0 10px;
+	span {
+		font-weight: bold;
+	}
+	.pad-bottom {
+		padding-bottom: 5px !important;
+	}
+}

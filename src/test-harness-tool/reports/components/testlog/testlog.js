@@ -1,17 +1,20 @@
 import React, { useRef } from 'react';
+import { Container, Row, Col, Card, ListGroup, Form, Button } from 'react-bootstrap'
 import * as d3 from 'd3';
 import styles from './testlog.scss'
 
-const TestLog = () => {
+function createCasesList(data) {
+	return data.map((item, index) => (
+		<li key={index}><i style={{backgroundColor:item.color}} />{item.cases}: <span>{item.count}</span></li>
+	))
+}
+
+const TestLog = (props) => {
+  const { testCasesRun, expectedDuration, logData } = props
   const logRef = useRef()
   const drawLog = () => {
-	const logData = [
-		{ "region": "North", "count": "53245"},
-		{ "region": "South", "count": "28479"},
-		{ "region": "East", "count": "19697"},
-	]
-	const width = 300;
-    const height = 300;
+	const width = 150;
+    const height = 150;
     const radius = Math.min(width, height) / 2;
 
     const svg = d3.select(logRef.current)
@@ -21,11 +24,14 @@ const TestLog = () => {
         .append("g")
             .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-    const color = d3.scaleOrdinal(["#66c2a5","#fc8d62","#8da0cb",
-         "#e78ac3","#a6d854","#ffd92f"]);
+	const casesColor = logData.reduce(function (accumulator, currentValue) {
+		return accumulator.concat(currentValue.color)
+	}, [])
+	
+    const color = d3.scaleOrdinal(casesColor);
 
     const pie = d3.pie()
-        .value(d => d.count)
+        .value(d => d.percent)
         .sort(null);
 
     const arc = d3.arc()
@@ -58,8 +64,17 @@ const TestLog = () => {
 	},10)
   return (
     <div>
-      <div className={styles.logWrapper} ref={logRef} />
-	  <div>TestLog_Javascript</div>
+	  <div className={styles.logContainer}>
+		<div className={styles.logWrapper} ref={logRef} />
+		<div className={styles.logLables}>
+		  <div className={styles.padBottom}><span>TestLog_Javascript</span></div>
+		  <ul className={styles.padBottom}>
+			<li><i />Test Cases Run: <span>{testCasesRun}</span></li>
+			{createCasesList(logData)}
+		  </ul>
+		  <div>Execution duration: <span>{expectedDuration}</span></div>
+		</div>
+	  </div>
 	</div>
   );
 }

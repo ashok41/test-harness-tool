@@ -1,0 +1,23 @@
+.container {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.section {
+  margin: 20px 0;
+  span { 
+	font-weight: bold;
+  }
+}
+.box {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px;
+}
+.button-alignment {
+	display: block !important;
+	margin-bottom: 5px;
+}
+.pad-bottom {
+	padding-bottom: 10px;
+}

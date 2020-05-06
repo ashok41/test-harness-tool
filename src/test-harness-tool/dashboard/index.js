@@ -1,8 +1,10 @@
 import React from 'react';
 import { Container, Row, Col, Card, ListGroup, Form, Button } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 import styles from './dashboard.scss'
 
 function Dashboard() {
+  const history = useHistory()
   return (
     <Container className={styles.container}>
       <Row className={styles.header}>
@@ -53,7 +55,10 @@ function Dashboard() {
                 </Form.Control>
               </Form.Group>
               <Button variant="danger">Reset</Button>{' '}
-              <Button variant="primary" href="#/reports">Submit</Button>
+              <Button variant="primary" onClick={() => history.push({
+					pathname: '/rules-processing',
+					state: 'test-data'
+			  })}>Next</Button>
             </Form>
             </Card.Body>
           </Card>
