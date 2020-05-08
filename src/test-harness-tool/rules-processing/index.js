@@ -1,19 +1,17 @@
 import React from 'react';
 import { Container } from 'react-bootstrap'
-import { useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import TestData from './components/test-data'
 import ServiceRequest from './components/service-request'
 import styles from './rules-processing.scss'
 
 function RulesProcessing() {
-  const location = useLocation()
-  const { state } = location
+  const params = useParams()
+  const { slug } = params
   return (
     <Container className={styles.container}>
-	 {state === 'test-data' &&
-		<TestData />}
-	  {state === 'service-request' &&
-	  <ServiceRequest />}
+	 {slug === 'test-data' && <TestData />}
+     {slug === 'service-request' && <ServiceRequest />}
     </Container>
   );
 }

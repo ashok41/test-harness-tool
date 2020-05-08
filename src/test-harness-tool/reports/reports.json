@@ -39,15 +39,31 @@
          "duration":"00:00:02",
          "status":"Failed"
       
+},
+      {
+         "testCase":"Age Less than 50 and Greater than 36",
+         "project":"Lending",
+         "startTime":"4/11/2019 11:17:00 AM",
+         "duration":"00:00:02",
+         "status":"Skipped"
+      
+},
+      {
+         "testCase":"Age Less than 50 and Greater than 36",
+         "project":"Lending",
+         "startTime":"4/11/2019 11:17:00 AM",
+         "duration":"00:00:02",
+         "status":"Not Completed"
+      
 }
    
 ],
    "testCasesRun":5,
    "failed":2,
-   "failedPercent":40,
-   "warningPercent":0,
-   "warnings":0,
+   "warnings":2,
    "passed":3,
+   "failedPercent":20,
+   "warningPercent":20,   
    "passedPercent":60,
    "expectedDuration":"00:00:09"
 }

@@ -13,7 +13,7 @@ render((
 	 <Switch>
 	   <Route path="/reports" component={Reports}/>
 	   <Route exact path="/" component={Dashboard}/>
-	   <Route path="/rules-processing" component={RulesProcessing}/>
+	   <Route path="/rules-processing/:slug" component={RulesProcessing}/>
 	 </Switch>
    </div>
  </Router>

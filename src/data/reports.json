@@ -60,10 +60,10 @@
 ],
    "testCasesRun":5,
    "failed":2,
-   "warnings":0,
+   "warnings":2,
    "passed":3,
-   "failedPercent":40,
-   "warningPercent":0,   
+   "failedPercent":20,
+   "warningPercent":20,   
    "passedPercent":60,
    "expectedDuration":"00:00:09"
 }

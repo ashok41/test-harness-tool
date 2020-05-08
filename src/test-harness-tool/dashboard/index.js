@@ -56,8 +56,7 @@ function Dashboard() {
               </Form.Group>
               <Button variant="danger">Reset</Button>{' '}
               <Button variant="primary" onClick={() => history.push({
-					pathname: '/rules-processing',
-					state: 'test-data'
+					pathname: '/rules-processing/test-data'
 			  })}>Next</Button>
             </Form>
             </Card.Body>

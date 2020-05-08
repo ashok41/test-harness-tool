@@ -18,9 +18,14 @@ function ControlledTabs(props) {
   if (data.length === 3) {
 	data.unshift({ "color": "#000000", "cases": "Total executed", "count": testCasesRun})
   }
+  const statusList = ['Skipped', 'Not Completed']
   const [key, setKey] = useState(data[0].cases);
   const filteredData = testDataList.filter(function (item) {
-	return key === "Total executed" ? item : item.status === key
+	let status = item.status
+	if (statusList.indexOf(item.status) !== -1) {
+		status = 'Warnings'
+	}
+	return key === "Total executed" ? item : status === key
   })
   return (
     <Tabs
