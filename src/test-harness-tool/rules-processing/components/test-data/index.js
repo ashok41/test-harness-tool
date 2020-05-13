@@ -1,10 +1,39 @@
-import React from 'react';
-import { Row, Col, Button } from 'react-bootstrap'
+import React, {useEffect, useState} from 'react';
+import { Row, Col, Button, Table, Spinner } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
+import axios from 'axios'
 import styles from './test-data.scss'
 
 function TestData() {
+  
   const history = useHistory()
+  const data = [{
+	  "id": "10000",
+	  "barrowAmount": "10000",
+	  "riskFactor": 3,
+	  "termFactor": 12
+  },
+  {
+	  "id": "10001",
+	  "barrowAmount": "10000",
+	  "riskFactor": 3,
+	  "termFactor": 12
+  },
+  {
+	  "id": "10002",
+	  "barrowAmount": "10000",
+	  "riskFactor": 3,
+	  "termFactor": 12
+  }]
+  
+  const [state, setState] = useState([])
+  
+  useEffect(() => {
+	  axios.get('http://dummy.restapiexample.com/api/v1/employees')
+	  .then((response) => {
+		  setState(data)
+	  })
+  }, [])
   return (
     <>
 	  <Row>
@@ -14,6 +43,37 @@ function TestData() {
 		</Col>
 		<Col md="6">
 		  <div className={styles.box}>From Screen 1 - Capture the uploadedtest data in Excel & Allow user to view thesame data in UI Grid  which is Editable /Selectable for Service execution</div>
+		</Col>
+	  </Row>
+	  <Row className={styles.padTop}>
+	    <Col md="12">
+		  <Table responsive>
+			  <thead>
+				<tr>
+				  <th>ID</th>
+				  <th>Barrow Amount</th>
+				  <th>Risk Factor</th>
+				  <th>Term Factor</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				{state.map((item) => (
+				  <tr>
+					<td>{item.id}</td>
+					<td>{item.barrowAmount}</td>
+					<td>{item.riskFactor}</td>
+					<td>{item.termFactor}</td>
+				  </tr>
+				))}
+			  </tbody>
+		  </Table>
+		  {state.length === 0 &&
+			<div className={styles.centerOne}>
+				<Spinner animation="border" role="status">
+				  <span className="sr-only">Loading...</span>
+				</Spinner>
+			</div>
+		   }
 		</Col>
 	  </Row>
 	  <Row className={styles.section}>

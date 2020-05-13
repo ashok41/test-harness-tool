@@ -1,10 +1,61 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Container, Row, Col, Card, ListGroup, Form, Button } from 'react-bootstrap'
+import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import styles from './dashboard.scss'
 
 function Dashboard() {
   const history = useHistory()
+  
+  const [state, setState] = useState({rules: '', labels:[]})
+  
+  function handleSubmit(e) {
+	  e.preventDefault();
+	  console.log('state', state)
+	  buildJSON(state.labels)
+	  history.push({
+		pathname: '/rules-processing/test-data',
+		state: state
+	  })
+  }
+  
+  function buildJSON(labels) {
+	  const data = [
+		{barrowAmount: 1000, riskFactor: 4, termFactor: 34},
+		{barrowAmount: 4999, riskFactor: 4, termFactor: 58},
+		{barrowAmount: 30001, riskFactor: 1, termFactor: 119}
+	  ]
+	  let newData = []
+	  data.forEach((item) => {
+		const newObj = {}
+		labels.forEach((key) => {
+		  newObj[key] = item[key]
+		})
+		newData.push(newObj)
+	  })
+	  const postData = {"inputList": newData}
+	  axios.post('', postData)
+  }
+  
+  function checkLables(value) {
+	  const labels = state.labels
+	  const isLabled = labels.findIndex((item) => ( item === value ))
+	  if (isLabled !== -1) {
+		labels.splice(isLabled, 1)
+	  } else {
+		labels.push(value)
+	  }
+	  return labels
+  }
+  
+  function onSelectedSingleOptionChange(e) {
+	  setState({...state, rules: e.target.value})
+  }
+  
+  function onSelectedOptionsChange(e) {
+	  const data = checkLables(e.target.value)
+	  setState({...state, labels: data})
+  }
   return (
     <Container className={styles.container}>
       <Row className={styles.header}>
@@ -48,16 +99,22 @@ function Dashboard() {
 
               <Form.Group controlId="businessRules">
                 <Form.Label>Select Type of Business Rules</Form.Label>
-                <Form.Control as="select">
-                  <option>BB</option>
-                  <option>CB</option>
-                  <option>OD</option>
+                <Form.Control as="select" value={state.rules} onChange={onSelectedSingleOptionChange}>
+                  <option value="BB">BB</option>
+                  <option value="CB">CB</option>
+                  <option value="OD">OD</option>
+                </Form.Control>
+              </Form.Group>
+			  <Form.Group controlId="labels">
+                <Form.Label>Select Type of Lables</Form.Label>
+                <Form.Control as="select" multiple value={state.labels} onChange={onSelectedOptionsChange}>
+                  <option value="barrowAmount">Borrowing Amount</option>
+                  <option value="termFactor">Term (Months)</option>
+                  <option value="riskFactor">Risk Band</option>
                 </Form.Control>
               </Form.Group>
               <Button variant="danger">Reset</Button>{' '}
-              <Button variant="primary" onClick={() => history.push({
-					pathname: '/rules-processing/test-data'
-			  })}>Next</Button>
+              <Button variant="primary" onClick={handleSubmit}>Next</Button>
             </Form>
             </Card.Body>
           </Card>
