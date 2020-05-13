@@ -11,12 +11,7 @@ function Dashboard() {
   
   function handleSubmit(e) {
 	  e.preventDefault();
-	  console.log('state', state)
 	  buildJSON(state.labels)
-	  history.push({
-		pathname: '/rules-processing/test-data',
-		state: state
-	  })
   }
   
   function buildJSON(labels) {
@@ -34,7 +29,14 @@ function Dashboard() {
 		newData.push(newObj)
 	  })
 	  const postData = {"inputList": newData}
-	  axios.post('', postData)
+	  axios.post('http://localhost:8081', postData)
+	  .then((response) => {
+		  const { data } = response
+		  history.push({
+			pathname: '/rules-processing/test-data',
+			state: data
+		  })
+	  })
   }
   
   function checkLables(value) {

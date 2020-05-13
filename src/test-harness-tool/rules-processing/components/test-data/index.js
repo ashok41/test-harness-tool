@@ -1,39 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import { Row, Col, Button, Table, Spinner } from 'react-bootstrap'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import styles from './test-data.scss'
 
 function TestData() {
   
   const history = useHistory()
-  const data = [{
-	  "id": "10000",
-	  "barrowAmount": "10000",
-	  "riskFactor": 3,
-	  "termFactor": 12
-  },
-  {
-	  "id": "10001",
-	  "barrowAmount": "10000",
-	  "riskFactor": 3,
-	  "termFactor": 12
-  },
-  {
-	  "id": "10002",
-	  "barrowAmount": "10000",
-	  "riskFactor": 3,
-	  "termFactor": 12
-  }]
-  
-  const [state, setState] = useState([])
-  
-  useEffect(() => {
-	  axios.get('http://dummy.restapiexample.com/api/v1/employees')
-	  .then((response) => {
-		  setState(data)
-	  })
-  }, [])
+  const location = useLocation()
+  const {state} = location
+    
   return (
     <>
 	  <Row>
