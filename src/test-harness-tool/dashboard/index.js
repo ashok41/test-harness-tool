@@ -12,10 +12,10 @@ function Dashboard() {
   
   function handleSubmit(e) {
 	  e.preventDefault();
-	  // validation(state)
-	  //if (error === '') {
+	  validation(state)
+	  if (error === '') {
 		buildJSON(state)
-	  //}
+	  }
   }
   
   function validation(forms) {
@@ -84,7 +84,7 @@ function Dashboard() {
       </Row>
       <Row className={styles.section}>
         <Col md="4">
-          <Card bg="light" text="dark">
+          <Card>
             <Card.Header>Pricing Tool Menu</Card.Header>
             <Card.Body>
               <ListGroup defaultActiveKey="#/">
@@ -104,30 +104,27 @@ function Dashboard() {
 			  {error}
 		    </Alert>
 		  }
-          <Card bg="light" text="dark">
+          <Card>
             <Card.Header>Form 1</Card.Header>
             <Card.Body>
             <Form>
-              <Form.Group controlId="barrowAmount">
-				<Form.Label>Borrowing Amount Amount</Form.Label>
-				<Form.Control type="text" required value={state.borrowingAmountAmount} onChange={onTextUpdated('borrowingAmountAmount')} />
-				<Form.Text className="text-muted">
-				  1000,2000,3000
-				</Form.Text>
+              <Form.Group as={Row} controlId="barrowAmount">
+				<Form.Label column sm="3">Borrowing Amount</Form.Label>
+				<Col sm="9">
+				  <Form.Control type="text" required placeholder="1000,2000,3000" value={state.borrowingAmountAmount} onChange={onTextUpdated('borrowingAmountAmount')} />
+				</Col>
 		      </Form.Group>
-			  <Form.Group controlId="riskFactor">
-				<Form.Label>Risk Band</Form.Label>
-				<Form.Control type="text" required value={state.riskBand} onChange={onTextUpdated('riskBand')} />
-				<Form.Text className="text-muted">
-				  1,2,3
-				</Form.Text>
+			  <Form.Group as={Row} controlId="riskFactor">
+				<Form.Label column sm="3">Risk Band</Form.Label>
+				<Col sm="9">
+				  <Form.Control type="text" required placeholder="1,2,3" value={state.riskBand} onChange={onTextUpdated('riskBand')} />
+				</Col>
 			  </Form.Group>
-			  <Form.Group controlId="termFactor">
-				<Form.Label>Term (Months)</Form.Label>
-				<Form.Control type="text" required value={state.term} onChange={onTextUpdated('term')} />
-				<Form.Text className="text-muted">
-				  34,54,119
-				</Form.Text>
+			  <Form.Group as={Row} controlId="termFactor">
+				<Form.Label column sm="3">Term (Months)</Form.Label>
+				<Col sm="9">
+				  <Form.Control type="text" required placeholder="34,54,119" value={state.term} onChange={onTextUpdated('term')} />
+				</Col>
 			  </Form.Group>
               <Button variant="danger">Reset</Button>{' '}
               <Button variant="primary" onClick={handleSubmit}>Next</Button>
