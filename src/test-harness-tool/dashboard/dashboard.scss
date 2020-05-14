@@ -41,3 +41,15 @@ body {
 :global(.card-header:first-child) {
 	border-radius: 0px !important
 }
+:global(.list-group-item.active) {
+	background-color: #005093 !important;
+    border-color: #005093 !important;
+	color: #fff !important;
+}
+:global(.list-group-item) {
+	color: #005093 !important;
+}
+:global(.btn-primary) {
+	background-color: #005093 !important;
+    border-color: #005093 !important;
+}
