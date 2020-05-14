@@ -31,7 +31,7 @@ function Dashboard() {
 		  newData.push(newObj)
 	  })
 	  const postData = {"inputList": newData}
-	  axios.post('http://localhost:8081', postData)
+	  axios.post('http://localhost:8081/testCases', postData)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
