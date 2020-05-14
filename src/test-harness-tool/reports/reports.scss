@@ -9,9 +9,17 @@ body {
 .header {
   border-bottom: 1px solid #ccc;
   padding: 20px 0;
+  background-color: #4e73df;
+}
+.header-txt{
+  text-align: left;
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+  padding-top: 10px;
 }
 .footer {
-  background-color: #231f20;
+  background-color: #4e73df;
   height: 50px;
   color: #fff;
   padding-top: 10px;

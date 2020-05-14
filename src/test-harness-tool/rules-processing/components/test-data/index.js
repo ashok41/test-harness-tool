@@ -23,7 +23,7 @@ function TestData() {
 	  </Row>
 	  <Row className={styles.padTop}>
 	    <Col md="12">
-		  <Table responsive>
+		  <Table responsive striped bordered hover>
 			  <thead>
 				<tr>
 				  <th>ID</th>

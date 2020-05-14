@@ -70,13 +70,13 @@ function Dashboard() {
   return (
     <Container className={styles.container}>
       <Row className={styles.header}>
-        <Col xs="6">
+        <Col xs="4">
           <img src="https://www.mphasis.com/content/dam/mphasis-com/global/logo/logo.png" alt="mphasis logo" title="mphasis logo"/>
         </Col>
-        <Col xs="6" className={styles.headerTxt}>Test Harness Tool</Col>
+        <Col xs="8" className={styles.headerTxt}>Test Harness Tool</Col>
       </Row>
       <Row className={styles.section}>
-        <Col md="4">
+        <Col md="4" className={styles.colRounded}>
           <Card>
             <Card.Header>Pricing Tool Menu</Card.Header>
             <Card.Body>
@@ -91,7 +91,7 @@ function Dashboard() {
             </Card.Body>
           </Card>
         </Col>
-        <Col md="8">
+        <Col md="8" className={styles.colRounded}>
 		  {error &&
 		    <Alert key="1" variant="danger">
 			  {error}
