@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Container, Row, Col, Card, ListGroup, Form, Button } from 'react-bootstrap'
+import { Container, Row, Col, Card, ListGroup, Form, Button, Alert } from 'react-bootstrap'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import styles from './dashboard.scss'
@@ -7,30 +7,42 @@ import styles from './dashboard.scss'
 function Dashboard() {
   const history = useHistory()
   
-  const [state, setState] = useState({barrowAmount: '', riskFactor:'', termFactor: ''})
+  const [state, setState] = useState({borrowingAmount: '', riskBand:'', term: ''})
+  const [error, setError] = useState('')
   
   function handleSubmit(e) {
 	  e.preventDefault();
-	  buildJSON(state)
+	  // validation(state)
+	  //if (error === '') {
+		buildJSON(state)
+	  //}
   }
   
   function validation(forms) {
-	 
+	const errors = {borrowingAmount: '', riskBand: '', term: ''}
+	if (forms.borrowingAmount.value !== '') {
+		errors.borrowingAmount = 'Please enter borrowing amount';
+	}
+	else if (forms.riskBand.value !== '') {
+		errors.riskBand = 'Please enter risk band';
+	}
+	else if (forms.term.value !== '') {
+		errors.term = 'Please enter t (months)';
+	}
   }
   
   function buildJSON(forms) {
-	  const barrowAmount = forms.barrowAmount.split(',');
-	  const riskFactor = forms.riskFactor.split(',');
-	  const termFactor = forms.termFactor.split(',');
-	  let newData = []
-	  barrowAmount.forEach((item, index) => {
-		  const newObj = {}
-		  newObj['barrowAmount'] = item;
-		  newObj['riskFactor'] = riskFactor[index];
-		  newObj['termFactor'] = termFactor[index];
-		  newData.push(newObj)
+	  const borrowingAmount = forms.borrowingAmount.split(',');
+	  const riskBand = forms.riskBand.split(',');
+	  const term = forms.term.split(',');
+	  let postData = [];
+	  borrowingAmount.forEach((item, index) => {
+		  const lists = {}
+		  lists['barrowAmount'] = item;
+		  lists['riskFactor'] = riskBand[index];
+		  lists['termFactor'] = term[index];
+		  postData.push(lists)
 	  })
-	  const postData = {"inputList": newData}
 	  axios.post('http://localhost:8081/testCases', postData)
 	  .then((response) => {
 		  const { data } = response
@@ -87,27 +99,32 @@ function Dashboard() {
           </Card>
         </Col>
         <Col md="8">
+		  {error &&
+		    <Alert key="1" variant="danger">
+			  {error}
+		    </Alert>
+		  }
           <Card bg="light" text="dark">
             <Card.Header>Form 1</Card.Header>
             <Card.Body>
             <Form>
               <Form.Group controlId="barrowAmount">
-				<Form.Label>Barrow Amount</Form.Label>
-				<Form.Control type="text" required value={state.barrowAmount} pattern='[0-9\,]+' onChange={onTextUpdated('barrowAmount')} />
+				<Form.Label>Borrowing Amount Amount</Form.Label>
+				<Form.Control type="text" required value={state.borrowingAmountAmount} onChange={onTextUpdated('borrowingAmountAmount')} />
 				<Form.Text className="text-muted">
 				  1000,2000,3000
 				</Form.Text>
 		      </Form.Group>
 			  <Form.Group controlId="riskFactor">
-				<Form.Label>Risk Factor</Form.Label>
-				<Form.Control type="text" required value={state.riskFactor} onChange={onTextUpdated('riskFactor')} />
+				<Form.Label>Risk Band</Form.Label>
+				<Form.Control type="text" required value={state.riskBand} onChange={onTextUpdated('riskBand')} />
 				<Form.Text className="text-muted">
 				  1,2,3
 				</Form.Text>
 			  </Form.Group>
 			  <Form.Group controlId="termFactor">
-				<Form.Label>Term Factor</Form.Label>
-				<Form.Control type="text" required value={state.termFactor} onChange={onTextUpdated('termFactor')} />
+				<Form.Label>Term (Months)</Form.Label>
+				<Form.Control type="text" required value={state.term} onChange={onTextUpdated('term')} />
 				<Form.Text className="text-muted">
 				  34,54,119
 				</Form.Text>
