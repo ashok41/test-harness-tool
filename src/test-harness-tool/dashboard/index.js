@@ -7,26 +7,28 @@ import styles from './dashboard.scss'
 function Dashboard() {
   const history = useHistory()
   
-  const [state, setState] = useState({rules: '', labels:[]})
+  const [state, setState] = useState({barrowAmount: '', riskFactor:'', termFactor: ''})
   
   function handleSubmit(e) {
 	  e.preventDefault();
-	  buildJSON(state.labels)
+	  buildJSON(state)
   }
   
-  function buildJSON(labels) {
-	  const data = [
-		{barrowAmount: 1000, riskFactor: 4, termFactor: 34},
-		{barrowAmount: 4999, riskFactor: 4, termFactor: 58},
-		{barrowAmount: 30001, riskFactor: 1, termFactor: 119}
-	  ]
+  function validation(forms) {
+	 
+  }
+  
+  function buildJSON(forms) {
+	  const barrowAmount = forms.barrowAmount.split(',');
+	  const riskFactor = forms.riskFactor.split(',');
+	  const termFactor = forms.termFactor.split(',');
 	  let newData = []
-	  data.forEach((item) => {
-		const newObj = {}
-		labels.forEach((key) => {
-		  newObj[key] = item[key]
-		})
-		newData.push(newObj)
+	  barrowAmount.forEach((item, index) => {
+		  const newObj = {}
+		  newObj['barrowAmount'] = item;
+		  newObj['riskFactor'] = riskFactor[index];
+		  newObj['termFactor'] = termFactor[index];
+		  newData.push(newObj)
 	  })
 	  const postData = {"inputList": newData}
 	  axios.post('http://localhost:8081', postData)
@@ -50,14 +52,16 @@ function Dashboard() {
 	  return labels
   }
   
-  function onSelectedSingleOptionChange(e) {
-	  setState({...state, rules: e.target.value})
+  const onTextUpdated = (label) => (e) => {
+	  const data = e.target.value;
+	  const checkCommas = data.split(',')
+	  const totCommas = checkCommas.length
+	  const regex = /^[\d\,]+$/g
+	  if (regex.test(data) && totCommas <= 3) {
+	    setState({...state, [label]: data})
+	  }
   }
   
-  function onSelectedOptionsChange(e) {
-	  const data = checkLables(e.target.value)
-	  setState({...state, labels: data})
-  }
   return (
     <Container className={styles.container}>
       <Row className={styles.header}>
@@ -87,34 +91,27 @@ function Dashboard() {
             <Card.Header>Form 1</Card.Header>
             <Card.Body>
             <Form>
-              <Form.Group controlId="businessData">
-                <Form.Label>Upload Business Data</Form.Label>
-                <Form.File
-                  label="Excel, CSV, JSON, XML types only"
-                  data-browse="Upload"
-                  custom
-                />
-                <Form.Text className="text-muted">
-                  We'll never share your email with anyone else.
-                </Form.Text>
-              </Form.Group>
-
-              <Form.Group controlId="businessRules">
-                <Form.Label>Select Type of Business Rules</Form.Label>
-                <Form.Control as="select" value={state.rules} onChange={onSelectedSingleOptionChange}>
-                  <option value="BB">BB</option>
-                  <option value="CB">CB</option>
-                  <option value="OD">OD</option>
-                </Form.Control>
-              </Form.Group>
-			  <Form.Group controlId="labels">
-                <Form.Label>Select Type of Lables</Form.Label>
-                <Form.Control as="select" multiple value={state.labels} onChange={onSelectedOptionsChange}>
-                  <option value="barrowAmount">Borrowing Amount</option>
-                  <option value="termFactor">Term (Months)</option>
-                  <option value="riskFactor">Risk Band</option>
-                </Form.Control>
-              </Form.Group>
+              <Form.Group controlId="barrowAmount">
+				<Form.Label>Barrow Amount</Form.Label>
+				<Form.Control type="text" required value={state.barrowAmount} pattern='[0-9\,]+' onChange={onTextUpdated('barrowAmount')} />
+				<Form.Text className="text-muted">
+				  1000,2000,3000
+				</Form.Text>
+		      </Form.Group>
+			  <Form.Group controlId="riskFactor">
+				<Form.Label>Risk Factor</Form.Label>
+				<Form.Control type="text" required value={state.riskFactor} onChange={onTextUpdated('riskFactor')} />
+				<Form.Text className="text-muted">
+				  1,2,3
+				</Form.Text>
+			  </Form.Group>
+			  <Form.Group controlId="termFactor">
+				<Form.Label>Term Factor</Form.Label>
+				<Form.Control type="text" required value={state.termFactor} onChange={onTextUpdated('termFactor')} />
+				<Form.Text className="text-muted">
+				  34,54,119
+				</Form.Text>
+			  </Form.Group>
               <Button variant="danger">Reset</Button>{' '}
               <Button variant="primary" onClick={handleSubmit}>Next</Button>
             </Form>
