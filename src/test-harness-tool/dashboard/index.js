@@ -6,8 +6,8 @@ import styles from './dashboard.scss'
 
 function Dashboard() {
   const history = useHistory()
-  
-  const [state, setState] = useState({borrowingAmount: '', riskBand:'', term: ''})
+  const initial = {borrowingAmount: '', riskBand:'', term: ''}
+  const [state, setState] = useState(initial)
   const [error, setError] = useState('')
   
   function handleSubmit(e) {
@@ -53,15 +53,8 @@ function Dashboard() {
 	  })
   }
   
-  function checkLables(value) {
-	  const labels = state.labels
-	  const isLabled = labels.findIndex((item) => ( item === value ))
-	  if (isLabled !== -1) {
-		labels.splice(isLabled, 1)
-	  } else {
-		labels.push(value)
-	  }
-	  return labels
+  function handleReset() {
+	  setState({...state, ...initial})
   }
   
   const onTextUpdated = (label) => (e) => {
@@ -88,12 +81,12 @@ function Dashboard() {
             <Card.Header>Pricing Tool Menu</Card.Header>
             <Card.Body>
               <ListGroup defaultActiveKey="#/">
-                <ListGroup.Item variant="dark" action href="#/">Upload Business Data</ListGroup.Item>
-                <ListGroup.Item variant="dark" href="#link2">Create/View Data</ListGroup.Item>
-                <ListGroup.Item variant="dark" href="#link3">Generate Test data</ListGroup.Item>
-                <ListGroup.Item variant="dark" href="#link4">Configure Rule Service</ListGroup.Item>
-                <ListGroup.Item variant="dark" href="#link5">Execute / Run</ListGroup.Item>
-                <ListGroup.Item variant="dark" href="#link6">Test Report</ListGroup.Item>
+                <ListGroup.Item action href="#/">Upload Business Data</ListGroup.Item>
+                <ListGroup.Item href="#link2">Create/View Data</ListGroup.Item>
+                <ListGroup.Item href="#link3">Generate Test data</ListGroup.Item>
+                <ListGroup.Item href="#link4">Configure Rule Service</ListGroup.Item>
+                <ListGroup.Item href="#link5">Execute / Run</ListGroup.Item>
+                <ListGroup.Item href="#link6">Test Report</ListGroup.Item>
               </ListGroup>
             </Card.Body>
           </Card>
@@ -108,25 +101,25 @@ function Dashboard() {
             <Card.Header>Form 1</Card.Header>
             <Card.Body>
             <Form>
-              <Form.Group as={Row} controlId="barrowAmount">
+              <Form.Group as={Row} controlId="borrowingAmount">
 				<Form.Label column sm="3">Borrowing Amount</Form.Label>
 				<Col sm="9">
-				  <Form.Control type="text" required placeholder="1000,2000,3000" value={state.borrowingAmountAmount} onChange={onTextUpdated('borrowingAmountAmount')} />
+				  <Form.Control type="text" required placeholder="1000,2000,3000" value={state.borrowingAmount} onChange={onTextUpdated('borrowingAmount')} />
 				</Col>
 		      </Form.Group>
-			  <Form.Group as={Row} controlId="riskFactor">
+			  <Form.Group as={Row} controlId="riskBand">
 				<Form.Label column sm="3">Risk Band</Form.Label>
 				<Col sm="9">
 				  <Form.Control type="text" required placeholder="1,2,3" value={state.riskBand} onChange={onTextUpdated('riskBand')} />
 				</Col>
 			  </Form.Group>
-			  <Form.Group as={Row} controlId="termFactor">
+			  <Form.Group as={Row} controlId="term">
 				<Form.Label column sm="3">Term (Months)</Form.Label>
 				<Col sm="9">
 				  <Form.Control type="text" required placeholder="34,54,119" value={state.term} onChange={onTextUpdated('term')} />
 				</Col>
 			  </Form.Group>
-              <Button variant="danger">Reset</Button>{' '}
+              <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
               <Button variant="primary" onClick={handleSubmit}>Next</Button>
             </Form>
             </Card.Body>
