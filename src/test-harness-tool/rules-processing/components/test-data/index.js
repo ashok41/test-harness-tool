@@ -31,11 +31,11 @@ function TestData() {
 				  <th>Bank Division</th>
 				  <th>Product Family</th>
 				  <th>Product Name</th>
+				  <th>Borrow Amount</th>
 				  <th>Term Factor</th>
 				  <th>Risk Factor</th>
 				  <th>All In Rate</th>
 				  <th>Annual Percentage Rate</th>
-				  <th>Borrow Amount</th>
 				</tr>
 			  </thead>
 			  <tbody>
@@ -46,11 +46,11 @@ function TestData() {
 					<td>{item.bankDivision}</td>
 					<td>{item.productFamily}</td>
 					<td>{item.productName}</td>
+					<td>{item.barrowAmount}</td>
 					<td>{item.termFactor}</td>
 					<td>{item.riskFactor}</td>
 					<td>{item.allInRate}</td>
 					<td>{item.annualPercentageRate}</td>
-					<td>{item.barrowAmount}</td>
 				  </tr>
 				))}
 			  </tbody>
