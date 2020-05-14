@@ -98,7 +98,7 @@ function Dashboard() {
 		    </Alert>
 		  }
           <Card>
-            <Card.Header>Form 1</Card.Header>
+            <Card.Header>Pricing Data Parameters</Card.Header>
             <Card.Body>
             <Form>
               <Form.Group as={Row} controlId="borrowingAmount">
