@@ -71,7 +71,6 @@ const TestLog = (props) => {
 			<li><i />Test Cases Run: <span>{testCasesRun}</span></li>
 			{createCasesList(logData)}
 		  </ul>
-		  <div>Execution duration: <span>{expectedDuration}</span></div>
 		</div>
 	  </div>
 	</div>

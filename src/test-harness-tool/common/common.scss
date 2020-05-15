@@ -17,3 +17,8 @@ body {
     border-color: #1e808f !important;
 	color: #1e808f !important;
 }
+:global(.table) {
+	max-height: 400px;
+    overflow: auto;
+    display: block;
+}

@@ -12,7 +12,7 @@ function ServiceRequest() {
   const {state} = location;
   
   function handleSubmit() {
-	  axios.post('https://jsonplaceholder.typicode.com/posts', state)
+	  axios.post('http://localhost:8081/testCasesResult', state)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
@@ -25,7 +25,7 @@ function ServiceRequest() {
     <>
 	  <Row className={styles.padTop}>
 	    <Col md="12">
-		<Table responsive striped bordered hover>
+		<Table responsive striped bordered hover size="sm">
 			  <thead>
 				<tr>
 				  <th>ID</th>

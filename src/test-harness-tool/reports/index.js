@@ -1,27 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Tabs, Tab, Table } from 'react-bootstrap'
+import { useLocation } from 'react-router-dom'
 import axios from 'axios';
 import TestLog from './components/testlog';
-import data from './reports.json';
 import styles from './reports.scss';
 
 function createLogData(data) {
 	const cases = []
-	cases.push({ "color": "#00c21e", "cases": "Passed", "count": data.passed, percent: data.passedPercent});
-	cases.push({ "color": "#d81a36", "cases": "Failed", "count": data.failed, percent: data.failedPercent});
+	cases.push({ "color": "#00c21e", "cases": "Passed", "status": "Y", "count": data.passed, percent: data.passed});
+	cases.push({ "color": "#d81a36", "cases": "Failed", "status": "N", "count": data.failed, percent: data.failed});
 	return cases;
 }
 
 function ControlledTabs(props) {
   const { data, testCasesRun, testDataList } = props
-  const statusList = ['Skipped', 'Not Completed']
-  const [key, setKey] = useState(data[0].cases);
+  const statusList = ['Y', 'N']
+  const [key, setKey] = useState(data[0].status);
   const filteredData = testDataList.filter(function (item) {
-	let status = item.status
-	if (statusList.indexOf(item.status) !== -1) {
-		status = 'Warnings'
-	}
-	return key === "Total executed" ? item : status === key
+	return item.status === key
   })
   return (
     <Tabs
@@ -31,23 +27,39 @@ function ControlledTabs(props) {
     >
 	{data.map((item, index) => {
 	  const percent = item.percent ? ` (${item.percent}%)` : ''
-      return (<Tab key={index} eventKey={item.cases} title={`${item.cases}: ${item.count}${percent}`}>
-        <Table responsive>
+      return (<Tab key={index} eventKey={item.status} title={`${item.cases}: ${item.count}`}>
+        <Table responsive striped bordered hover size="sm">
 		  <thead>
 			<tr>
-			  <th>Test Case</th>
-			  <th>Project</th>
-			  <th>Start Time</th>
-			  <th>Duration</th>
+			  <th>ID</th>
+			  <th>Application Identity</th>
+			  <th>Bank Division</th>
+			  <th>Product Family</th>
+			  <th>Term Factor</th>
+			  <th>Risk Factor</th>
+			  <th>All In Rate</th>
+			  <th>Annual Percentage Rate</th>
+			  <th>Expected All In Rate</th>
+			  <th>Expected Annual Percentage Rate</th>
+			  <th>Status</th>
+			  <th>Barrow Amount</th>
 			</tr>
 		  </thead>
 		  <tbody>
-			{filteredData.map((item) => (
+		  {filteredData.map((item) => (
 			  <tr>
-				<td>{item.testCase}</td>
-				<td>{item.project}</td>
-				<td>{item.startTime}</td>
-				<td>{item.duration}</td>
+				<td>{item.id}</td>
+				<td>{item.applicationIdentity}</td>
+				<td>{item.bankDivision}</td>
+				<td>{item.productFamily}</td>
+				<td>{item.productName}</td>
+				<td>{item.termFactor}</td>
+				<td>{item.riskFactor}</td>
+				<td>{item.allInRate}</td>
+				<td>{item.annualPercentageRate}</td>
+				<td>{item.expectedAnnualPercentageRate}</td>
+				<td>{item.status === 'Y' ? 'Passed': 'Failed'}</td>
+				<td>{item.barrowAmount}</td>
 			  </tr>
 			))}
 		  </tbody>
@@ -59,24 +71,19 @@ function ControlledTabs(props) {
 }
 
 function RoutingPage() {
-  const reportsRef = useRef()
-  useEffect(() => {
-	axios.get('reports.json').then((response) => {
-	  const { data } = response
-	  reportsRef.current = data
-	})
-  }, [])
+  const location = useLocation()
+  const {state} = location;
   return (
 	<>
 	  <Row className={styles.section}>
         <Col md="12">
 		  <div>
 		    <div className={styles.headTitle}>Test Execution Summary</div>
-		    <TestLog testCasesRun={data.testCasesRun} expectedDuration={data.expectedDuration} logData={createLogData(data)} />
+		    <TestLog testCasesRun={state.totaltestcases} logData={createLogData(state)} />
 		  </div>
 		</Col>
 	  </Row>
-	  <ControlledTabs data={createLogData(data)} testCasesRun={data.testCasesRun} testDataList={data.testDataList} />
+	  <ControlledTabs data={createLogData(state)} testCasesRun={state.totaltestcases} testDataList={state.testcasesResultList} />
 	</>
   );
 }

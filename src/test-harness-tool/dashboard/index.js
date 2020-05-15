@@ -92,56 +92,68 @@ function Dashboard() {
             <Card.Header>Pricing Business Parameters</Card.Header>
             <Card.Body>
             <Form>
-			  <Form.Group as={Row} controlId="locationIdentity">
-                <Form.Label column sm="3">Location Identity</Form.Label>
-                <Col sm="4">
-				  <Form.Control as="select" value={state.locationIdentity} onChange={onSelectedSingleOptionChange('locationIdentity')}>
-                    <option value="">Please Select</option>
-					<option value="Ulster">Ulster</option>
-                  </Form.Control>
+			  <Row>
+			    <Col md="6">
+			     <Form.Group as={Row} controlId="locationIdentity">
+                   <Form.Label column sm="4">Location Identity</Form.Label>
+                   <Col sm="6">
+				     <Form.Control as="select" value={state.locationIdentity} onChange={onSelectedSingleOptionChange('locationIdentity')}>
+                      <option value="">Please Select</option>
+					  <option value="Ulster">Ulster</option>
+                     </Form.Control>
+				   </Col>
+                 </Form.Group>
+			    </Col>
+				<Col md="6">
+				  <Form.Group as={Row} controlId="bankDivision">
+                  <Form.Label column sm="3">Bank Division</Form.Label>
+                  <Col sm="6">
+				    <Form.Control as="select" value={state.bankDivision} onChange={onSelectedSingleOptionChange('bankDivision')}>
+                      <option value="">Please Select</option>
+					  <option value="Business">Business</option>
+                    </Form.Control>
+				   </Col>
+                  </Form.Group>
 				</Col>
-              </Form.Group>
-			  <Form.Group as={Row} controlId="bankDivision">
-                <Form.Label column sm="3">Bank Division</Form.Label>
-                <Col sm="4">
-				  <Form.Control as="select" value={state.locationIdentity} onChange={onSelectedSingleOptionChange('bankDivision')}>
-                    <option value="">Please Select</option>
-					<option value="Business">Business</option>
-                  </Form.Control>
+			  </Row>
+			  <Row>
+			    <Col md="6">
+				  <Form.Group as={Row} controlId="productFamily">
+					<Form.Label column sm="4">Product Family</Form.Label>
+					<Col sm="6">
+					  <Form.Control as="select" value={state.productFamily} onChange={onSelectedSingleOptionChange('productFamily')}>
+						<option value="">Please Select</option>
+						<option value="Loans">Loans</option>
+					  </Form.Control>
+					</Col>
+				  </Form.Group>
 				</Col>
-              </Form.Group>
-			  <Form.Group as={Row} controlId="productFamily">
-                <Form.Label column sm="3">Product Family</Form.Label>
-				<Col sm="4">
-				  <Form.Control as="select" value={state.productFamily} onChange={onSelectedSingleOptionChange('productFamily')}>
-                    <option value="">Please Select</option>
-					<option value="Loans">Loans</option>
-                  </Form.Control>
+				<Col md="6">
+				  <Form.Group as={Row} controlId="productName">
+					<Form.Label column sm="3">Product Name</Form.Label>
+					<Col sm="6">
+					  <Form.Control as="select" value={state.productName} onChange={onSelectedSingleOptionChange('productName')}>
+						<option value="">Please Select</option>
+						<option value="Small Business Loan (Fixed)">Small Business Loan (Fixed)</option>
+					  </Form.Control>
+					</Col>
+				  </Form.Group>
 				</Col>
-              </Form.Group>
-			  <Form.Group as={Row} controlId="productName">
-                <Form.Label column sm="3">Product Name</Form.Label>
-                <Col sm="4">
-				  <Form.Control as="select" value={state.productName} onChange={onSelectedSingleOptionChange('productName')}>
-				    <option value="">Please Select</option>
-                    <option value="Small Business Loan (Fixed)">Small Business Loan (Fixed)</option>
-                  </Form.Control>
-				</Col>
-              </Form.Group>
+			  </Row>
 			  <Form.Group as={Row} controlId="borrowingAmount">
-				<Form.Label column sm="3">Borrowing Amount</Form.Label>
+				<Form.Label column sm="2">Borrowing Amount</Form.Label>
 				<Col sm="4">
 				  <Form.Control type="text" placeholder="1000,2000,3000" value={state.borrowingAmount} onChange={onTextUpdated('borrowingAmount')} />
 				</Col>
 		      </Form.Group>
 			  <Form.Group as={Row} controlId="riskBand">
-				<Form.Label column sm="3">Risk Band</Form.Label>
+				<Form.Label column sm="2">Risk Band</Form.Label>
 				<Col sm="4">
 				  <Form.Control type="text" placeholder="1,2,3" value={state.riskBand} onChange={onTextUpdated('riskBand')} />
 				</Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="term">
-				<Form.Label column sm="3">Term (Months)</Form.Label>
+				<Form.Label column sm="2">Term (Months)</Form.Label>
 				<Col sm="4">
 				  <Form.Control type="text" placeholder="34,58,119" value={state.term} onChange={onTextUpdated('term')} />
 				</Col>
