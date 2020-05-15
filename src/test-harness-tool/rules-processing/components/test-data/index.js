@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Row, Col, Button, Table, Spinner } from 'react-bootstrap'
+import { Container, Row, Col, Button, Table, Spinner } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import styles from './test-data.scss'
@@ -73,7 +73,7 @@ function TestData() {
 	   <Row>
         <Col className={styles.footer}>&copy; {new Date().getFullYear()} Mphasis. All rights reserved</Col>
       </Row>
-    </>
+    </Container>
   );
 }
 
