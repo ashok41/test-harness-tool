@@ -11,16 +11,13 @@ function TestData() {
   const {state} = location
     
   return (
-    <>
-	  <Row>
-		<Col md="6">
-		  <Button variant="secondary" disabled className={styles.buttonAlignment}>View and Edit Test data in UI Grid</Button>{' '}
-		  <Button variant="secondary" disabled className={styles.buttonAlignment}>Generate Test datasets and Save</Button>{' '}
-		</Col>
-		<Col md="6">
-		  <div className={styles.box}>From Screen 1 - Capture the uploadedtest data in Excel & Allow user to view thesame data in UI Grid  which is Editable /Selectable for Service execution</div>
-		</Col>
-	  </Row>
+    <Container className={styles.container}>
+	 <Row className={styles.header}>
+        <Col xs="4">
+          <img src="https://www.mphasis.com/content/dam/mphasis-com/global/logo/logo.png" alt="mphasis logo" title="mphasis logo"/>
+        </Col>
+        <Col xs="8" className={styles.headerTxt}>Test Harness Tool</Col>
+      </Row>
 	  <Row className={styles.padTop}>
 	    <Col md="12">
 		  <Table responsive striped bordered hover>
@@ -65,9 +62,6 @@ function TestData() {
 		</Col>
 	  </Row>
 	  <Row className={styles.section}>
-		<Col md="9">
-		  <div><span>Integrate Automated Test Data Generation solution</span> - Under Construction</div>
-		</Col>
 		<Col md="3">
 		  <Button variant="primary" onClick={() => history.goBack()}>Back</Button>{' '}
 		  <Button variant="primary" onClick={() => history.push({
@@ -76,6 +70,9 @@ function TestData() {
 	})}>Next</Button>
 		</Col>
 	   </Row>
+	   <Row>
+        <Col className={styles.footer}>&copy; {new Date().getFullYear()} Mphasis. All rights reserved</Col>
+      </Row>
     </>
   );
 }
