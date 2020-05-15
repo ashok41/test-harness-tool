@@ -67,7 +67,6 @@ const TestLog = (props) => {
 	  <div className={styles.logContainer}>
 		<div className={styles.logWrapper} ref={logRef} />
 		<div className={styles.logLables}>
-		  <div className={styles.padBottom}><span>TestLog_Javascript</span></div>
 		  <ul className={styles.padBottom}>
 			<li><i />Test Cases Run: <span>{testCasesRun}</span></li>
 			{createCasesList(logData)}

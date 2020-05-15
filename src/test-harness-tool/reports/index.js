@@ -7,17 +7,13 @@ import styles from './reports.scss';
 
 function createLogData(data) {
 	const cases = []
-	cases.push({ "color": "#d81a36", "cases": "Failed", "count": data.failed, percent: data.failedPercent});
-	cases.push({ "color": "#efe000", "cases": "Warnings", "count": data.warnings, percent: data.warningPercent});
 	cases.push({ "color": "#00c21e", "cases": "Passed", "count": data.passed, percent: data.passedPercent});
+	cases.push({ "color": "#d81a36", "cases": "Failed", "count": data.failed, percent: data.failedPercent});
 	return cases;
 }
 
 function ControlledTabs(props) {
   const { data, testCasesRun, testDataList } = props
-  if (data.length === 3) {
-	data.unshift({ "color": "#000000", "cases": "Total executed", "count": testCasesRun})
-  }
   const statusList = ['Skipped', 'Not Completed']
   const [key, setKey] = useState(data[0].cases);
   const filteredData = testDataList.filter(function (item) {
@@ -71,13 +67,7 @@ function RoutingPage() {
 	})
   }, [])
   return (
-	<Container className={styles.container}>
-	  <Row className={styles.header}>
-        <Col xs="4">
-          <img src="https://www.mphasis.com/content/dam/mphasis-com/global/logo/logo.png" alt="mphasis logo" title="mphasis logo"/>
-        </Col>
-        <Col xs="8" className={styles.headerTxt}>Test Harness Tool</Col>
-      </Row>
+	<>
 	  <Row className={styles.section}>
         <Col md="12">
 		  <div>
@@ -87,12 +77,8 @@ function RoutingPage() {
 		</Col>
 	  </Row>
 	  <ControlledTabs data={createLogData(data)} testCasesRun={data.testCasesRun} testDataList={data.testDataList} />
-	  <Row>
-        <Col className={styles.footer}>&copy; {new Date().getFullYear()} Mphasis. All rights reserved</Col>
-      </Row>
-	</Container>
+	</>
   );
 }
 
-export default RoutingPage
-;
+export default RoutingPage;

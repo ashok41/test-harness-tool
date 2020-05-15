@@ -1,81 +1,77 @@
 import React, {useEffect, useState} from 'react';
-import { Container, Row, Col, Button, Table, Spinner } from 'react-bootstrap'
+import { Row, Col, Button, Table } from 'react-bootstrap'
+import BootstrapTable from 'react-bootstrap-table-next';
+import cellEditFactory from 'react-bootstrap-table2-editor';
 import { useHistory, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import styles from './test-data.scss'
+import common from '../../../common/common.scss'
 
 function TestData() {
   
   const history = useHistory()
   const location = useLocation()
-  const {state} = location
+  const {state} = location;
+  
+  const columns = [{
+	  dataField: 'id',
+	  text: 'ID'
+	}, {
+	  dataField: 'applicationIdentity',
+	  text: 'Location Identity'
+	}, {
+	  dataField: 'bankDivision',
+	  text: 'Bank Division'
+	}, {
+	  dataField: 'productFamily',
+	  text: 'Product Family'
+	}, {
+	  dataField: 'productName',
+	  text: 'Product Name'
+	}, {
+	  dataField: 'barrowAmount',
+	  text: 'Borrow Amount'
+	}, {
+	  dataField: 'termFactor',
+	  text: 'Term Factor'
+	}, {
+	  dataField: 'riskFactor',
+	  text: 'Risk Factor'
+	}];
     
+  function handleSubmit() {
+	  axios.post('http://localhost:8081/expectedScenarios', state)
+	  .then((response) => {
+		  const { data } = response
+		  history.push({
+			pathname: '/rules-processing/service-request',
+			state: data
+		})
+	  })
+  }
   return (
-    <Container className={styles.container}>
-	 <Row className={styles.header}>
-        <Col xs="4">
-          <img src="https://www.mphasis.com/content/dam/mphasis-com/global/logo/logo.png" alt="mphasis logo" title="mphasis logo"/>
-        </Col>
-        <Col xs="8" className={styles.headerTxt}>Test Harness Tool</Col>
-      </Row>
+    <>
 	  <Row className={styles.padTop}>
 	    <Col md="12">
-		  <Table responsive striped bordered hover>
-			  <thead>
-				<tr>
-				  <th>ID</th>
-				  <th>Location Identity</th>
-				  <th>Bank Division</th>
-				  <th>Product Family</th>
-				  <th>Product Name</th>
-				  <th>Borrow Amount</th>
-				  <th>Term Factor</th>
-				  <th>Risk Factor</th>
-				  <th>All In Rate</th>
-				  <th>Annual Percentage Rate</th>
-				</tr>
-			  </thead>
-			  <tbody>
-				{state.map((item) => (
-				  <tr>
-					<td>{item.id}</td>
-					<td>{item.licationIdentity}</td>
-					<td>{item.bankDivision}</td>
-					<td>{item.productFamily}</td>
-					<td>{item.productName}</td>
-					<td>{item.barrowAmount}</td>
-					<td>{item.termFactor}</td>
-					<td>{item.riskFactor}</td>
-					<td>{item.allInRate}</td>
-					<td>{item.annualPercentageRate}</td>
-				  </tr>
-				))}
-			  </tbody>
-		  </Table>
-		  {state.length === 0 &&
-			<div className={styles.centerOne}>
-				<Spinner animation="border" role="status">
-				  <span className="sr-only">Loading...</span>
-				</Spinner>
-			</div>
-		   }
+		<BootstrapTable
+		  keyField="id"
+		  data={ state }
+		  columns={ columns }
+		  cellEdit={ cellEditFactory({
+			mode: 'click',
+			blurToSave: true
+		  }) }
+		/>
 		</Col>
 	  </Row>
 	  <Row className={styles.section}>
 		<Col md="3">
 		  <Button variant="primary" onClick={() => history.goBack()}>Back</Button>{' '}
-		  <Button variant="primary" onClick={() => history.push({
-		pathname: '/rules-processing/service-request',
-		state: 'service-request'
-	})}>Next</Button>
+		  <Button variant="primary" onClick={handleSubmit}>Next</Button>
 		</Col>
 	   </Row>
-	   <Row>
-        <Col className={styles.footer}>&copy; {new Date().getFullYear()} Mphasis. All rights reserved</Col>
-      </Row>
-    </Container>
+    </>
   );
 }
 
-export default TestData
-;
+export default TestData;
