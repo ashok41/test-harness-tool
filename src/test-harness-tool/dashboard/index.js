@@ -53,7 +53,7 @@ function Dashboard() {
 	  labelsArray[firstKey].forEach((item, index) => {
 		  const lists = {}
 		  forms.labels.forEach((d) => {
-			  lists[d] = labelsArray[d][index]
+			  lists[labelLists[d].name] = labelsArray[d][index]
 		  })
 		  postData.push(lists)
 	  })
