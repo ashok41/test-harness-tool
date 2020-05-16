@@ -10,9 +10,8 @@ function TestData() {
   
   const history = useHistory()
   const location = useLocation()
-  	
-  const [dataLists, setDataLists] = useState(state)
   const {state} = location;
+  const [dataLists, setDataLists] = useState(state);
   
   function handleSubmit() {
 	  axios.post('http://localhost:8081/expectedScenarios', dataLists)

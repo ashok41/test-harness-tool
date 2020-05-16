@@ -143,19 +143,19 @@ function Dashboard() {
 			  <Form.Group as={Row} controlId="borrowingAmount">
 				<Form.Label column sm="2">Borrowing Amount</Form.Label>
 				<Col sm="4">
-				  <Form.Control type="text" placeholder="1000,2000,3000" value={state.borrowingAmount} onChange={onTextUpdated('borrowingAmount')} />
+				  <Form.Control type="text" value={state.borrowingAmount} onChange={onTextUpdated('borrowingAmount')} />
 				</Col>
 		      </Form.Group>
 			  <Form.Group as={Row} controlId="riskBand">
 				<Form.Label column sm="2">Risk Band</Form.Label>
 				<Col sm="4">
-				  <Form.Control type="text" placeholder="1,2,3" value={state.riskBand} onChange={onTextUpdated('riskBand')} />
+				  <Form.Control type="text" value={state.riskBand} onChange={onTextUpdated('riskBand')} />
 				</Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="term">
 				<Form.Label column sm="2">Term (Months)</Form.Label>
 				<Col sm="4">
-				  <Form.Control type="text" placeholder="34,58,119" value={state.term} onChange={onTextUpdated('term')} />
+				  <Form.Control type="text" value={state.term} onChange={onTextUpdated('term')} />
 				</Col>
 			  </Form.Group>
 			  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
