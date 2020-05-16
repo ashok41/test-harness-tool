@@ -33,9 +33,9 @@ function ServiceRequest() {
 				  <th>Bank Division</th>
 				  <th>Product Family</th>
 				  <th>Product Name</th>
-				  <th>Borrow Amount</th>
-				  <th>Term Factor</th>
-				  <th>Risk Factor</th>
+				  <th>Borrowing Amount</th>
+				  <th>Term (Months)</th>
+				  <th>Risk Band</th>
 				  <th>All In Rate</th>
 				  <th>Annual Percentage Rate</th>
 				</tr>

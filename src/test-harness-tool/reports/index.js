@@ -37,10 +37,11 @@ function ControlledTabs(props) {
 			  <th>Product Family</th>
 			  <th>Product Name</th>
 			  <th>Borrowing Amount</th>
-			  <th>Term Factor</th>
-			  <th>Risk Factor</th>
+			  <th>Term (Months)</th>
+			  <th>Risk Band</th>
 			  <th>All In Rate</th>
 			  <th>Annual Percentage Rate</th>
+			  <th>Actual All In Rate</th>
 			  <th>Actual Annual Percentage Rate</th>
 			</tr>
 		  </thead>
@@ -57,6 +58,7 @@ function ControlledTabs(props) {
 				<td>{item.riskFactor}</td>
 				<td>{item.allInRate}</td>
 				<td>{item.annualPercentageRate}</td>
+				<td>{item.expectedAllInRate}</td>
 				<td>{item.expectedAnnualPercentageRate}</td>
 			  </tr>
 			))}
