@@ -7,8 +7,8 @@ import styles from './reports.scss';
 
 function createLogData(data) {
 	const cases = []
-	cases.push({ "color": "#00c21e", "cases": "Passed", "status": "Y", "count": data.passed, percent: data.passed});
-	cases.push({ "color": "#d81a36", "cases": "Failed", "status": "N", "count": data.failed, percent: data.failed});
+	cases.push({ "color": "#00c21e", "cases": "Passed", "status": "Y", "count": data.passed, percent: data.passedPercent});
+	cases.push({ "color": "#d81a36", "cases": "Failed", "status": "N", "count": data.failed, percent: data.failedPercent});
 	return cases;
 }
 
@@ -27,7 +27,7 @@ function ControlledTabs(props) {
     >
 	{data.map((item, index) => {
 	  const percent = item.percent ? ` (${item.percent}%)` : ''
-      return (<Tab key={index} eventKey={item.status} title={`${item.cases}: ${item.count}`}>
+      return (<Tab key={index} eventKey={item.status} title={`${item.cases}: ${item.count}${percent}`}>
         <Table responsive striped bordered hover size="sm">
 		  <thead>
 			<tr>
@@ -73,6 +73,8 @@ function ControlledTabs(props) {
 function RoutingPage() {
   const location = useLocation()
   const {state} = location;
+  state['passedPercent'] = Math.round((state.passed/state.totaltestcases) * 100);
+  state['failedPercent'] = Math.round((state.failed/state.totaltestcases) * 100);
   return (
 	<>
 	  <Row className={styles.section}>

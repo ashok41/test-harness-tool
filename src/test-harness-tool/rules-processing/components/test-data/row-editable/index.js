@@ -20,10 +20,7 @@ function RowEditable(props) {
 	  rowEdit(state, rowIndex)
       setShow(false)	  
   }
-  const onTextUpdated = (label) => (e) => {
-	  setState({...state, [label]: e.target.value})
-  }
-  
+   
   const onNumberUpdated = (label) => (e) => {
 	  const data = e.target.value;
 	  const regex = /^[\d]+$/g
@@ -37,10 +34,10 @@ function RowEditable(props) {
    {show ?
     <>
 		<td>{state.id}</td>
-		<td><Form.Control type="text" value={state.applicationIdentity} onChange={onTextUpdated('applicationIdentity')} /></td>
-		<td><Form.Control type="text" value={state.bankDivision} onChange={onTextUpdated('bankDivision')} /></td>
-		<td><Form.Control type="text" value={state.productFamily} onChange={onTextUpdated('productFamily')} /></td>
-		<td><Form.Control type="text" value={state.productName} onChange={onTextUpdated('productName')} /></td>
+		<td>{state.applicationIdentity}</td>
+		<td>{state.bankDivision}</td>
+		<td>{state.productFamily}</td>
+		<td>{state.productName}</td>
 		<td><Form.Control type="text" value={state.barrowAmount} onChange={onNumberUpdated('barrowAmount')} /></td>
 		<td><Form.Control type="text" value={state.termFactor} onChange={onNumberUpdated('termFactor')} /></td>
 		<td><Form.Control type="text" value={state.riskFactor} onChange={onNumberUpdated('riskFactor')} /></td>

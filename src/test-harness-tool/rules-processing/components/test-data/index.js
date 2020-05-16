@@ -55,7 +55,7 @@ function TestData() {
 	  </Row>
 	  <Row className={styles.section}>
 		<Col md="3">
-		  <Button variant="primary" onClick={() => history.goBack()}>Back</Button>{' '}
+		  <Button variant="primary" disabled onClick={() => history.goBack()}>Back</Button>{' '}
 		  <Button variant="primary" onClick={handleSubmit}>Next</Button>
 		</Col>
 	   </Row>
