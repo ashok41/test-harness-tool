@@ -35,14 +35,13 @@ function ControlledTabs(props) {
 			  <th>Application Identity</th>
 			  <th>Bank Division</th>
 			  <th>Product Family</th>
+			  <th>Product Name</th>
+			  <th>Borrowing Amount</th>
 			  <th>Term Factor</th>
 			  <th>Risk Factor</th>
 			  <th>All In Rate</th>
 			  <th>Annual Percentage Rate</th>
-			  <th>Expected All In Rate</th>
-			  <th>Expected Annual Percentage Rate</th>
-			  <th>Status</th>
-			  <th>Barrow Amount</th>
+			  <th>Actual Annual Percentage Rate</th>
 			</tr>
 		  </thead>
 		  <tbody>
@@ -53,13 +52,12 @@ function ControlledTabs(props) {
 				<td>{item.bankDivision}</td>
 				<td>{item.productFamily}</td>
 				<td>{item.productName}</td>
+				<td>{item.barrowAmount}</td>
 				<td>{item.termFactor}</td>
 				<td>{item.riskFactor}</td>
 				<td>{item.allInRate}</td>
 				<td>{item.annualPercentageRate}</td>
 				<td>{item.expectedAnnualPercentageRate}</td>
-				<td>{item.status === 'Y' ? 'Passed': 'Failed'}</td>
-				<td>{item.barrowAmount}</td>
 			  </tr>
 			))}
 		  </tbody>

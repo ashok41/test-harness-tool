@@ -15,6 +15,7 @@ function Dashboard() {
 	  e.preventDefault();
 	  const error = validation(state)
 	  if (error === '') {
+		setError('')	
 		buildJSON(state)
 	  } else {
 		setError(error)	
@@ -22,17 +23,29 @@ function Dashboard() {
   }
   
   function validation(forms) {
-    /*const errors = {borrowingAmount: '', riskBand: '', term: ''}
-	if (forms.borrowingAmount.value !== '') {
-		errors.borrowingAmount = 'Please enter borrowing amount';
+	let errors = ''
+	if (forms.locationIdentity === '') {
+		errors = 'Please enter application identity';
+	} 
+	if (errors === '' && forms.bankDivision === '') {
+		errors = 'Please enter bank division';
 	}
-	else if (forms.riskBand.value !== '') {
-		errors.riskBand = 'Please enter risk band';
+	if (errors === '' && forms.productFamily === '') {
+		errors = 'Please enter product family';
 	}
-	else if (forms.term.value !== '') {
-		errors.term = 'Please enter t (months)';
-	}*/
-	return ''
+	if (errors === '' && forms.productName === '') {
+		errors = 'Please enter product name';
+	}
+	if (errors === '' && forms.borrowingAmount === '') {
+		errors = 'Please enter borrowing amount';
+	} 
+	if (errors === '' && forms.riskBand === '') {
+		errors = 'Please enter risk band';
+	}
+	if (errors === '' && forms.term === '') {
+		errors = 'Please enter term (months)';
+	}
+	return errors
   }
   
   function buildJSON(forms) {
@@ -70,7 +83,7 @@ function Dashboard() {
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
 	  const regex = /^[\d\,]+$/g
-	  if (regex.test(data) && totCommas <= 3) {
+	  if (data === '' || (data && regex.test(data) && totCommas <= 3)) {
 	    setState({...state, [label]: data})
 	  }
   }
@@ -95,7 +108,7 @@ function Dashboard() {
 			  <Row>
 			    <Col md="6">
 			     <Form.Group as={Row} controlId="locationIdentity">
-                   <Form.Label column sm="4">Location Identity</Form.Label>
+                   <Form.Label column sm="4">Application Identity</Form.Label>
                    <Col sm="6">
 				     <Form.Control as="select" value={state.locationIdentity} onChange={onSelectedSingleOptionChange('locationIdentity')}>
                       <option value="">Please Select</option>

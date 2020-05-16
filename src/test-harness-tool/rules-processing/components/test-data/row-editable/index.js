@@ -27,7 +27,7 @@ function RowEditable(props) {
   const onNumberUpdated = (label) => (e) => {
 	  const data = e.target.value;
 	  const regex = /^[\d]+$/g
-	  if (regex.test(data)) {
+	  if (data === "" || (data && regex.test(data))) {
 	    setState({...state, [label]: data})
 	  }
   }

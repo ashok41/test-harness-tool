@@ -29,7 +29,7 @@ function ServiceRequest() {
 			  <thead>
 				<tr>
 				  <th>ID</th>
-				  <th>Location Identity</th>
+				  <th>Application Identity</th>
 				  <th>Bank Division</th>
 				  <th>Product Family</th>
 				  <th>Product Name</th>
@@ -62,7 +62,7 @@ function ServiceRequest() {
 	  <Row className={styles.section}>
 		<Col md="3">
 		  <Button variant="primary" onClick={() => history.goBack()}>Back</Button>{' '}
-		  <Button variant="primary" onClick={handleSubmit}>Execute</Button>
+		  <Button variant="primary" onClick={handleSubmit}>Confirm & Execute</Button>
 		</Col>
 	   </Row>
     </>

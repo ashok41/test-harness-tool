@@ -35,7 +35,7 @@ function TestData() {
 			  <thead>
 				<tr>
 				  <th>ID</th>
-				  <th>Location Identity</th>
+				  <th>Application Identity</th>
 				  <th>Bank Division</th>
 				  <th>Product Family</th>
 				  <th>Product Name</th>
