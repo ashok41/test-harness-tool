@@ -5,7 +5,7 @@ import styles from './footer.scss'
 function Footer() {
   return (
 	<Row>
-      <Col className={styles.footer}>&copy; {new Date().getFullYear()} Mphasis. All rights reserved</Col>
+      <Col className={styles.footer} />
     </Row>
   );
 }

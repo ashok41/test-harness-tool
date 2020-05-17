@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Row, Col, Button, Table } from 'react-bootstrap'
+import { Row, Col, Button, Table, Pagination } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import RowEditable from './row-editable'
@@ -12,6 +12,8 @@ function TestData() {
   const location = useLocation()
   const {state} = location;
   const [dataLists, setDataLists] = useState(state);
+  
+  const [page, setPage] = useState(1)
   
   function handleSubmit() {
 	  axios.post('http://localhost:8081/expectedScenarios', dataLists)
@@ -27,6 +29,24 @@ function TestData() {
 	  const obj = {...dataLists[idx], ...data}
 	  setDataLists([...dataLists.slice(0, idx), data, ...dataLists.slice(idx + 1)])
   }
+  
+  const setPageItem = (number) => () => {
+	  setPage(number)
+  }
+  
+  let items = [];
+  const total = Math.ceil(state.length/10)
+  for (let number = 1; number <= total; number++) {
+    items.push(
+      <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
+        {number}
+      </Pagination.Item>,
+    );
+  }
+  
+  const indexOfLastTodo = page * 10;
+  const indexOfFirstTodo = indexOfLastTodo - 10;
+  const paginationData = dataLists.slice(indexOfFirstTodo, indexOfLastTodo);
   return (
     <>
 	  <Row className={styles.padTop}>
@@ -46,11 +66,14 @@ function TestData() {
 				</tr>
 			  </thead>
 			  <tbody>
-				{dataLists.map((item, index) => (
+				{paginationData.map((item, index) => (
 				  <RowEditable data={item} key={index} rowIndex={index} rowEdit={rowEdit} />
 				))}
 			  </tbody>
 		  </Table>
+		  {state.length > 10 && <div>
+		    <Pagination>{items}</Pagination>
+	      </div>}
 		</Col>
 	  </Row>
 	  <Row className={styles.section}>

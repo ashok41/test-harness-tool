@@ -1,24 +1,28 @@
-import React, {useState} from 'react';
-import { Form, Button } from 'react-bootstrap'
+import React, {useState, useEffect} from 'react';
+import { Form, Button, Modal } from 'react-bootstrap'
 import styles from './row-editable.scss'
 
 function RowEditable(props) {
     
   const { data, rowEdit, rowIndex } = props
   const [state, setState] = useState(data)
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState({popup: false, modal: false})
   const oldData = {...data}
   
   function handleEdit() {
-	  setShow(true)
+	  setShow({...show, popup: true})
   }
   function handleCancel() {
 	  setState({...state, ...oldData})
-	  setShow(false)
+	  setShow({popup: false, modal: false})
   }
   function handleSave() {
+	  setShow({...show, modal: true})
+  }
+  function modalSave() {
+	  setState({...state})
 	  rowEdit(state, rowIndex)
-      setShow(false)	  
+      setShow({popup: false, modal: false})	  
   }
    
   const onNumberUpdated = (label) => (e) => {
@@ -29,9 +33,14 @@ function RowEditable(props) {
 	  }
   }
   
+  useEffect(() => {
+	  setState(data)
+  },[data]);
+  
   return (
+  <>
    <tr>
-   {show ?
+   {show.popup ?
     <>
 		<td>{state.id}</td>
 		<td>{state.applicationIdentity}</td>
@@ -61,6 +70,18 @@ function RowEditable(props) {
     </>
    }
    </tr>
+   <Modal show={show.modal} onHide={handleCancel}>
+        <Modal.Body>Will confirm to save?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCancel}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={modalSave}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+   </>
   );
 }
 

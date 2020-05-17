@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Row, Col, Button, Table } from 'react-bootstrap'
+import { Row, Col, Button, Table, Pagination } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import styles from './service-request.scss'
@@ -21,6 +21,22 @@ function ServiceRequest() {
 		})
 	  })
   }
+  const [page, setPage] = useState(1)
+  const setPageItem = (number) => () => {
+	  setPage(number)
+  }
+  let items = [];
+  const total = Math.ceil(state.length/10)
+  for (let number = 1; number <= total; number++) {
+    items.push(
+      <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
+        {number}
+      </Pagination.Item>
+    );
+  }
+  const indexOfLastTodo = page * 10;
+  const indexOfFirstTodo = indexOfLastTodo - 10;
+  const paginationData = state.slice(indexOfFirstTodo, indexOfLastTodo);
   return (
     <>
 	  <Row className={styles.padTop}>
@@ -28,20 +44,23 @@ function ServiceRequest() {
 		<Table responsive striped bordered hover size="sm">
 			  <thead>
 				<tr>
-				  <th>ID</th>
-				  <th>Application Identity</th>
-				  <th>Bank Division</th>
-				  <th>Product Family</th>
-				  <th>Product Name</th>
-				  <th>Borrowing Amount</th>
-				  <th>Term (Months)</th>
-				  <th>Risk Band</th>
-				  <th>All In Rate</th>
-				  <th>Annual Percentage Rate</th>
+				  <th rowSpan="2">ID</th>
+				  <th rowSpan="2">Application Identity</th>
+				  <th rowSpan="2">Bank Division</th>
+				  <th rowSpan="2">Product Family</th>
+				  <th rowSpan="2">Product Name</th>
+				  <th rowSpan="2">Borrowing Amount(GDP)</th>
+				  <th rowSpan="2">Term (Months)</th>
+				  <th rowSpan="2">Risk Band</th>
+				  <th colSpan="2" className={styles.rate}>Actual</th>
+				</tr>
+				<tr>
+				  <th className={styles.rate}>AIR</th>
+				  <th className={styles.rate}>APR</th>
 				</tr>
 			  </thead>
 			  <tbody>
-				{state.map((item) => (
+				{paginationData.map((item) => (
 				  <tr>
 					<td>{item.id}</td>
 					<td>{item.applicationIdentity}</td>
@@ -51,12 +70,15 @@ function ServiceRequest() {
 					<td>{item.barrowAmount}</td>
 					<td>{item.termFactor}</td>
 					<td>{item.riskFactor}</td>
-					<td>{item.allInRate}</td>
-					<td>{item.annualPercentageRate}</td>
+					<td className={styles.rate}>{item.allInRate}</td>
+					<td className={styles.rate}>{item.annualPercentageRate}</td>
 				  </tr>
 				))}
 			  </tbody>
 		  </Table>
+		  {state.length > 10 && <div>
+		    <Pagination>{items}</Pagination>
+	      </div>}
 		</Col>
 	  </Row>
 	  <Row className={styles.section}>

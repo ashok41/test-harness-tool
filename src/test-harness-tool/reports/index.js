@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Tabs, Tab, Table } from 'react-bootstrap'
+import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios';
 import TestLog from './components/testlog';
@@ -16,12 +16,28 @@ function ControlledTabs(props) {
   const { data, testCasesRun, testDataList } = props
   const statusList = ['Y', 'N']
   const [key, setKey] = useState(data[0].status);
+  const [page, setPage] = useState({'Y': 1, 'N': 1})
+  
   const filteredData = testDataList.filter(function (item) {
 	return item.status === key
   })
+  const setPageItem = (number) => () => {
+	  setPage({...page, [key]: number})
+  }
+  let items = [];
+  const total = Math.ceil(filteredData.length/10)
+  for (let number = 1; number <= total; number++) {
+    items.push(
+      <Pagination.Item key={number} active={number === page[key]} onClick={setPageItem(number)}>
+        {number}
+      </Pagination.Item>
+    );
+  }
+  const indexOfLastTodo = page[key] * 10;
+  const indexOfFirstTodo = indexOfLastTodo - 10;
+  const paginationData = filteredData.slice(indexOfFirstTodo, indexOfLastTodo);
   return (
     <Tabs
-      id="controlled-tab-example"
       activeKey={key}
       onSelect={(k) => setKey(k)}
     >
@@ -31,22 +47,26 @@ function ControlledTabs(props) {
         <Table responsive striped bordered hover size="sm">
 		  <thead>
 			<tr>
-			  <th>ID</th>
-			  <th>Application Identity</th>
-			  <th>Bank Division</th>
-			  <th>Product Family</th>
-			  <th>Product Name</th>
-			  <th>Borrowing Amount</th>
-			  <th>Term (Months)</th>
-			  <th>Risk Band</th>
-			  <th>All In Rate</th>
-			  <th>Annual Percentage Rate</th>
-			  <th>Actual All In Rate</th>
-			  <th>Actual Annual Percentage Rate</th>
+			  <th rowSpan="2">ID</th>
+			  <th rowSpan="2">Application Identity</th>
+			  <th rowSpan="2">Bank Division</th>
+			  <th rowSpan="2">Product Family</th>
+			  <th rowSpan="2">Product Name</th>
+			  <th rowSpan="2">Borrowing Amount(GDP)</th>
+			  <th rowSpan="2">Term (Months)</th>
+			  <th rowSpan="2">Risk Band</th>
+			  <th colSpan="2" className={styles.rate}>Actual</th>
+			  <th colSpan="2" className={styles.rate}>Expected</th>
+			</tr>
+			<tr>
+		      <th className={styles.rate}>AIR</th>
+			  <th className={styles.rate}>APR</th>
+			  <th className={styles.rate}>AIR</th>
+			  <th className={styles.rate}>APR</th>
 			</tr>
 		  </thead>
 		  <tbody>
-		  {filteredData.map((item) => (
+		  {paginationData.map((item) => (
 			  <tr>
 				<td>{item.id}</td>
 				<td>{item.applicationIdentity}</td>
@@ -56,14 +76,17 @@ function ControlledTabs(props) {
 				<td>{item.barrowAmount}</td>
 				<td>{item.termFactor}</td>
 				<td>{item.riskFactor}</td>
-				<td>{item.allInRate}</td>
-				<td>{item.annualPercentageRate}</td>
-				<td>{item.expectedAllInRate}</td>
-				<td>{item.expectedAnnualPercentageRate}</td>
+				<td className={styles.rate}>{item.allInRate}</td>
+				<td className={styles.rate}>{item.annualPercentageRate}</td>
+				<td className={styles.rate}>{item.expectedAllInRate}</td>
+				<td className={styles.rate}>{item.expectedAnnualPercentageRate}</td>
 			  </tr>
 			))}
 		  </tbody>
 		  </Table>
+		  {filteredData.length > 10 && <div>
+		    <Pagination>{items}</Pagination>
+	      </div>}
       </Tab>)
 	})}
     </Tabs>
@@ -73,6 +96,7 @@ function ControlledTabs(props) {
 function RoutingPage() {
   const location = useLocation()
   const {state} = location;
+  
   state['passedPercent'] = Math.round((state.passed/state.totaltestcases) * 100);
   state['failedPercent'] = Math.round((state.failed/state.totaltestcases) * 100);
   return (
@@ -85,7 +109,15 @@ function RoutingPage() {
 		  </div>
 		</Col>
 	  </Row>
-	  <ControlledTabs data={createLogData(state)} testCasesRun={state.totaltestcases} testDataList={state.testcasesResultList} />
+	  <div>
+	    <div className={styles.relative}>
+		  <div className={styles.download}>
+		   <Button variant="primary" disabled>Download Reports</Button>{' '}
+		   <Button variant="primary" disabled>Print</Button>
+		  </div>
+		</div>
+	    <ControlledTabs data={createLogData(state)} testCasesRun={state.totaltestcases} testDataList={state.testcasesResultList} />
+	  </div>
 	</>
   );
 }
