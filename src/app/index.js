@@ -10,9 +10,11 @@ import RulesProcessing from '../test-harness-tool/rules-processing'
 import styles from '../test-harness-tool/common/common.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const  root = document.createElement('div');
+root.style = 'height:100%';
+
 render((
  <Router>
-   <div>
      <Container className={styles.container}>
        <Header />
 	   <Switch>
@@ -22,6 +24,5 @@ render((
 	   </Switch>
 	   <Footer />
 	 </Container>
-   </div>
  </Router>
-), document.body.appendChild(document.createElement('div')));
+), document.body.appendChild(root));

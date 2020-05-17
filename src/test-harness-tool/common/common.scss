@@ -8,15 +8,22 @@ body, html {
 	min-height: 100%;
 }
 
+.height-wrapper, #root {
+	height: 100%;
+}
+
 .container {
   border: 1px solid #ccc;
   position:relative; /* needed for footer positioning*/
     margin:0 auto; /* center, not in IE5 */
 
-    height:auto !important; /* real browsers */
-    height:100% !important; /* IE6: treaded as min-height*/
+    height:auto !important; /* IE6: treaded as min-height*/
 
     min-height:100%; /* real browsers */
+}
+
+:global(.pagination) {
+	display: inline-block !important;
 }
 
 :global(.btn-primary) {
