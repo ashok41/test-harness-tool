@@ -59,7 +59,7 @@ function TestData() {
 				  <th>Bank Division</th>
 				  <th>Product Family</th>
 				  <th>Product Name</th>
-				  <th>Borrowing Amount</th>
+				  <th>Borrowing Amount(GDP)</th>
 				  <th>Term (Months)</th>
 				  <th>Risk Band</th>
 				  <th>Action</th>
