@@ -22,10 +22,6 @@ body, html {
     min-height:100%; /* real browsers */
 }
 
-:global(.pagination) {
-	display: inline-block !important;
-}
-
 :global(.btn-primary) {
 	background-color: #1e808f !important;
     border-color: #1e808f !important;
