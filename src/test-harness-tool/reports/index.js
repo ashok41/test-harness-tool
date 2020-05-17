@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination } from 'react-bootstrap'
+import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios';
 import TestLog from './components/testlog';
@@ -44,7 +44,7 @@ function ControlledTabs(props) {
 	{data.map((item, index) => {
 	  const percent = item.percent ? ` (${item.percent}%)` : ''
       return (<Tab key={index} eventKey={item.status} title={`${item.cases}: ${item.count}${percent}`}>
-        <Table responsive striped bordered hover size="sm">
+        <Table responsive striped bordered hover size="md">
 		  <thead>
 			<tr>
 			  <th rowSpan="2">ID</th>
@@ -52,7 +52,7 @@ function ControlledTabs(props) {
 			  <th rowSpan="2">Bank Division</th>
 			  <th rowSpan="2">Product Family</th>
 			  <th rowSpan="2">Product Name</th>
-			  <th rowSpan="2">Borrowing Amount(GDP)</th>
+			  <th rowSpan="2">Borrowing Amount(GBP)</th>
 			  <th rowSpan="2">Term (Months)</th>
 			  <th rowSpan="2">Risk Band</th>
 			  <th colSpan="2" className={styles.rate}>Actual</th>
@@ -96,29 +96,33 @@ function ControlledTabs(props) {
 function RoutingPage() {
   const location = useLocation()
   const {state} = location;
-     
+  
   state['passedPercent'] = Math.round((state.passed/state.totaltestcases) * 100);
   state['failedPercent'] = Math.round((state.failed/state.totaltestcases) * 100);
   return (
-	<>
-	  <Row className={styles.section}>
-        <Col md="12">
+	<div className={styles.container}>
+	  <Card>
+	    <Card.Header>Test Execution Summary</Card.Header>
+	    <Card.Body className={styles.cardBody}>
 		  <div>
-		    <div className={styles.headTitle}>Test Execution Summary</div>
 		    <TestLog testCasesRun={state.totaltestcases} logData={createLogData(state)} />
 		  </div>
-		</Col>
-	  </Row>
-	  <div>
-	    <div className={styles.relative}>
+		 </Card.Body>
+	  </Card>
+	  <div className={styles.tabWrapper}>
+	   <Card>
+	    <Card.Body>
+	     <div className={styles.relative}>
 		  <div className={styles.download}>
 		   <Button variant="primary" disabled>Download Reports</Button>{' '}
 		   <Button variant="primary" disabled>Print</Button>
 		  </div>
-		</div>
-	    <ControlledTabs data={createLogData(state)} testCasesRun={state.totaltestcases} testDataList={state.testcasesResultList} />
+		 </div>
+	     <ControlledTabs data={createLogData(state)} testCasesRun={state.totaltestcases} testDataList={state.testcasesResultList} />
+		</Card.Body>
+	   </Card>
 	  </div>
-	</>
+	</div>
   );
 }
 

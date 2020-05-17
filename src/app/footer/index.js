@@ -4,9 +4,7 @@ import styles from './footer.scss'
 
 function Footer() {
   return (
-	<Row>
-      <Col className={styles.footer} />
-    </Row>
+	<Row className={styles.footer} />
   );
 }
 

@@ -22,11 +22,20 @@
 	}
 }
 .log-lables {
-	padding: 40px 0px 0 10px;
+	padding: 35px 0px 0 10px;
 	span {
 		font-weight: bold;
 	}
 	.pad-bottom {
 		padding-bottom: 5px !important;
 	}
+}
+:global(.nav-link.active) {
+	background-color: #d91260 !important;
+	border-color: #d91260 #d91260 #fff !important;
+	color: #fff !important;
+}
+:global(.nav-link) {
+	color: #000 !important;
+	font-weight: 500;
 }

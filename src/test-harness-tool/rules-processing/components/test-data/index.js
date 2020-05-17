@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Row, Col, Button, Table, Pagination } from 'react-bootstrap'
+import { Row, Col, Button, Table, Pagination, Card } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import RowEditable from './row-editable'
@@ -48,10 +48,10 @@ function TestData() {
   const indexOfFirstTodo = indexOfLastTodo - 10;
   const paginationData = dataLists.slice(indexOfFirstTodo, indexOfLastTodo);
   return (
-    <>
-	  <Row className={styles.padTop}>
+    <Card>
+	  <Row className={styles.wrapper}>
 	    <Col md="12">
-		<Table responsive striped bordered hover size="sm">
+		<Table responsive striped bordered hover size="md">
 			  <thead>
 				<tr>
 				  <th>ID</th>
@@ -59,10 +59,10 @@ function TestData() {
 				  <th>Bank Division</th>
 				  <th>Product Family</th>
 				  <th>Product Name</th>
-				  <th>Borrowing Amount(GDP)</th>
+				  <th>Borrowing Amount(GBP)</th>
 				  <th>Term (Months)</th>
 				  <th>Risk Band</th>
-				  <th>Action</th>
+				  <th>Actions</th>
 				</tr>
 			  </thead>
 			  <tbody>
@@ -74,15 +74,13 @@ function TestData() {
 		  {state.length > 10 && <div>
 		    <Pagination>{items}</Pagination>
 	      </div>}
+		  <div>
+		    <Button variant="primary" disabled onClick={() => history.goBack()}>Back</Button>{' '}
+		    <Button variant="primary" onClick={handleSubmit}>Next</Button>
+		  </div>
 		</Col>
 	  </Row>
-	  <Row className={styles.section}>
-		<Col md="3">
-		  <Button variant="primary" disabled onClick={() => history.goBack()}>Back</Button>{' '}
-		  <Button variant="primary" onClick={handleSubmit}>Next</Button>
-		</Col>
-	   </Row>
-    </>
+    </Card>
   );
 }
 

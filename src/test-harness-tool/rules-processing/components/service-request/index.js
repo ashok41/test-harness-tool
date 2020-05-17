@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Row, Col, Button, Table, Pagination } from 'react-bootstrap'
+import { Row, Col, Button, Table, Pagination, Card } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import styles from './service-request.scss'
@@ -30,7 +30,7 @@ function ServiceRequest() {
   for (let number = 1; number <= total; number++) {
     items.push(
       <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
-        {number}
+        {number}+
       </Pagination.Item>
     );
   }
@@ -38,25 +38,22 @@ function ServiceRequest() {
   const indexOfFirstTodo = indexOfLastTodo - 10;
   const paginationData = state.slice(indexOfFirstTodo, indexOfLastTodo);
   return (
-    <>
-	  <Row className={styles.padTop}>
+    <Card>
+	  <Row className={styles.wrapper}>
 	    <Col md="12">
-		<Table responsive striped bordered hover size="sm">
+		<Table responsive striped bordered hover size="md">
 			  <thead>
 				<tr>
-				  <th rowSpan="2">ID</th>
-				  <th rowSpan="2">Application Identity</th>
-				  <th rowSpan="2">Bank Division</th>
-				  <th rowSpan="2">Product Family</th>
-				  <th rowSpan="2">Product Name</th>
-				  <th rowSpan="2">Borrowing Amount(GDP)</th>
-				  <th rowSpan="2">Term (Months)</th>
-				  <th rowSpan="2">Risk Band</th>
-				  <th colSpan="2" className={styles.rate}>Actual</th>
-				</tr>
-				<tr>
-				  <th className={styles.rate}>AIR</th>
-				  <th className={styles.rate}>APR</th>
+				  <th>ID</th>
+				  <th>Application Identity</th>
+				  <th>Bank Division</th>
+				  <th>Product Family</th>
+				  <th>Product Name</th>
+				  <th>Borrowing Amount(GBP)</th>
+				  <th>Term (Months)</th>
+				  <th>Risk Band</th>
+				  <th className={styles.rate}>AIR(%)</th>
+				  <th className={styles.rate}>APR(%)</th>
 				</tr>
 			  </thead>
 			  <tbody>
@@ -79,15 +76,14 @@ function ServiceRequest() {
 		  {state.length > 10 && <div>
 		    <Pagination>{items}</Pagination>
 	      </div>}
+		  <div>
+		   <Button variant="primary" disabled onClick={() => history.goBack()}>Back</Button>{' '}
+		   <Button variant="primary" onClick={handleSubmit}>Confirm & Execute</Button>
+		  </div>
 		</Col>
 	  </Row>
-	  <Row className={styles.section}>
-		<Col md="3">
-		  <Button variant="primary" disabled onClick={() => history.goBack()}>Back</Button>{' '}
-		  <Button variant="primary" onClick={handleSubmit}>Confirm & Execute</Button>
-		</Col>
-	   </Row>
-    </>
+	  
+    </Card>
   );
 }
 

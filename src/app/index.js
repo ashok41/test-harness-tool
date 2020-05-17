@@ -11,8 +11,7 @@ import styles from '../test-harness-tool/common/common.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const  root = document.createElement('div');
-root.style = 'height:100%';
-
+root.style = "min-height: 100%;height:100%;"
 render((
  <Router>
      <Container className={styles.container}>
