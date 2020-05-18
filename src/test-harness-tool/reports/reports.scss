@@ -13,14 +13,17 @@
 	padding-bottom: 20px;
 }
 
-th.rate, th.actual {
+th.rate, th.actual,th.rate-head, th.actual-head {
 	color: #000 !important;
 	font-weight: bold !important;
 }
-.rate {
+.rate, .rate-head {
 	background-color: #9ad8f9 !important;
 }
-.actual {
+.rate-head, .actual-head {
+	text-align: center;
+}
+.actual, .actual-head {
 	background-color: #ca4a9b !important;
 }
 .relative {

@@ -55,8 +55,8 @@ function ControlledTabs(props) {
 			  <th rowSpan="2">Borrowing Amount(GBP)</th>
 			  <th rowSpan="2">Term (Months)</th>
 			  <th rowSpan="2">Risk Band</th>
-			  <th colSpan="2" className={styles.rate}>Expected</th>
-			  <th colSpan="2" className={styles.actual}>Actual</th>
+			  <th colSpan="2" className={styles.rateHead}>Expected</th>
+			  <th colSpan="2" className={styles.actualHead}>Actual</th>
 			</tr>
 			<tr>
 		      <th className={styles.rate}>AIR(%)</th>
@@ -96,7 +96,7 @@ function ControlledTabs(props) {
 function RoutingPage() {
   const location = useLocation()
   const {state} = location;
-    
+  
   state['passedPercent'] = Math.round((state.passed/state.totaltestcases) * 100);
   state['failedPercent'] = Math.round((state.failed/state.totaltestcases) * 100);
   return (
