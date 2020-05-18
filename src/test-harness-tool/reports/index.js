@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card } from 'react-bootstrap'
+import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card, DropdownButton,Dropdown } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios';
 import TestLog from './components/testlog';
@@ -55,8 +55,8 @@ function ControlledTabs(props) {
 			  <th rowSpan="2">Borrowing Amount(GBP)</th>
 			  <th rowSpan="2">Term (Months)</th>
 			  <th rowSpan="2">Risk Band</th>
-			  <th colSpan="2" className={styles.rate}>Actual</th>
 			  <th colSpan="2" className={styles.rate}>Expected</th>
+			  <th colSpan="2" className={styles.rate}>Actual</th>
 			</tr>
 			<tr>
 		      <th className={styles.rate}>AIR</th>
@@ -76,10 +76,10 @@ function ControlledTabs(props) {
 				<td>{item.barrowAmount}</td>
 				<td>{item.termFactor}</td>
 				<td>{item.riskFactor}</td>
-				<td className={styles.rate}>{item.allInRate}</td>
-				<td className={styles.rate}>{item.annualPercentageRate}</td>
 				<td className={styles.rate}>{item.expectedAllInRate}</td>
 				<td className={styles.rate}>{item.expectedAnnualPercentageRate}</td>
+				<td className={styles.rate}>{item.allInRate}</td>
+				<td className={styles.rate}>{item.annualPercentageRate}</td>
 			  </tr>
 			))}
 		  </tbody>
@@ -114,7 +114,10 @@ function RoutingPage() {
 	    <Card.Body>
 	     <div className={styles.relative}>
 		  <div className={styles.download}>
-		   <Button variant="primary" disabled>Download Reports</Button>{' '}
+		   <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Reports">
+			  <Dropdown.Item href="#">PDF</Dropdown.Item>
+			  <Dropdown.Item href="#">Excel</Dropdown.Item>
+			</DropdownButton>
 		   <Button variant="primary" disabled>Print</Button>
 		  </div>
 		 </div>

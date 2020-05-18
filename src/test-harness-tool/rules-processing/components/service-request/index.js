@@ -10,7 +10,7 @@ function ServiceRequest() {
   const history = useHistory()
   const location = useLocation()
   const {state} = location;
-  
+    
   function handleSubmit() {
 	  axios.post('http://localhost:8081/testCasesResult', state)
 	  .then((response) => {
@@ -30,7 +30,7 @@ function ServiceRequest() {
   for (let number = 1; number <= total; number++) {
     items.push(
       <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
-        {number}+
+        {number}
       </Pagination.Item>
     );
   }

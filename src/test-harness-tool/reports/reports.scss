@@ -14,6 +14,9 @@
 }
 .section {
 }
+th.rate {
+	color: #000 !important;
+}
 .rate {
 	background-color: #9ad8f9 !important;
 }
@@ -25,4 +28,8 @@
    top: -5px;
    bottom: 0px;
    right: 0px;
+}
+.dropdown {
+	display: inline-block;
+	margin-right: 10px;
 }
