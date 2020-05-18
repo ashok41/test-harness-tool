@@ -71,13 +71,13 @@ function RowEditable(props) {
    }
    </tr>
    <Modal show={show.modal} onHide={handleCancel}>
-        <Modal.Body>Will confirm to save?</Modal.Body>
+        <Modal.Body>Please confirm your changes?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCancel}>
-            Close
+            Cancel
           </Button>
           <Button variant="primary" onClick={modalSave}>
-            Save Changes
+            Save
           </Button>
         </Modal.Footer>
       </Modal>
