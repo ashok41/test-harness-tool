@@ -31,11 +31,15 @@
 	}
 }
 :global(.nav-link.active) {
-	background-color: #d91260 !important;
-	border-color: #d91260 #d91260 #fff !important;
-	color: #fff !important;
+	border-color: #00c21e #00c21e #fff !important;
+	background-color: #00c21e !important;
+
 }
 :global(.nav-link) {
 	color: #000 !important;
 	font-weight: 500;
+		background-color: #d81a36 !important;
+	border-color: #d81a36 #d81a36 #fff !important;
+
+	color: #fff !important;
 }

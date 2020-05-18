@@ -56,13 +56,13 @@ function ControlledTabs(props) {
 			  <th rowSpan="2">Term (Months)</th>
 			  <th rowSpan="2">Risk Band</th>
 			  <th colSpan="2" className={styles.rate}>Expected</th>
-			  <th colSpan="2" className={styles.rate}>Actual</th>
+			  <th colSpan="2" className={styles.actual}>Actual</th>
 			</tr>
 			<tr>
-		      <th className={styles.rate}>AIR</th>
-			  <th className={styles.rate}>APR</th>
-			  <th className={styles.rate}>AIR</th>
-			  <th className={styles.rate}>APR</th>
+		      <th className={styles.rate}>AIR(%)</th>
+			  <th className={styles.rate}>APR(%)</th>
+			  <th className={styles.actual}>AIR(%)</th>
+			  <th className={styles.actual}>APR(%)</th>
 			</tr>
 		  </thead>
 		  <tbody>
@@ -78,8 +78,8 @@ function ControlledTabs(props) {
 				<td>{item.riskFactor}</td>
 				<td className={styles.rate}>{item.expectedAllInRate}</td>
 				<td className={styles.rate}>{item.expectedAnnualPercentageRate}</td>
-				<td className={styles.rate}>{item.allInRate}</td>
-				<td className={styles.rate}>{item.annualPercentageRate}</td>
+				<td className={styles.actual}>{item.allInRate}</td>
+				<td className={styles.actual}>{item.annualPercentageRate}</td>
 			  </tr>
 			))}
 		  </tbody>
@@ -96,7 +96,7 @@ function ControlledTabs(props) {
 function RoutingPage() {
   const location = useLocation()
   const {state} = location;
-  
+    
   state['passedPercent'] = Math.round((state.passed/state.totaltestcases) * 100);
   state['failedPercent'] = Math.round((state.failed/state.totaltestcases) * 100);
   return (
@@ -104,6 +104,16 @@ function RoutingPage() {
 	  <Card>
 	    <Card.Header>Test Execution Summary</Card.Header>
 	    <Card.Body className={styles.cardBody}>
+		  <div className={styles.relative}>
+		   <div className={styles.download}>
+		    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
+			  <Dropdown.Item href="#">PDF</Dropdown.Item>
+			  <Dropdown.Item href="#">Excel</Dropdown.Item>
+			 </DropdownButton>
+		    <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
+		    <Button variant="primary" disabled>Print</Button>
+		   </div>
+		 </div>
 		  <div>
 		    <TestLog testCasesRun={state.totaltestcases} logData={createLogData(state)} />
 		  </div>
@@ -112,16 +122,6 @@ function RoutingPage() {
 	  <div className={styles.tabWrapper}>
 	   <Card>
 	    <Card.Body>
-	     <div className={styles.relative}>
-		  <div className={styles.download}>
-		   <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
-			  <Dropdown.Item href="#">PDF</Dropdown.Item>
-			  <Dropdown.Item href="#">Excel</Dropdown.Item>
-			</DropdownButton>
-		    <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
-		   <Button variant="primary" disabled>Print</Button>
-		  </div>
-		 </div>
 	     <ControlledTabs data={createLogData(state)} testCasesRun={state.totaltestcases} testDataList={state.testcasesResultList} />
 		</Card.Body>
 	   </Card>

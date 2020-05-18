@@ -12,17 +12,20 @@
 	color: #002d64;
 	padding-bottom: 20px;
 }
-.section {
-}
-th.rate {
+
+th.rate, th.actual {
 	color: #000 !important;
 	font-weight: bold !important;
 }
 .rate {
 	background-color: #9ad8f9 !important;
 }
+.actual {
+	background-color: #ca4a9b !important;
+}
 .relative {
 	position: relative;
+	margin-right: 20px;
 }
 .download {
    position: absolute;

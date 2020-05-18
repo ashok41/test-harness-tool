@@ -11,7 +11,7 @@ function createCasesList(data) {
 
 const TestLog = (props) => {
   const { testCasesRun, logData } = props
-  const expectedDuration = '02:00:00:00'
+  const expectedDuration = '00:00:00:00'
   const logRef = useRef()
   const drawLog = () => {
 	const width = 130;

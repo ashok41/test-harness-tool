@@ -43,11 +43,15 @@ body, html {
 	
 }
 :global(.table-striped tbody tr:nth-of-type(odd)) {
-	background-color: #ccc !important;
+	background-color: #6dcc67 !important;
+	color: #fff !important;
 }
 :global(.card-header-tabs) {
 	margin: 0 !important;
 }
 :global(.form-control) {
 	font-size: .9rem !important;
+}
+:global(.pagination) {
+	float: right;
 }
