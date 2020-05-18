@@ -114,10 +114,11 @@ function RoutingPage() {
 	    <Card.Body>
 	     <div className={styles.relative}>
 		  <div className={styles.download}>
-		   <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Reports">
+		   <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
 			  <Dropdown.Item href="#">PDF</Dropdown.Item>
 			  <Dropdown.Item href="#">Excel</Dropdown.Item>
 			</DropdownButton>
+		    <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
 		   <Button variant="primary" disabled>Print</Button>
 		  </div>
 		 </div>
