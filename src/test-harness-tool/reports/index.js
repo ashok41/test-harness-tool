@@ -94,7 +94,7 @@ function ControlledTabs(props) {
 }
 
 function RoutingPage() {
-  const location = useLocation()
+  const location = useLocation();
   const {state} = location;
   
   state['passedPercent'] = Math.round((state.passed/state.totaltestcases) * 100);
