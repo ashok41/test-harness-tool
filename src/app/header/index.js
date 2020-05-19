@@ -10,7 +10,7 @@ function Header() {
       </Col>
       <Col xs="6" className={styles.headerTxt}>Loan Pricing Validator</Col>
 	  <Col xs="2">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTVXgAS--oNIFnqS4Z4Z8TcxgrNtXC_GOhp_f8ZEE3rYsZ8LcZX&usqp=CAU" className={styles.logo} alt="Natwest Group" title="Natwest Group"/>
+          <img src="https://media-assets-04.thedrum.com/cache/images/thedrum-prod/s3-news-tmp-10557-natwest--default--1225.jpg" className={styles.logo} alt="Natwest Group" title="Natwest Group"/>
       </Col>
     </Row>
   );
