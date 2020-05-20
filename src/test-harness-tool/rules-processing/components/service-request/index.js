@@ -7,10 +7,9 @@ import common from '../../../common/common.scss'
 
 function ServiceRequest() {
   
-  const history = useHistory()
-  const location = useLocation()
-  const {state} = location;
-  
+  const history = useHistory();
+  const location = useLocation();
+  const {state} = location;  
   function handleSubmit() {
 	  axios.post('http://localhost:8081/testCasesResult', state)
 	  .then((response) => {

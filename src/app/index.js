@@ -6,6 +6,7 @@ import Header from './header'
 import Footer from './footer'
 import Reports from '../test-harness-tool/reports'
 import Dashboard from '../test-harness-tool/dashboard'
+import PricingTool from '../test-harness-tool/pricing-tool'
 import RulesProcessing from '../test-harness-tool/rules-processing'
 import styles from '../test-harness-tool/common/common.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,7 +19,8 @@ render((
        <Header />
 	   <Switch>
 	     <Route path="/reports" component={Reports}/>
-	     <Route exact path="/" component={Dashboard}/>
+		 <Route exact path="/" component={Dashboard}/>
+	     <Route path="/pricing-tool" component={PricingTool}/>
 	     <Route path="/rules-processing/:slug" component={RulesProcessing}/>
 	   </Switch>
 	   <Footer />
