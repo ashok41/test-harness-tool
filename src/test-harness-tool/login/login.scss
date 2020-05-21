@@ -41,26 +41,6 @@
 	}
 }
 
-ul > li {
-	list-style-type: none;
-	padding: 10px 15px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
-    background-color: #fff;
-    margin: 10px;
-	position: relative;
-	cursor: pointer;
-}
-
-li a {
-	font-weight: 700;
-	font-size: 1rem;
-	color: #000;
-}
-
-li a:hover {
-	text-decoration: none;
-}
-	
 :global(.card) {
 	border-radius: 0px !important;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14);

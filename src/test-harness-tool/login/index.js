@@ -5,11 +5,12 @@ import common from '../common/common.scss'
 import styles from './login.scss'
 	
 
-function Dashboard() {
+function Login() {
   const history = useHistory()
   const initial = {username: '', password:''}
   const [state, setState] = useState(initial)
   const [error, setError] = useState('')
+  const date = new Date();
 
   function handleSubmit(e) {
 	  e.preventDefault();
@@ -17,6 +18,7 @@ function Dashboard() {
 	  if (error === '') {
 		setError('')	
 		localStorage.setItem('logged', true);
+		localStorage.setItem('date', date.toLocaleString("en-US"));
 		history.push({
 			pathname: '/',
 		})
@@ -77,4 +79,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Login;

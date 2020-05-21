@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Row, Col, Button, Table, Pagination, Card } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
+import ProfileList from '../../../common/profile-list'
 import axios from 'axios'
 import styles from './service-request.scss'
 import common from '../../../common/common.scss'
@@ -10,6 +11,7 @@ function ServiceRequest() {
   const history = useHistory();
   const location = useLocation();
   const {state} = location;  
+  
   function handleSubmit() {
 	  axios.post('http://localhost:8081/testCasesResult', state)
 	  .then((response) => {
@@ -40,7 +42,14 @@ function ServiceRequest() {
     <Card>
 	  <Row className={styles.wrapper}>
 	    <Col md="12">
-		<Table responsive striped bordered hover size="md">
+		 <Row>
+		   <Col md="9">
+		   </Col>
+		   <Col md="3">
+		    <ProfileList />
+		   </Col>
+		  </Row>
+		  <Table responsive striped bordered hover size="md">
 			  <thead>
 				<tr>
 				  <th>ID</th>

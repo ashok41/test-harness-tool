@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb } from 'react-bootstrap'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import ProfileList from '../common/profile-list'
 import styles from './pricing-tool.scss'
 import common from '../common/common.scss'
 
@@ -96,10 +97,17 @@ function Dashboard() {
     <>
       <Row className={styles.section}>
         <Col md="12">
-		  <Breadcrumb>
-		   <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
-		   <Breadcrumb.Item active>Pricing Tool</Breadcrumb.Item>
-		  </Breadcrumb>
+		  <Row>
+		   <Col md="9">
+		    <Breadcrumb>
+		     <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
+		     <Breadcrumb.Item active>Pricing Tool</Breadcrumb.Item>
+		    </Breadcrumb>
+		   </Col>
+		   <Col md="3">
+		    <ProfileList />
+		   </Col>
+		  </Row>
 		  {error &&
 		    <Alert key="1" className={styles.alert} variant="danger">
 			  {error}

@@ -6,11 +6,11 @@ import styles from './dashboard.scss'
 	
 
 function Dashboard() {
-  const date = new Date();
   const history = useHistory();
   
   function logout() {
 	  localStorage.removeItem('logged');
+	  localStorage.removeItem('date');
 	  history.push({
 		pathname: '/login',
 	  })
@@ -24,7 +24,7 @@ function Dashboard() {
             <Card.Body className={styles.relative}>
 			<div className={styles.profileList}>
 				<div><span>Welcome,</span> <i>Rob</i> <span className={styles.logout} href="#" onClick={logout}>(Logout)</span></div>
-				<div><span>Logged in</span> <i>{date.toLocaleString("en-US")}</i></div>
+				<div><span>Logged in</span> <i>{localStorage.getItem('date')}</i></div>
 			</div>
             <div className={styles.listWrapper}>
 			 <ul className={styles.listGroup}>

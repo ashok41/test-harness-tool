@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card, DropdownButton, Dropdown, Breadcrumb } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios';
+import ProfileList from '../common/profile-list'
 import TestLog from './components/testlog';
 import styles from './reports.scss';
 
@@ -95,16 +96,23 @@ function ControlledTabs(props) {
 
 function RoutingPage() {
   const location = useLocation();
-  const {state} = location;
-  
+  const {state} = location
+   
   state['passedPercent'] = Math.round((state.passed/state.totaltestcases) * 100);
   state['failedPercent'] = Math.round((state.failed/state.totaltestcases) * 100);
   return (
 	<div className={styles.container}>
-	  <Breadcrumb>
-		<Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
-		<Breadcrumb.Item active>Reports</Breadcrumb.Item>
-	  </Breadcrumb>
+	  <Row>
+	   <Col md="9">
+		<Breadcrumb>
+		 <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
+		 <Breadcrumb.Item active>Reports</Breadcrumb.Item>
+		</Breadcrumb>
+	   </Col>
+	   <Col md="3">
+		<ProfileList />
+	   </Col>
+	  </Row>
 	  <Card>
 	    <Card.Header>Test Execution Summary</Card.Header>
 	    <Card.Body className={styles.cardBody}>
