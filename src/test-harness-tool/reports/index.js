@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card, DropdownButton,Dropdown } from 'react-bootstrap'
+import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card, DropdownButton, Dropdown, Breadcrumb } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios';
 import TestLog from './components/testlog';
@@ -101,6 +101,10 @@ function RoutingPage() {
   state['failedPercent'] = Math.round((state.failed/state.totaltestcases) * 100);
   return (
 	<div className={styles.container}>
+	  <Breadcrumb>
+		<Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
+		<Breadcrumb.Item active>Reports</Breadcrumb.Item>
+	  </Breadcrumb>
 	  <Card>
 	    <Card.Header>Test Execution Summary</Card.Header>
 	    <Card.Body className={styles.cardBody}>

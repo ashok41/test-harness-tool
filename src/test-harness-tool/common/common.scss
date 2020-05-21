@@ -54,3 +54,11 @@ body, html {
 :global(.pagination) {
 	float: right;
 }
+:global(.breadcrumb) {
+	background-color: transparent !important;
+	padding: 0 !important;
+	li a {
+		color: #007bff;
+		font-weight: 500;
+	}
+}

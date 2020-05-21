@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Container, Row, Col, Card, ListGroup, Form, Button, Alert } from 'react-bootstrap'
+import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb } from 'react-bootstrap'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import styles from './pricing-tool.scss'
@@ -96,6 +96,10 @@ function Dashboard() {
     <>
       <Row className={styles.section}>
         <Col md="12">
+		  <Breadcrumb>
+		   <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
+		   <Breadcrumb.Item active>Pricing Tool</Breadcrumb.Item>
+		  </Breadcrumb>
 		  {error &&
 		    <Alert key="1" className={styles.alert} variant="danger">
 			  {error}

@@ -1,30 +1,44 @@
 import React, {useState} from 'react';
-import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, List } from 'react-bootstrap'
+import { Row, Col, Card } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 import common from '../common/common.scss'
 import styles from './dashboard.scss'
 	
 
 function Dashboard() {
+  const date = new Date();
+  const history = useHistory();
+  
+  function logout() {
+	  localStorage.removeItem('logged');
+	  history.push({
+		pathname: '/login',
+	  })
+  }
+  
   return (
     <>
       <Row className={styles.section}>
         <Col md="12">
 		  <Card className={styles.cardWrapper}>
-            <Card.Body>
-            <ListGroup className={styles.listGroup}>
-			  <ListGroup.Item action href="#pricing-tool">
-			    Pricing Tool
-			  </ListGroup.Item>
-			  <ListGroup.Item action href="#link2" disabled>
-			    Product Finder
-			  </ListGroup.Item>
-			  <ListGroup.Item action href="#link2" disabled>
-			    Audit Reports
-			  </ListGroup.Item>
-			  <ListGroup.Item action href="#link2" disabled>
-			    Option 4(to be finalized)
-			  </ListGroup.Item>
-			</ListGroup>
+            <Card.Body className={styles.relative}>
+			<div className={styles.profileList}>
+				<div><span>Welcome,</span> <i>Rob</i> <span className={styles.logout} href="#" onClick={logout}>(Logout)</span></div>
+				<div><span>Logged in</span> <i>{date.toLocaleString("en-US")}</i></div>
+			</div>
+            <div className={styles.listWrapper}>
+			 <ul className={styles.listGroup}>
+			  <li>
+			    <i /><span><a href="#pricing-tool">Pricing Tool</a></span>
+			  </li>
+			  <li>
+			    <i /><span><a href="#">Product Finder</a></span>
+			  </li>
+			  <li>
+			    <i /><span><a href="#report-lists">Report</a></span>
+			  </li>
+			 </ul>
+			</div>
             </Card.Body>
           </Card>
         </Col>
