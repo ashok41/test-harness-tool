@@ -8,7 +8,7 @@ import styles from './report-lists.scss'
 	
 
 function ReportLists() {
-  const initial = {from: '', to: '', data: []}
+  const initial = {from: '', to: '', business: '', data: []}
   const [state, setState] = useState(initial)
   const [list, setList] = useState('date-range')
   const [page, setPage] = useState(1);
@@ -50,6 +50,7 @@ function ReportLists() {
   }
   
   const menuOpen = (list) => (e) => {
+	  setState(initial)
 	  setList(list)
   }
   return (
@@ -84,9 +85,17 @@ function ReportLists() {
              <Card.Body>
               <Form>
 			   <Row>
+			   {list === "business-report" && <Col md="12">
+                 <Form.Group as={Row} controlId="business">
+				  <Form.Label column sm="2">Business</Form.Label>
+				  <Col sm="4">
+				   <Form.Control type="text" value={state.business} onChange={onTextUpdated('business')} />
+				  </Col>
+		         </Form.Group>
+			   </Col>}
 			    <Col md="6">
                  <Form.Group as={Row} controlId="from">
-				  <Form.Label column sm="3">From</Form.Label>
+				  <Form.Label column sm="4">From</Form.Label>
 				  <Col sm="8">
 				   <Form.Control type="text" value={state.from} onChange={onTextUpdated('from')} />
 				  </Col>
@@ -94,7 +103,7 @@ function ReportLists() {
 				</Col>
 				<Col md="6">
 			     <Form.Group as={Row} controlId="to">
-				  <Form.Label column sm="3">To</Form.Label>
+				  <Form.Label column sm="2">To</Form.Label>
 				  <Col sm="8">
 				   <Form.Control type="text" value={state.to} onChange={onTextUpdated('to')} />
 				  </Col>
