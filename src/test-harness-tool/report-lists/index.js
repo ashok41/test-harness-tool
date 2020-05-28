@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import { Row, Col, Card, Breadcrumb, ListGroup, Form, Button, Table, Pagination } from 'react-bootstrap'
-import { useHistory } from 'react-router-dom'
+import { Row, Col, Card, Breadcrumb, ListGroup, Form, Button, Table, Pagination, Dropdown, DropdownButton, Alert } from 'react-bootstrap'
+import { useHistory, useParams } from 'react-router-dom'
+import DatePicker from  'react-date-picker'
 import ProfileList from '../common/profile-list'
 import data from './reports.json';
 import common from '../common/common.scss'
@@ -8,11 +9,12 @@ import styles from './report-lists.scss'
 	
 
 function ReportLists() {
-  const initial = {from: '', to: '', business: '', data: []}
+  const initial = {from: new Date(), to: new Date(), business: '', data: []}
   const [state, setState] = useState(initial)
-  const [list, setList] = useState('date-range')
+  const [error, setError] = useState('')
   const [page, setPage] = useState(1);
-  
+  const params = useParams()
+  const { slug } = params
   const setPageItem = (number) => () => {
 	  setPage(number)
   }
@@ -37,22 +39,38 @@ function ReportLists() {
   }
   
   function handleSubmit(e) {
-	  setState({...state, data: data})
+	  const error = validation(state)
+	  if (error === '') {
+		setError('')	
+	    setState({...state, data: data})
+	  } else {
+		setError(error)	
+	  }
+  }
+  
+  function validation(forms) {
+	let errors = ''
+	if (forms.from === null) {
+		errors = 'Please enter valid from date';
+	} 
+	if (errors === '' && forms.to === null) {
+		errors = 'Please enter valid to date';
+	}
+	return errors
   }
   
   function handleReset() {
 	  setState({...state, ...initial})
   }
   
-  const onTextUpdated = (label) => (e) => {
-	  const data = e.target.value;
+  const onTextUpdated = (label) => (data) => {
 	  setState({...state, [label]: data})
   }
   
-  const menuOpen = (list) => (e) => {
-	  setState(initial)
-	  setList(list)
-  }
+  const onSelectedSingleOptionChange = (label) => (e) => {
+	setState({...state, [label]: e.target.value})
+  }	
+  
   return (
     <>
       <Row className={styles.section}>
@@ -69,51 +87,63 @@ function ReportLists() {
 		   </Col>
 		  </Row>
 		  <Row>
-		   <Col md="3">
-            <Card bg="light" text="dark">
-             <Card.Body>
-              <ListGroup defaultActiveKey={leftMenu[list].url}>
-                <ListGroup.Item variant="dark" action href="#/report-lists" onClick={menuOpen('date-range')}>Date Range</ListGroup.Item>
-                <ListGroup.Item variant="dark" href="#/report-lists/business-report" onClick={menuOpen('business-report')}>Business Report</ListGroup.Item>
-              </ListGroup>
-             </Card.Body>
-            </Card>
-           </Col>
-		   <Col md="9">
+		   <Col md="12">
+		   {error &&
+		    <Alert key="1" className={styles.alert} variant="danger">
+			  {error}
+		    </Alert>
+		   }
 		    <Card>
-			 <Card.Header>{leftMenu[list].name}</Card.Header>
+			 <Card.Header>{leftMenu[slug].name}</Card.Header>
              <Card.Body>
               <Form>
-			   <Row>
-			   {list === "business-report" && <Col md="12">
+			    {slug === "business-report" && <Row><Col md="8">
                  <Form.Group as={Row} controlId="business">
-				  <Form.Label column sm="2">Business</Form.Label>
+				  <Form.Label column sm="2">Product Name</Form.Label>
 				  <Col sm="4">
-				   <Form.Control type="text" value={state.business} onChange={onTextUpdated('business')} />
+				   <Form.Control as="select" value={state.business} onChange={onSelectedSingleOptionChange('business')}>
+                      <option value="">Please Select</option>
+					  <option value="01">Small Business</option>
+                   </Form.Control>
 				  </Col>
 		         </Form.Group>
-			   </Col>}
-			    <Col md="6">
-                 <Form.Group as={Row} controlId="from">
-				  <Form.Label column sm="4">From</Form.Label>
-				  <Col sm="8">
-				   <Form.Control type="text" value={state.from} onChange={onTextUpdated('from')} />
-				  </Col>
-		         </Form.Group>
-				</Col>
-				<Col md="6">
-			     <Form.Group as={Row} controlId="to">
-				  <Form.Label column sm="2">To</Form.Label>
-				  <Col sm="8">
-				   <Form.Control type="text" value={state.to} onChange={onTextUpdated('to')} />
-				  </Col>
-			     </Form.Group>
-				 </Col>
-				</Row>
-				<Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
-                <Button variant="primary" onClick={handleSubmit}>Generate Report</Button>
+			    </Col></Row>}
+			    {((slug === "business-report" && state.business != "") || (slug === "date-range")) &&
+				 <>
+				  <Row>
+				   <Col md="12" className={styles.dateBox}>
+				    <div className={slug === "business-report" ? styles.listBox :styles.fromBox}>From</div>
+				    <div className={styles.listBox}>
+				     <DatePicker
+					  onChange={onTextUpdated('from')}
+					  value={state.from}
+					  maxDate={new Date()}
+					 />
+				    </div>
+				    <div className={styles.toBox}>To</div>
+				    <div className={styles.toBox}>
+				     <DatePicker
+					  onChange={onTextUpdated('to')}
+					  value={state.to}
+					  maxDate={new Date()}
+				     />
+				    </div>
+				   </Col>
+				  </Row>
+				  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
+                  <Button variant="primary" onClick={handleSubmit}>Generate Report</Button>
+				 </>
+				}
 			  </Form>
 			  {state.data.length >0 && <div className={styles.tableWrapper}>
+			   <div className={styles.buttonBox}>
+			    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
+			     <Dropdown.Item href="#">PDF</Dropdown.Item>
+			     <Dropdown.Item href="#">Excel</Dropdown.Item>
+			    </DropdownButton>
+		        <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
+		        <Button variant="primary" disabled>Print</Button>
+			   </div>
 			   <Table responsive striped bordered hover size="md">
 			    <thead>
 				 <tr>

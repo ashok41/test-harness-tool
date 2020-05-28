@@ -65,3 +65,28 @@ th.rate, th.actual,th.rate-head, th.actual-head {
 :global(.list-group-item) {
 	color: #005093 !important;
 }
+.date-box {
+	padding-bottom: 20px;
+}
+.list-box {
+	display: inline-block;
+	padding-right: 90px;
+}
+.from-box {
+	display: inline-block;
+	padding-right: 25px;
+}
+.to-box {
+	display: inline-block;
+	padding-right: 30px;
+}
+.button-box {
+	float: right;
+	padding-bottom: 10px;
+	.dropdown {
+		display: inline-block;
+	}
+	button {
+		margin-left: 10px;
+	}
+}

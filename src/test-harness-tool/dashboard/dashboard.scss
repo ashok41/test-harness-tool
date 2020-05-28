@@ -42,6 +42,16 @@
 	  position: absolute;
 	  top: 13px;
 	}
+	.dropdown {
+		display: inline-block;
+		button {
+		   padding: 0px !important;
+		   background-color: transparent !important;
+		   color: #000 !important;
+		   border: none !important;
+		   font-weight: 700;
+		}
+	}
 }
 
 ul.list-group > li {

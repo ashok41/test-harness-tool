@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Row, Col, Card } from 'react-bootstrap'
+import { Row, Col, Card, Dropdown, DropdownButton } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import common from '../common/common.scss'
 import styles from './dashboard.scss'
@@ -35,7 +35,13 @@ function Dashboard() {
 			    <i /><span><a href="#">Product Finder</a></span>
 			  </li>
 			  <li>
-			    <i /><span><a href="#report-lists">Report</a></span>
+			    <i />
+				<span>
+				 <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Report">
+			      <Dropdown.Item href="#/report-lists/date-range">Date Range</Dropdown.Item>
+			      <Dropdown.Item href="#/report-lists/business-report">Business Report</Dropdown.Item>
+			     </DropdownButton>
+			    </span>
 			  </li>
 			 </ul>
 			</div>
