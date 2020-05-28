@@ -51,6 +51,12 @@
 		   border: none !important;
 		   font-weight: 700;
 		}
+		button::after {
+			vertical-align: 0.1rem !important;
+	    }
+		a {
+			font-weight: 500;
+		}
 	}
 }
 

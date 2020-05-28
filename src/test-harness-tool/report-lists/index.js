@@ -9,7 +9,9 @@ import styles from './report-lists.scss'
 	
 
 function ReportLists() {
-  const initial = {from: new Date(), to: new Date(), business: '', data: []}
+  const date = new Date()
+  const minDate = new Date(date.getFullYear(), 0, 1)
+  const initial = {from: date, to: date, business: '', data: []}
   const [state, setState] = useState(initial)
   const [error, setError] = useState('')
   const [page, setPage] = useState(1);
@@ -117,7 +119,8 @@ function ReportLists() {
 				     <DatePicker
 					  onChange={onTextUpdated('from')}
 					  value={state.from}
-					  maxDate={new Date()}
+					  maxDate={date}
+					  minDate={minDate}
 					 />
 				    </div>
 				    <div className={styles.toBox}>To</div>
@@ -125,7 +128,8 @@ function ReportLists() {
 				     <DatePicker
 					  onChange={onTextUpdated('to')}
 					  value={state.to}
-					  maxDate={new Date()}
+					  maxDate={date}
+				      minDate={minDate}
 				     />
 				    </div>
 				   </Col>
