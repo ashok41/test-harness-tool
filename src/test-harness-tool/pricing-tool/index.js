@@ -50,21 +50,19 @@ function Dashboard() {
   }
   
   function buildJSON(forms) {
-	  const borrowingAmount = forms.borrowingAmount.split(',');
-	  const riskBand = forms.riskBand.split(',');
-	  const term = forms.term.split(',');
+	  const borrowingAmount = forms.borrowingAmount.split(',').map(Number);
+	  const riskBand = forms.riskBand.split(',').map(Number);
+	  const term = forms.term.split(',').map(Number);
 	  let postData = [];
-	  borrowingAmount.forEach((item, index) => {
-		  const lists = {}
-		  lists['barrowAmount'] = item;
-		  lists['riskFactor'] = riskBand[index];
-		  lists['termFactor'] = term[index];
-		  lists['applicationIdentity'] = forms.locationIdentity;
-		  lists['bankDivision'] = forms.bankDivision;
-		  lists['productFamily'] = forms.productFamily;
-		  lists['productName'] = forms.productName;
-		  postData.push(lists)
-	  })
+	  const lists = {}
+	  lists['barrowAmount'] = borrowingAmount;
+	  lists['riskFactor'] = riskBand;
+	  lists['termFactor'] = term;
+	  lists['applicationIdentity'] = forms.locationIdentity;
+	  lists['bankDivision'] = forms.bankDivision;
+	  lists['productFamily'] = forms.productFamily;
+	  lists['productName'] = forms.productName;
+	  postData.push(lists)
 	  axios.post('http://localhost:8081/scenarios', postData)
 	  .then((response) => {
 		  const { data } = response
