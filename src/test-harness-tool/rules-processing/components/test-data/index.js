@@ -8,11 +8,10 @@ import styles from './test-data.scss'
 import common from '../../../common/common.scss'
 
 function TestData() {
-  
   const history = useHistory()
   const location = useLocation()
-  const {state} = location;
-  const [dataLists, setDataLists] = useState(state);
+  const {state: {postData, formData}} = location;
+  const [dataLists, setDataLists] = useState(postData);
   
   const [page, setPage] = useState(1)
   
@@ -36,7 +35,7 @@ function TestData() {
   }
   
   let items = [];
-  const total = Math.ceil(state.length/10)
+  const total = Math.ceil(dataLists.length/10)
   for (let number = 1; number <= total; number++) {
     items.push(
       <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
@@ -79,11 +78,14 @@ function TestData() {
 				))}
 			  </tbody>
 		  </Table>
-		  {state.length > 10 && <div>
+		  {dataLists.length > 10 && <div>
 		    <Pagination>{items}</Pagination>
 	      </div>}
 		  <div>
-		    <Button variant="primary" disabled onClick={() => history.goBack()}>Back</Button>{' '}
+		    <Button variant="primary" onClick={() => history.push({
+			pathname: '/pricing-tool',
+			state: formData
+		})}>Back</Button>{' '}
 		    <Button variant="primary" onClick={handleSubmit}>Next</Button>
 		  </div>
 		</Col>

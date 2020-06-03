@@ -1,15 +1,17 @@
 import React, {useState} from 'react';
 import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb } from 'react-bootstrap'
 import axios from 'axios'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import ProfileList from '../common/profile-list'
 import styles from './pricing-tool.scss'
 import common from '../common/common.scss'
 
 function Dashboard() {
   const history = useHistory()
+  const location = useLocation()
+  const { state: backFormData } = location
   const initial = {borrowingAmount: '', riskBand:'', term: '', locationIdentity: '', bankDivision : '', productFamily: '', productName: ''}
-  const [state, setState] = useState(initial)
+  const [state, setState] = useState(backFormData ? backFormData : initial)
   const [error, setError] = useState('')
     
   function handleSubmit(e) {
@@ -68,7 +70,74 @@ function Dashboard() {
 		  const { data } = response
 		  history.push({
 			pathname: '/rules-processing/test-data',
-			state: data
+			state: {postData: data, formData: forms}
+		})
+	 })
+	 .catch(() => {
+		 const data = [
+        {
+            "id": "10000",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 1,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "10001",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 1,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "10002",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 1,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "10003",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 2,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        }]
+		  history.push({
+			pathname: '/rules-processing/test-data',
+			state: {postData: data, formData: forms}
 		})
 	 })
   }
@@ -82,7 +151,7 @@ function Dashboard() {
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
 	  const regex = /^[\d\,]+$/g
-	  if (data === '' || (data && regex.test(data) && totCommas <= 3)) {
+	  if (data === '' || (data && regex.test(data) && totCommas <= 3 && checkCommas[totCommas-1] !== "0" && checkCommas[0] !== "")) {
 	    setState({...state, [label]: data})
 	  }
   }
