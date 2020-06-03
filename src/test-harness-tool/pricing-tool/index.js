@@ -156,6 +156,14 @@ function Dashboard() {
 	  }
   }
   
+  const removeUnwantedComma = (label) => (e) => {
+	  const data = e.target.value;
+	  const regex = /,\s*$/
+	  if (regex.test(data)) {
+		setState({...state, [label]: data.replace(regex, "")})
+	  }
+  }
+  
   const onSelectedSingleOptionChange = (label) => (e) => {
 	setState({...state, [label]: e.target.value})
   }
@@ -235,19 +243,19 @@ function Dashboard() {
 			  <Form.Group as={Row} controlId="borrowingAmount">
 				<Form.Label column sm="2">Borrowing Amount</Form.Label>
 				<Col sm="4">
-				  <Form.Control type="text" value={state.borrowingAmount} onChange={onTextUpdated('borrowingAmount')} />
+				  <Form.Control type="text" value={state.borrowingAmount} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
 				</Col>
 		      </Form.Group>
 			  <Form.Group as={Row} controlId="term">
 				<Form.Label column sm="2">Term (Months)</Form.Label>
 				<Col sm="4">
-				  <Form.Control type="text" value={state.term} onChange={onTextUpdated('term')} />
+				  <Form.Control type="text" value={state.term} autoComplete="off" onChange={onTextUpdated('term')} onBlur={removeUnwantedComma('term')} />
 				</Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="riskBand">
 				<Form.Label column sm="2">Risk Band</Form.Label>
 				<Col sm="4">
-				  <Form.Control type="text" value={state.riskBand} onChange={onTextUpdated('riskBand')} />
+				  <Form.Control type="text" value={state.riskBand} autoComplete="off" onChange={onTextUpdated('riskBand')} onBlur={removeUnwantedComma('riskBand')} />
 				</Col>
 			  </Form.Group>
 			  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
