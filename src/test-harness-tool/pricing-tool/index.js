@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb } from 'react-bootstrap'
+import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import axios from 'axios'
 import { useHistory, useLocation } from 'react-router-dom'
 import ProfileList from '../common/profile-list'
@@ -18,7 +18,7 @@ function Dashboard() {
 	  e.preventDefault();
 	  const error = validation(state)
 	  if (error === '') {
-		setError('')	
+		setError('')
 		buildJSON(state)
 	  } else {
 		setError(error)	
@@ -76,7 +76,7 @@ function Dashboard() {
 	 .catch(() => {
 		 const data = [
         {
-            "id": "10000",
+            "id": "012005210000001",
             "applicationIdentity": "Pricing",
             "bankDivision": "Ulster",
             "productFamily": "Lending",
@@ -91,7 +91,7 @@ function Dashboard() {
             "barrowAmount": 10000
         },
         {
-            "id": "10001",
+            "id": "012005210000002",
             "applicationIdentity": "Pricing",
             "bankDivision": "Ulster",
             "productFamily": "Lending",
@@ -106,7 +106,7 @@ function Dashboard() {
             "barrowAmount": 20000
         },
         {
-            "id": "10002",
+            "id": "012005210000003",
             "applicationIdentity": "Pricing",
             "bankDivision": "Ulster",
             "productFamily": "Lending",
@@ -121,7 +121,7 @@ function Dashboard() {
             "barrowAmount": 30000
         },
         {
-            "id": "10003",
+            "id": "012005210000004",
             "applicationIdentity": "Pricing",
             "bankDivision": "Ulster",
             "productFamily": "Lending",
@@ -134,7 +134,353 @@ function Dashboard() {
             "expectedAnnualPercentageRate": 0.0,
             "status": "Y",
             "barrowAmount": 10000
-        }]
+        },
+        {
+            "id": "012005210000005",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 2,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000006",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 2,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000007",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 3,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "N",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000008",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 3,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000009",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 3,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000010",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 1,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000011",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 1,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000012",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 1,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000013",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 2,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000014",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 2,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "N",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000015",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 2,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000016",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 3,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000017",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 3,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000018",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 3,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000019",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 1,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000020",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 1,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000021",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 1,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "N",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000022",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 2,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000023",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 2,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000024",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 2,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000025",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 3,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000026",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 3,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000027",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 3,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        }
+		]
 		  history.push({
 			pathname: '/rules-processing/test-data',
 			state: {postData: data, formData: forms}
@@ -150,14 +496,23 @@ function Dashboard() {
 	  const data = e.target.value;
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
+	  const eachData = checkCommas[totCommas-1]
+	  const lastBeforeData = checkCommas[totCommas-2]
 	  const regex = /^[\d\,]+$/g
-	  if (data === '' || (data && regex.test(data) && totCommas <= 3 && checkCommas[totCommas-1] !== "0" && checkCommas[0] !== "")) {
-	    setState({...state, [label]: data})
+	  let valid = true
+	  if (label === "borrowingAmount" && lastBeforeData && (Number(lastBeforeData) < 1000 || Number(lastBeforeData) > 5000)) {
+		  valid = false
+	  }
+	  if (data === '' || (data && regex.test(data) && totCommas <= 4 && eachData !== "0" && checkCommas[0] !== "" && valid)) {
+		setState({...state, [label]: data})
 	  }
   }
   
   const removeUnwantedComma = (label) => (e) => {
 	  const data = e.target.value;
+	  const checkCommas = data.split(',')
+	  const totCommas = checkCommas.length
+	  const eachData = checkCommas[totCommas-2]
 	  const regex = /,\s*$/
 	  if (regex.test(data)) {
 		setState({...state, [label]: data.replace(regex, "")})
@@ -167,7 +522,7 @@ function Dashboard() {
   const onSelectedSingleOptionChange = (label) => (e) => {
 	setState({...state, [label]: e.target.value})
   }
-   
+  
   return (
     <>
       <Row className={styles.section}>
@@ -242,20 +597,44 @@ function Dashboard() {
 			  </Row>
 			  <Form.Group as={Row} controlId="borrowingAmount">
 				<Form.Label column sm="2">Borrowing Amount</Form.Label>
-				<Col sm="4">
+				<Col sm="4" className={styles.textform}>
 				  <Form.Control type="text" value={state.borrowingAmount} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
+				  <OverlayTrigger
+					  placement="right"	
+					  overlay={
+						<Tooltip>Min: 1000, Max: 5000 Delimiter [0-9,]</Tooltip>
+					  }
+					>
+					<div className={styles.tooltip}><div className={styles.qicon} /></div>
+                  </OverlayTrigger>
 				</Col>
 		      </Form.Group>
 			  <Form.Group as={Row} controlId="term">
 				<Form.Label column sm="2">Term (Months)</Form.Label>
-				<Col sm="4">
+				<Col sm="4" className={styles.textform}>
 				  <Form.Control type="text" value={state.term} autoComplete="off" onChange={onTextUpdated('term')} onBlur={removeUnwantedComma('term')} />
+				  <OverlayTrigger
+					  placement="right"	
+					  overlay={
+						<Tooltip>Delimiter [0-9,]</Tooltip>
+					  }
+					>
+					<div className={styles.tooltip}><div className={styles.qicon} /></div>
+                  </OverlayTrigger>
 				</Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="riskBand">
 				<Form.Label column sm="2">Risk Band</Form.Label>
-				<Col sm="4">
+				<Col sm="4" className={styles.textform}>
 				  <Form.Control type="text" value={state.riskBand} autoComplete="off" onChange={onTextUpdated('riskBand')} onBlur={removeUnwantedComma('riskBand')} />
+				  <OverlayTrigger
+					  placement="right"	
+					  overlay={
+						<Tooltip>Delimiter [0-9,]</Tooltip>
+					  }
+					>
+					<div className={styles.tooltip}><div className={styles.qicon} /></div>
+                  </OverlayTrigger>
 				</Col>
 			  </Form.Group>
 			  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
