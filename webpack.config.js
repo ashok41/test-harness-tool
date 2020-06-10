@@ -19,6 +19,17 @@ const options = {
 		use: ['style-loader', 'css-loader'],
 	  },
 	  {
+      test: /\.(jpe?g|gif|png|svg)$/i,
+      use: [
+        {
+          loader: 'url-loader',
+          options: {
+            limit: 10000
+          }
+        }
+      ]
+    },
+	  {
 		test: /\.s(a|c)ss$/,
 		use: [
 		 'style-loader',

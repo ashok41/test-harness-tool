@@ -1,16 +1,18 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap'
+import logo from '../../../assets/images/Mphasis_SSO.png';
+import natwest from '../../../assets/images/natwest.jpg';
 import styles from './header.scss'
 
 function Header() {
   return (
 	<Row className={styles.header}>
-      <Col xs="4">
-          <img src="https://appaccess.mphasis.com/images/Mphasis_SSO.png" className={styles.logo} alt="mphasis logo" title="mphasis logo"/>
+      <Col xs="3">
+          <img src={logo} className={styles.logo} alt="mphasis logo" title="mphasis logo"/>
       </Col>
-      <Col xs="6" className={styles.headerTxt}>Test Harness</Col>
-	  <Col xs="2">
-          <img src="https://media-assets-04.thedrum.com/cache/images/thedrum-prod/s3-news-tmp-10557-natwest--default--1225.jpg" className={styles.logo} alt="Natwest Group" title="Natwest Group"/>
+      <Col xs="8" className={styles.headerTxt}>Test Harness</Col>
+	  <Col xs="1">
+          <img src={natwest} alt="Natwest Group" title="Natwest Group"/>
       </Col>
     </Row>
   );
