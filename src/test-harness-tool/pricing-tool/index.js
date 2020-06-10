@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import axios from 'axios'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -13,7 +13,6 @@ function Dashboard() {
   const initial = {borrowingAmount: '', riskBand:'', term: '', locationIdentity: '', bankDivision : '', productFamily: '', productName: ''}
   const [state, setState] = useState(backFormData ? backFormData : initial)
   const [error, setError] = useState('')
-  const [businessAttributes, setBusinessAttributes] = useState({})
     
   function handleSubmit(e) {
 	  e.preventDefault();
@@ -25,88 +24,6 @@ function Dashboard() {
 		setError(error)	
 	  }
   }
-  
-  function getBusinessAttributes() {
-	  axios.get('http://localhost:8081/rbs/th/businessAttributes')
-	  .then((response) => {
-		const { data } = response
-		let attrs = {}
-		data.map((item) => {
-		  if (attrs[item.refDataKey] === undefined) {
-			attrs[item.refDataKey] = []
-		  }
-		  attrs[item.refDataKey].push(item)
-		})
-		setBusinessAttributes(attrs)
-	  })
-	  .catch(() => {
-		const data = [
-		{
-			"attributeId": 1,
-			"createdBy": "R123",
-			"createdTs": "2020-06-09T04:38:41.688Z",
-			"isActive": {},
-			"refDataDesc": "Ulster",
-			"refDataKey": "AP001",
-			"updatedBy": "R123",
-			"updatedTs": "2020-06-09T04:38:41.688Z"
-		},
-		{
-			"attributeId": 2,
-			"createdBy": "R123",
-			"createdTs": "2020-06-09T04:38:41.688Z",
-			"isActive": {},
-			"refDataDesc": "Business",
-			"refDataKey": "BU001",
-			"updatedBy": "R123",
-			"updatedTs": "2020-06-09T04:38:41.688Z"
-		},
-		{
-			"attributeId": 3,
-			"createdBy": "R123",
-			"createdTs": "2020-06-09T04:38:41.688Z",
-			"isActive": {},
-			"refDataDesc": "Loans",
-			"refDataKey": "PR001",
-			"updatedBy": "R123",
-			"updatedTs": "2020-06-09T04:38:41.688Z"
-		},
-		{
-			"attributeId": 4,
-			"createdBy": "R123",
-			"createdTs": "2020-06-09T04:38:41.688Z",
-			"isActive": {},
-			"refDataDesc": "Small Business Loan",
-			"refDataKey": "PF001",
-			"updatedBy": "R123",
-			"updatedTs": "2020-06-09T04:38:41.688Z"
-		}, {
-			"attributeId": 5,
-			"createdBy": "R123",
-			"createdTs": "2020-06-09T04:38:41.688Z",
-			"isActive": {},
-			"refDataDesc": "Large Business Loan",
-			"refDataKey": "PF001",
-			"updatedBy": "R123",
-			"updatedTs": "2020-06-09T04:38:41.688Z"
-		}]
-		let attrs = {}
-		data.map((item) => {
-		  if (attrs[item.refDataKey] === undefined) {
-			attrs[item.refDataKey] = []
-		  }
-		  attrs[item.refDataKey].push(item)
-		})
-		setBusinessAttributes(attrs)
-	  })
-  }
-  
-  useEffect(() => {
-	 const businessAttributesData = Object.keys(businessAttributes).length
-	 if (businessAttributesData === 0) {
-		getBusinessAttributes()
-	 }
-  }, [businessAttributes])
   
   function validation(forms) {
 	let errors = ''
@@ -138,16 +55,17 @@ function Dashboard() {
 	  const borrowingAmount = forms.borrowingAmount.split(',').map(Number);
 	  const riskBand = forms.riskBand.split(',').map(Number);
 	  const term = forms.term.split(',').map(Number);
+	  let postData = [];
 	  const lists = {}
-	  lists['borrowingAmount'] = borrowingAmount;
+	  lists['barrowAmount'] = borrowingAmount;
 	  lists['riskFactor'] = riskBand;
 	  lists['termFactor'] = term;
-	  lists['applicationIdentity'] = Number(forms.locationIdentity);
-	  lists['bankDivision'] = Number(forms.bankDivision);
-	  lists['productFamily'] = Number(forms.productFamily);
-	  lists['productName'] = Number(forms.productName);
-	  lists['userId'] = "R123";
-	  axios.post('http://localhost:8081/rbs/th/testdata', lists)
+	  lists['applicationIdentity'] = forms.locationIdentity;
+	  lists['bankDivision'] = forms.bankDivision;
+	  lists['productFamily'] = forms.productFamily;
+	  lists['productName'] = forms.productName;
+	  postData.push(lists)
+	  axios.post('http://localhost:8081/scenarios', postData)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
@@ -158,43 +76,410 @@ function Dashboard() {
 	 .catch(() => {
 		 const data = [
         {
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 10,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 2,
-			"termFactor": 1,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 1,
-			"testTransactionNo": "TH_001_001",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    }
+            "id": "012005210000001",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 1,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000002",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 1,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000003",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 1,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000004",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 2,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000005",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 2,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000006",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 2,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000007",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 3,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "N",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000008",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 3,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000009",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 18,
+            "riskFactor": 3,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000010",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 1,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000011",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 1,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000012",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 1,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000013",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 2,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000014",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 2,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "N",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000015",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 2,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000016",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 3,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000017",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 3,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000018",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 6,
+            "riskFactor": 3,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000019",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 1,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000020",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 1,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000021",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 1,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "N",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000022",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 2,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000023",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 2,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000024",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 2,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        },
+        {
+            "id": "012005210000025",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 3,
+            "allInRate": 6.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 6.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 10000
+        },
+        {
+            "id": "012005210000026",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 3,
+            "allInRate": 7.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 7.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 20000
+        },
+        {
+            "id": "012005210000027",
+            "applicationIdentity": "Pricing",
+            "bankDivision": "Ulster",
+            "productFamily": "Lending",
+            "productName": "Small Business",
+            "termFactor": 12,
+            "riskFactor": 3,
+            "allInRate": 8.95,
+            "annualPercentageRate": 0.0,
+            "expectedAllInRate": 8.95,
+            "expectedAnnualPercentageRate": 0.0,
+            "status": "Y",
+            "barrowAmount": 30000
+        }
 		]
 		  history.push({
 			pathname: '/rules-processing/test-data',
@@ -269,9 +554,7 @@ function Dashboard() {
                    <Col sm="6">
 				     <Form.Control as="select" value={state.locationIdentity} onChange={onSelectedSingleOptionChange('locationIdentity')}>
                       <option value="">Please Select</option>
-					  {businessAttributes['AP001'] && businessAttributes['AP001'].map((item) => {
-						return (<option value={item.attributeId}>{item.refDataDesc}</option>)
-					  })}
+					  <option value="Ulster">Ulster</option>
                      </Form.Control>
 				   </Col>
                  </Form.Group>
@@ -282,9 +565,7 @@ function Dashboard() {
                   <Col sm="6">
 				    <Form.Control as="select" value={state.bankDivision} onChange={onSelectedSingleOptionChange('bankDivision')}>
                       <option value="">Please Select</option>
-					  {businessAttributes['BU001'] && businessAttributes['BU001'].map((item) => {
-						return (<option value={item.attributeId}>{item.refDataDesc}</option>)
-					  })}
+					  <option value="Business">Business</option>
                     </Form.Control>
 				   </Col>
                   </Form.Group>
@@ -297,9 +578,7 @@ function Dashboard() {
 					<Col sm="6">
 					  <Form.Control as="select" value={state.productFamily} onChange={onSelectedSingleOptionChange('productFamily')}>
 						<option value="">Please Select</option>
-						{businessAttributes['PF001'] && businessAttributes['PF001'].map((item) => {
-						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
-						})}
+						<option value="Loans">Loans</option>
 					  </Form.Control>
 					</Col>
 				  </Form.Group>
@@ -310,9 +589,7 @@ function Dashboard() {
 					<Col sm="6">
 					  <Form.Control as="select" value={state.productName} onChange={onSelectedSingleOptionChange('productName')}>
 						<option value="">Please Select</option>
-						{businessAttributes['PR001'] && businessAttributes['PR001'].map((item) => {
-						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
-						})}
+						<option value="Small Business Loan (Fixed)">Small Business Loan (Fixed)</option>
 					  </Form.Control>
 					</Col>
 				  </Form.Group>
