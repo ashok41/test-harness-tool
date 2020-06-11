@@ -20,7 +20,7 @@ function ControlledTabs(props) {
   const [page, setPage] = useState({'Y': 1, 'N': 1})
   
   const filteredData = testDataList.filter(function (item) {
-	return item.status === key
+	return item.testTransactionFlag === key
   })
   const setPageItem = (number) => () => {
 	  setPage({...page, [key]: number})
@@ -69,18 +69,18 @@ function ControlledTabs(props) {
 		  <tbody>
 		  {paginationData.map((item) => (
 			  <tr>
-				<td>{item.id}</td>
+				<td>{item.testTransactionNo}</td>
 				<td>{item.applicationIdentity}</td>
 				<td>{item.bankDivision}</td>
 				<td>{item.productFamily}</td>
 				<td>{item.productName}</td>
-				<td>{item.barrowAmount}</td>
+				<td>{item.borrowingAmount}</td>
 				<td>{item.termFactor}</td>
-				<td>{item.riskFactor}</td>
-				<td className={styles.rate}>{item.expectedAllInRate}</td>
-				<td className={styles.rate}>{item.expectedAnnualPercentageRate}</td>
-				<td className={styles.actual}>{item.allInRate}</td>
-				<td className={styles.actual}>{item.annualPercentageRate}</td>
+				<td>{item.riskBand}</td>
+				<td className={styles.rate}>{item.expectetAir}</td>
+				<td className={styles.rate}>{item.expectetApr}</td>
+				<td className={styles.actual}>{item.actualAir}</td>
+				<td className={styles.actual}>{item.actualApr}</td>
 			  </tr>
 			))}
 		  </tbody>
@@ -98,8 +98,8 @@ function RoutingPage() {
   const location = useLocation();
   const {state} = location
    
-  state['passedPercent'] = Math.round((state.passed/state.totaltestcases) * 100);
-  state['failedPercent'] = Math.round((state.failed/state.totaltestcases) * 100);
+  state['passedPercent'] = Math.round((state.passed/state.totalTestCases) * 100);
+  state['failedPercent'] = Math.round((state.failed/state.totalTestCases) * 100);
   return (
 	<div className={styles.container}>
 	  <Row>
@@ -127,14 +127,14 @@ function RoutingPage() {
 		   </div>
 		 </div>
 		  <div>
-		    <TestLog testCasesRun={state.totaltestcases} logData={createLogData(state)} />
+		    <TestLog testCasesRun={state.totalTestCases} logData={createLogData(state)} />
 		  </div>
 		 </Card.Body>
 	  </Card>
 	  <div className={styles.tabWrapper}>
 	   <Card>
 	    <Card.Body>
-	     <ControlledTabs data={createLogData(state)} testCasesRun={state.totaltestcases} testDataList={state.testcasesResultList} />
+	     <ControlledTabs data={createLogData(state)} testCasesRun={state.totalTestCases} testDataList={state.testcasesResultList} />
 		</Card.Body>
 	   </Card>
 	  </div>

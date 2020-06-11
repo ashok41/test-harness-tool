@@ -15,7 +15,7 @@ function ServiceRequest() {
   const [sort, setSort] = useState({})
   
   function handleSubmit() {
-	  axios.post(`http://localhost:8081/rbs/th/testdata/airapr/${testsetid}`, state)
+	  axios.post(`http://localhost:8081/rbs/th/testdata/result/${testsetid}`, state)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
@@ -25,10 +25,105 @@ function ServiceRequest() {
 	  })
 	  .catch(() => {
 		  const data = {
-			"totaltestcases": 27,
+			"totalTestCases": 27,
 			"passed": 24,
 			"failed": 3,
 			"testcasesResultList": [
+			{
+					"actualAir": 7.6,
+					"actualApr": 0.6,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 6,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_001",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 7.2,
+					"actualApr": 0.2,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 7,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_002",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 1.3,
+					"actualApr": 2,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_003",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 0,
+					"actualApr": 0,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "N",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_004",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 0,
+					"actualApr": 0,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "N",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_005",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				}
 			]
 		  }
 		  history.push({
