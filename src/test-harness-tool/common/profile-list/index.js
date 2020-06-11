@@ -16,7 +16,7 @@ function ProfileList() {
   
   return (
    <div className={styles.profileList}>
-	<div><span>Welcome,</span> <i>Rob</i> <span className={styles.logout} href="#" onClick={logout}>(Logout)</span></div>
+	<div><span>Welcome,</span> <i>{localStorage.getItem('logged')}</i> <span className={styles.logout} href="#" onClick={logout}>(Logout)</span></div>
 	<div><span>Logged in</span> <i>{localStorage.getItem('date')}</i></div>
    </div>
   );

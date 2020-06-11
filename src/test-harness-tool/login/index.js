@@ -17,7 +17,7 @@ function Login() {
 	  const error = validation(state)
 	  if (error === '') {
 		setError('')	
-		localStorage.setItem('logged', true);
+		localStorage.setItem('logged', state.username);
 		localStorage.setItem('date', date.toLocaleString("en-US"));
 		history.push({
 			pathname: '/',

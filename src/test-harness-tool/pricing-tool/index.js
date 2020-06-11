@@ -111,25 +111,25 @@ function Dashboard() {
   function validation(forms) {
 	let errors = ''
 	if (forms.locationIdentity === '') {
-		errors = 'Please enter application identity';
+		errors = 'Please enter Application Identity';
 	} 
 	if (errors === '' && forms.bankDivision === '') {
-		errors = 'Please enter bank division';
+		errors = 'Please enter Bank Division';
 	}
 	if (errors === '' && forms.productFamily === '') {
-		errors = 'Please enter product family';
+		errors = 'Please enter Product Family';
 	}
 	if (errors === '' && forms.productName === '') {
-		errors = 'Please enter product name';
+		errors = 'Please enter Product Name';
 	}
 	if (errors === '' && forms.borrowingAmount === '') {
-		errors = 'Please enter borrowing amount';
+		errors = 'Please enter Borrowing Amount';
 	} 
 	if (errors === '' && forms.riskBand === '') {
-		errors = 'Please enter risk band';
+		errors = 'Please enter Risk Band';
 	}
 	if (errors === '' && forms.term === '') {
-		errors = 'Please enter term (months)';
+		errors = 'Please enter Term (Months)';
 	}
 	return errors
   }
