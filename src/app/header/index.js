@@ -7,11 +7,11 @@ import styles from './header.scss'
 function Header() {
   return (
 	<Row className={styles.header}>
-      <Col xs="4">
+      <Col xs="5">
           <img src={logo} className={styles.logo} alt="mphasis logo" title="mphasis logo"/>
       </Col>
       <Col xs="6" className={styles.headerTxt}>Test Harness</Col>
-	  <Col xs="2">
+	  <Col xs="1">
           <img src={natwest} alt="Natwest Group" title="Natwest Group"/>
       </Col>
     </Row>
