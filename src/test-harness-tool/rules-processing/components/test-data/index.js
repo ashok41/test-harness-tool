@@ -294,8 +294,6 @@ function TestData() {
   }, {
 	  name: 'Risk Band',
 	  key: 'riskBand'
-  }, {
-	  name: 'Actions'
   }]
   
   const sortable = (sortKey, direction, isSortable) => () => {
