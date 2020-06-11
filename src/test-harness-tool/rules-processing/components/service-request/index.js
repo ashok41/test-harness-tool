@@ -15,7 +15,7 @@ function ServiceRequest() {
   const [sort, setSort] = useState({})
   
   function handleSubmit() {
-	  axios.post(`http://localhost:8081/rbs/th/testdata/result/${testsetid}`, state)
+	  axios.get(`http://localhost:8081/rbs/th/testdata/result/${testsetid}`)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
@@ -240,8 +240,8 @@ function ServiceRequest() {
 					<td>{item.borrowingAmount}</td>
 					<td>{item.termFactor}</td>
 					<td>{item.riskBand}</td>
-					<td className={styles.rate}>{item.actualAir}</td>
-					<td className={styles.rate}>{item.actualApr}</td>
+					<td className={styles.rate}>{item.expectetAir}</td>
+					<td className={styles.rate}>{item.expectetApr}</td>
 				  </tr>
 				))}
 			  </tbody>

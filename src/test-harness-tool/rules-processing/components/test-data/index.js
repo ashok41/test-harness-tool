@@ -18,7 +18,7 @@ function TestData() {
   const [page, setPage] = useState(1)
   
   function handleSubmit() {
-	  axios.post(`http://localhost:8081/rbs/th/testdata/airapr/${testsetid}`, dataLists)
+	  axios.get(`http://localhost:8081/rbs/th/testdata/airapr/${testsetid}`)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
