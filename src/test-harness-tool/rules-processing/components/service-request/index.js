@@ -14,16 +14,25 @@ function ServiceRequest() {
   const testsetid = state[0].testSetId
   const [sort, setSort] = useState({})
   
+  function toTimeString(seconds) {
+	return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+  }
+  
   function handleSubmit() {
+	  const start = Date.now();
 	  axios.get(`http://localhost:8081/rbs/th/testdata/result/${testsetid}`)
 	  .then((response) => {
+		  const seconds = Date.now() - start;
+		  const executionTime = toTimeString(seconds/1000)
 		  const { data } = response
 		  history.push({
 			pathname: '/reports',
-			state: data
+			state: {data: data, executionTime: executionTime}
 		})
 	  })
 	  .catch(() => {
+		  const seconds = Date.now() - start;
+		  const executionTime = toTimeString(seconds/1000)
 		  const data = {
 			"totalTestCases": 27,
 			"passed": 24,
@@ -128,7 +137,7 @@ function ServiceRequest() {
 		  }
 		  history.push({
 			pathname: '/reports',
-			state: data
+			state: {data: data, executionTime: executionTime}
 		})
 	  }
 	  )
@@ -180,11 +189,9 @@ function ServiceRequest() {
   }, {
 	  name: 'AIR(%)',
 	  key: 'air',
-	  className: styles.rate
   }, {
 	  name: 'APR(%)',
 	  key: 'apr',
-	  className: styles.rate
   }]
   
   const sortable = (sortKey, direction, isSortable) => () => {
@@ -240,8 +247,8 @@ function ServiceRequest() {
 					<td>{item.borrowingAmount}</td>
 					<td>{item.termFactor}</td>
 					<td>{item.riskBand}</td>
-					<td className={styles.rate}>{item.expectetAir}</td>
-					<td className={styles.rate}>{item.expectetApr}</td>
+					<td>{item.expectetAir}</td>
+					<td>{item.expectetApr}</td>
 				  </tr>
 				))}
 			  </tbody>

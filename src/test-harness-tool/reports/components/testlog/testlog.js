@@ -10,11 +10,10 @@ function createCasesList(data) {
 }
 
 const TestLog = (props) => {
-  const { testCasesRun, logData } = props
-  const expectedDuration = '00:00:00:00'
+  const { testCasesRun, logData, executionTime } = props
   const logRef = useRef()
   const drawLog = () => {
-	const width = 130;
+	const width = 170;
     const height = 130;
     const radius = Math.min(width, height) / 2;
 
@@ -94,7 +93,7 @@ const TestLog = (props) => {
 			<li><i />Test Cases Run: <span>{testCasesRun}</span></li>
 			{createCasesList(logData)}
 		  </ul>
-		  <div>Execution duration: <span>{expectedDuration}</span></div>
+		  <div>Execution duration: <span>{executionTime}</span></div>
 		</div>
 	  </div>
 	</div>
