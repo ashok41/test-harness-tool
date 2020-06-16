@@ -10,7 +10,15 @@ function Dashboard() {
   const history = useHistory()
   const location = useLocation()
   const { state: backFormData } = location
-  const initial = {borrowingAmount: '', riskBand:'', term: '', locationIdentity: '', bankDivision : '', productFamily: '', productName: ''}
+  const initial = {
+	  borrowingAmount: {data: '', error: ''},
+	  riskBand:{data: '', error: ''},
+	  term: {data: '', error: ''},
+	  locationIdentity: {data: '', error: ''},
+	  bankDivision : {data: '', error: ''},
+	  productFamily: {data: '', error: ''},
+	  productName: {data: '', error: ''}
+  }
   const [state, setState] = useState(backFormData ? backFormData : initial)
   const [error, setError] = useState('')
   const [businessAttributes, setBusinessAttributes] = useState({})
@@ -110,42 +118,42 @@ function Dashboard() {
   
   function validation(forms) {
 	let errors = ''
-	if (forms.locationIdentity === '') {
+	if (forms.locationIdentity.data === '') {
 		errors = 'Please enter Application Identity';
 	} 
-	if (errors === '' && forms.bankDivision === '') {
+	if (errors === '' && forms.bankDivision.data === '') {
 		errors = 'Please enter Bank Division';
 	}
-	if (errors === '' && forms.productFamily === '') {
+	if (errors === '' && forms.productFamily.data === '') {
 		errors = 'Please enter Product Family';
 	}
-	if (errors === '' && forms.productName === '') {
+	if (errors === '' && forms.productName.data === '') {
 		errors = 'Please enter Product Name';
 	}
-	if (errors === '' && forms.borrowingAmount === '') {
+	if (errors === '' && forms.borrowingAmount.data === '') {
 		errors = 'Please enter Borrowing Amount';
 	} 
-	if (errors === '' && forms.riskBand === '') {
+	if (errors === '' && forms.riskBand.data === '') {
 		errors = 'Please enter Risk Band';
 	}
-	if (errors === '' && forms.term === '') {
+	if (errors === '' && forms.term.data === '') {
 		errors = 'Please enter Term (Months)';
 	}
 	return errors
   }
   
   function buildJSON(forms) {
-	  const borrowingAmount = forms.borrowingAmount.split(',').map(Number);
-	  const riskBand = forms.riskBand.split(',').map(Number);
-	  const term = forms.term.split(',').map(Number);
+	  const borrowingAmount = forms.borrowingAmount.data.split(',').map(Number);
+	  const riskBand = forms.riskBand.data.split(',').map(Number);
+	  const term = forms.term.data.split(',').map(Number);
 	  const lists = {}
 	  lists['borrowingAmount'] = borrowingAmount;
 	  lists['riskFactor'] = riskBand;
 	  lists['termFactor'] = term;
-	  lists['applicationIdentity'] = Number(forms.locationIdentity);
-	  lists['bankDivision'] = Number(forms.bankDivision);
-	  lists['productFamily'] = Number(forms.productFamily);
-	  lists['productName'] = Number(forms.productName);
+	  lists['applicationIdentity'] = Number(forms.locationIdentity.data);
+	  lists['bankDivision'] = Number(forms.bankDivision.data);
+	  lists['productFamily'] = Number(forms.productFamily.data);
+	  lists['productName'] = Number(forms.productName.data);
 	  lists['userId'] = "R123";
 	  axios.post('http://localhost:8081/rbs/th/testdata', lists)
 	  .then((response) => {
@@ -720,6 +728,18 @@ function Dashboard() {
 	  setState({...state, ...initial})
   }
   
+  const formFieldsInfo = { 
+	'borrowingAmount': {
+		min: 1000, max: 50000, upto: 15, errorMsg: 'Please check the value should be Min of 1000 and Max of 50000'
+	},
+	'term': {
+		min: 12, max: 120, upto: 4, errorMsg: 'Please check the value should be Min of 12 and Max of 120'
+	},
+	'riskBand': {
+		min: 1, max: 10, upto: 10, errorMsg: 'Please check the value should be Min of 1 and Max of 10'
+	}
+  }
+  
   const onTextUpdated = (label) => (e) => {
 	  const data = e.target.value;
 	  const checkCommas = data.split(',')
@@ -727,34 +747,64 @@ function Dashboard() {
 	  const eachData = checkCommas[totCommas-1]
 	  const lastBeforeData = checkCommas[totCommas-2]
 	  const regex = /^[\d\,]+$/g
-	  let valid = true
-	  if (label === "borrowingAmount" && lastBeforeData && (Number(lastBeforeData) < 1000 || Number(lastBeforeData) > 50000)) {
-		  valid = false
+	  let valid = ''
+	  const {min, max, upto, errorMsg} = formFieldsInfo[label]
+	  if (label === "borrowingAmount" && lastBeforeData && (Number(lastBeforeData) < min || Number(lastBeforeData) > max)) {
+		  valid = errorMsg
 	  }
-	  if (label === "term" && lastBeforeData && (Number(lastBeforeData) < 12 || Number(lastBeforeData) > 120)) {
-		  valid = false
+	  if (label === "term" && lastBeforeData && (Number(lastBeforeData) < min || Number(lastBeforeData) > max)) {
+		  valid = errorMsg
 	  }
-	  if (label === "riskBand" && lastBeforeData && (Number(lastBeforeData) < 1 || Number(lastBeforeData) > 10)) {
-		  valid = false
+	  if (label === "riskBand" && lastBeforeData && (Number(lastBeforeData) < min || Number(lastBeforeData) > max)) {
+		  valid = errorMsg
 	  }
-	  if (data === '' || (data && regex.test(data) && totCommas <= 4 && eachData !== "0" && checkCommas[0] !== "" && valid)) {
-		setState({...state, [label]: data})
+	  if (data === '' || (data && regex.test(data) && totCommas <= upto && eachData !== "0" && checkCommas[0] !== "")) {
+		setState({...state, [label]: {data: data, error: valid}})
 	  }
   }
   
   const removeUnwantedComma = (label) => (e) => {
-	  const data = e.target.value;
+	  let data = e.target.value;
+	  const regex = /,\s*$/
+	  let isCommaLast = 0
+	  if (regex.test(data)) {
+		  isCommaLast = 1
+		  data = data.replace(regex, "")
+	  }
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
-	  const eachData = checkCommas[totCommas-2]
-	  const regex = /,\s*$/
-	  if (regex.test(data)) {
-		setState({...state, [label]: data.replace(regex, "")})
+	  const eachData = checkCommas[totCommas-1]
+	  const {min, max, upto, errorMsg} = formFieldsInfo[label]
+	  let valid = ''
+	  if (label === "borrowingAmount" && eachData && (Number(eachData) < min || Number(eachData) > max)) {
+		  valid = errorMsg
+	  }
+	  if (label === "term" && eachData && (Number(eachData) < min || Number(eachData) > max)) {
+		  valid = errorMsg
+	  }
+	  if (label === "riskBand" && eachData && (Number(eachData) < min || Number(eachData) > max)) {
+		  valid = errorMsg
+	  }
+	  if (valid) {
+		  setState({...state, [label]: {data: data, error: valid}})
+	  }
+	  if (isCommaLast && !valid) {
+		  setState({...state, [label]: {data: data, error: ''}})
 	  }
   }
   
   const onSelectedSingleOptionChange = (label) => (e) => {
-	setState({...state, [label]: e.target.value})
+	setState({...state, [label]: {data: e.target.value, error: ''}})
+  }
+  
+  function checkSubmitButton() {
+	  let valid = 0;
+	  Object.keys(state).forEach((item) => {
+		  if (state[item].error != "") {
+			  valid++
+		  }
+	  })
+	  return valid
   }
   
   return (
@@ -786,7 +836,7 @@ function Dashboard() {
 			     <Form.Group as={Row} controlId="locationIdentity">
                    <Form.Label column sm="4">Application Identity</Form.Label>
                    <Col sm="6">
-				     <Form.Control as="select" value={state.locationIdentity} onChange={onSelectedSingleOptionChange('locationIdentity')}>
+				     <Form.Control as="select" value={state.locationIdentity.data} onChange={onSelectedSingleOptionChange('locationIdentity')}>
                       <option value="">Please Select</option>
 					  {businessAttributes['AP001'] && businessAttributes['AP001'].map((item) => {
 						return (<option value={item.attributeId}>{item.refDataDesc}</option>)
@@ -799,7 +849,7 @@ function Dashboard() {
 				  <Form.Group as={Row} controlId="bankDivision">
                   <Form.Label column sm="3">Bank Division</Form.Label>
                   <Col sm="6">
-				    <Form.Control as="select" value={state.bankDivision} onChange={onSelectedSingleOptionChange('bankDivision')}>
+				    <Form.Control as="select" value={state.bankDivision.data} onChange={onSelectedSingleOptionChange('bankDivision')}>
                       <option value="">Please Select</option>
 					  {businessAttributes['BU001'] && businessAttributes['BU001'].map((item) => {
 						return (<option value={item.attributeId}>{item.refDataDesc}</option>)
@@ -814,7 +864,7 @@ function Dashboard() {
 				  <Form.Group as={Row} controlId="productFamily">
 					<Form.Label column sm="4">Product Family</Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" value={state.productFamily} onChange={onSelectedSingleOptionChange('productFamily')}>
+					  <Form.Control as="select" value={state.productFamily.data} onChange={onSelectedSingleOptionChange('productFamily')}>
 						<option value="">Please Select</option>
 						{businessAttributes['PF001'] && businessAttributes['PF001'].map((item) => {
 						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
@@ -827,7 +877,7 @@ function Dashboard() {
 				  <Form.Group as={Row} controlId="productName">
 					<Form.Label column sm="3">Product Name</Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" value={state.productName} onChange={onSelectedSingleOptionChange('productName')}>
+					  <Form.Control as="select" value={state.productName.data} onChange={onSelectedSingleOptionChange('productName')}>
 						<option value="">Please Select</option>
 						{businessAttributes['PR001'] && businessAttributes['PR001'].map((item) => {
 						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
@@ -840,7 +890,10 @@ function Dashboard() {
 			  <Form.Group as={Row} controlId="borrowingAmount">
 				<Form.Label column sm="2">Borrowing Amount</Form.Label>
 				<Col sm="4" className={styles.textform}>
-				  <Form.Control type="text" value={state.borrowingAmount} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
+				  <Form.Control type="text" isInvalid={state.borrowingAmount.error} value={state.borrowingAmount.data} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
+				  <Form.Control.Feedback type="invalid" tooltip>
+                   {state.borrowingAmount.error}
+                  </Form.Control.Feedback>
 				  <OverlayTrigger
 					  placement="right"	
 					  overlay={
@@ -854,7 +907,10 @@ function Dashboard() {
 			  <Form.Group as={Row} controlId="term">
 				<Form.Label column sm="2">Term (Months)</Form.Label>
 				<Col sm="4" className={styles.textform}>
-				  <Form.Control type="text" value={state.term} autoComplete="off" onChange={onTextUpdated('term')} onBlur={removeUnwantedComma('term')} />
+				  <Form.Control type="text" isInvalid={state.term.error} value={state.term.data} autoComplete="off" onChange={onTextUpdated('term')} onBlur={removeUnwantedComma('term')} />
+				  <Form.Control.Feedback type="invalid" tooltip>
+                   {state.term.error}
+                  </Form.Control.Feedback>
 				  <OverlayTrigger
 					  placement="right"	
 					  overlay={
@@ -868,7 +924,10 @@ function Dashboard() {
 			  <Form.Group as={Row} controlId="riskBand">
 				<Form.Label column sm="2">Risk Band</Form.Label>
 				<Col sm="4" className={styles.textform}>
-				  <Form.Control type="text" value={state.riskBand} autoComplete="off" onChange={onTextUpdated('riskBand')} onBlur={removeUnwantedComma('riskBand')} />
+				  <Form.Control type="text" isInvalid={state.riskBand.error} value={state.riskBand.data} autoComplete="off" onChange={onTextUpdated('riskBand')} onBlur={removeUnwantedComma('riskBand')} />
+				  <Form.Control.Feedback type="invalid" tooltip>
+                   {state.riskBand.error}
+                  </Form.Control.Feedback>
 				  <OverlayTrigger
 					  placement="right"	
 					  overlay={
@@ -880,7 +939,7 @@ function Dashboard() {
 				</Col>
 			  </Form.Group>
 			  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
-              <Button variant="primary" onClick={handleSubmit}>Next</Button>
+              <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
             </Form>
             </Card.Body>
           </Card>
