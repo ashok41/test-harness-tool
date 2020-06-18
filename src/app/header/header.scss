@@ -10,6 +10,11 @@
   border-bottom: 1px solid #ccc;
   padding: 2px 0;
   background-color: #002d64;
+  position: fixed;
+  max-width: inherit;
+  top: 0px;
+  width: 100%;
+  z-index: 1;
 }
 
 .header-txt{

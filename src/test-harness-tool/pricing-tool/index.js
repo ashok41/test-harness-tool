@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb, OverlayTrigger, Tooltip } from 'react-bootstrap'
-import axios from 'axios'
 import { useHistory, useLocation } from 'react-router-dom'
+import Service from '../common/service'
 import ProfileList from '../common/profile-list'
 import styles from './pricing-tool.scss'
 import common from '../common/common.scss'
@@ -17,12 +17,12 @@ function Dashboard() {
 	  locationIdentity: {data: '', error: ''},
 	  bankDivision : {data: '', error: ''},
 	  productFamily: {data: '', error: ''},
-	  productName: {data: '', error: ''}
+	  productName: {data: '', error: ''},
+	  environment: {data: '', error: ''},
   }
   const [state, setState] = useState(backFormData ? backFormData : initial)
   const [error, setError] = useState('')
   const [businessAttributes, setBusinessAttributes] = useState({})
-    
   function handleSubmit(e) {
 	  e.preventDefault();
 	  const error = validation(state)
@@ -35,7 +35,7 @@ function Dashboard() {
   }
   
   function getBusinessAttributes() {
-	  axios.get('http://localhost:8081/rbs/th/businessAttributes')
+	  Service.get('/rbs/th/businessAttributes')
 	  .then((response) => {
 		const { data } = response
 		let attrs = {}
@@ -133,6 +133,9 @@ function Dashboard() {
 	if (errors === '' && forms.borrowingAmount.data === '') {
 		errors = 'Please enter Borrowing Amount';
 	} 
+	if (errors === '' && forms.environment.data === '') {
+		errors = 'Please enter Environment';
+	}
 	if (errors === '' && forms.riskBand.data === '') {
 		errors = 'Please enter Risk Band';
 	}
@@ -155,7 +158,7 @@ function Dashboard() {
 	  lists['productFamily'] = Number(forms.productFamily.data);
 	  lists['productName'] = Number(forms.productName.data);
 	  lists['userId'] = "R123";
-	  axios.post('http://localhost:8081/rbs/th/testdata', lists)
+	  Service.post('http://localhost:8081/rbs/th/testdata', lists)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
@@ -773,7 +776,7 @@ function Dashboard() {
 	  }
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
-	  const eachData = checkCommas[totCommas-1]
+	  const eachData = Number(checkCommas[totCommas-1])
 	  const {min, max, upto, errorMsg} = formFieldsInfo[label]
 	  let valid = ''
 	  if (label === "borrowingAmount" && eachData && (Number(eachData) < min || Number(eachData) > max)) {
@@ -887,23 +890,40 @@ function Dashboard() {
 				  </Form.Group>
 				</Col>
 			  </Row>
-			  <Form.Group as={Row} controlId="borrowingAmount">
-				<Form.Label column sm="2">Borrowing Amount</Form.Label>
-				<Col sm="4" className={styles.textform}>
-				  <Form.Control type="text" isInvalid={state.borrowingAmount.error} value={state.borrowingAmount.data} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
-				  <Form.Control.Feedback type="invalid" tooltip>
-                   {state.borrowingAmount.error}
-                  </Form.Control.Feedback>
-				  <OverlayTrigger
-					  placement="right"	
-					  overlay={
-						<Tooltip>Min: 1000, Max: 50000 Delimiter [0-9,]</Tooltip>
-					  }
-					>
-					<div className={styles.tooltip}><div className={styles.qicon} /></div>
-                  </OverlayTrigger>
+			  <Row>
+			    <Col md="6">
+				  <Form.Group as={Row} controlId="borrowingAmount">
+					<Form.Label column sm="4">Borrowing Amount</Form.Label>
+					<Col sm="8" className={styles.textform}>
+					  <Form.Control type="text" isInvalid={state.borrowingAmount.error} value={state.borrowingAmount.data} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
+					  <Form.Control.Feedback type="invalid" tooltip>
+					   {state.borrowingAmount.error}
+					  </Form.Control.Feedback>
+					  <OverlayTrigger
+						  placement="right"	
+						  overlay={
+							<Tooltip>Min: 1000, Max: 50000 Delimiter [0-9,]</Tooltip>
+						  }
+						>
+						<div className={styles.tooltip}><div className={styles.qicon} /></div>
+					  </OverlayTrigger>
+					</Col>
+				  </Form.Group>
 				</Col>
-		      </Form.Group>
+				<Col md="6">
+				  <Form.Group as={Row} controlId="environment">
+					<Form.Label column sm="3">Environment</Form.Label>
+					<Col sm="6">
+					  <Form.Control as="select" value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
+						<option value="">Please Select</option>
+						<option value="NFTe">NFTe</option>
+						<option value="UAT">UAT</option>
+						<option value="Dev">Dev</option>
+					  </Form.Control>
+					</Col>
+				  </Form.Group>
+				</Col>
+			  </Row>
 			  <Form.Group as={Row} controlId="term">
 				<Form.Label column sm="2">Term (Months)</Form.Label>
 				<Col sm="4" className={styles.textform}>

@@ -15,6 +15,10 @@ body, html {
   min-height:100%; /* real browsers */
 }
 
+.content-block {
+	margin-top: 60px;
+}
+
 :global(.btn-primary) {
 	background-color: #1e808f !important;
     border-color: #1e808f !important;

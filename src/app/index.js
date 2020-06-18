@@ -31,21 +31,47 @@ const PrivateRoute = ({ component: Component , ...rest}) => (
   />
 );
 
-const  root = document.createElement('div');
+const  root = document.getElementById('root');
 root.style = "min-height: 100%;height:100%;"
 render((
  <Router>
      <Container className={styles.container}>
        <Header />
-	   <Switch>
+	   <div className={styles.contentBlock}>
+	    <Switch>
 	     <Route path="/login" component={Login}/>
 		 <PrivateRoute path="/report-lists/:slug" component={ReportLists}/>
 	     <PrivateRoute path="/reports" component={Reports}/>
 		 <PrivateRoute exact path="/" component={Dashboard}/>
 	     <PrivateRoute path="/pricing-tool" component={PricingTool}/>
 	     <PrivateRoute path="/rules-processing/:slug" component={RulesProcessing}/>
-	   </Switch>
+	    </Switch>
+	   </div>
 	   <Footer />
 	 </Container>
  </Router>
-), document.body.appendChild(root));
+),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ root);

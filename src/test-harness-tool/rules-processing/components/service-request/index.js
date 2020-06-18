@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { Row, Col, Button, Table, Pagination, Card } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 import ProfileList from '../../../common/profile-list'
-import axios from 'axios'
+import Service from '../../../common/service'
 import styles from './service-request.scss'
 import common from '../../../common/common.scss'
 
@@ -20,7 +20,7 @@ function ServiceRequest() {
   
   function handleSubmit() {
 	  const start = Date.now();
-	  axios.get(`http://localhost:8081/rbs/th/testdata/result/${testsetid}`)
+	  Service.get(`/rbs/th/testdata/result/${testsetid}`)
 	  .then((response) => {
 		  const seconds = Date.now() - start;
 		  const executionTime = toTimeString(seconds/1000)

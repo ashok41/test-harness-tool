@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Row, Col, Button, Table, Pagination, Card } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
-import axios from 'axios'
+import Service from '../../../common/service'
 import ProfileList from '../../../common/profile-list'
 import RowEditable from './row-editable'
 import styles from './test-data.scss'
@@ -18,7 +18,7 @@ function TestData() {
   const [page, setPage] = useState(1)
   
   function handleSubmit() {
-	  axios.get(`http://localhost:8081/rbs/th/testdata/airapr/${testsetid}`)
+	  Service.get(`/rbs/th/testdata/airapr/${testsetid}`)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
@@ -326,7 +326,7 @@ function TestData() {
 		    <ProfileList />
 		   </Col>
 		  </Row>
-		  <Table responsive striped bordered hover size="md">
+		  <Table responsive striped bordered hover size="md" className={styles.tableContainer}>
 			  <thead>
 				<tr>
 				{columns.map((item) => {

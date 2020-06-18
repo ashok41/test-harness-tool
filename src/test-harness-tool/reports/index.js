@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card, DropdownButton, Dropdown, Breadcrumb } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
-import axios from 'axios';
 import ProfileList from '../common/profile-list'
 import TestLog from './components/testlog';
 import styles from './reports.scss';
@@ -100,7 +99,8 @@ function RoutingPage() {
   data['passedPercent'] = Math.round((data.passed/data.totalTestCases) * 100);
   data['failedPercent'] = Math.round((data.failed/data.totalTestCases) * 100);
   return (
-	<div className={styles.container}>
+	<Row className={styles.container}>
+	<Col md="12">
 	  <Row>
 	   <Col md="9">
 		<Breadcrumb>
@@ -137,7 +137,8 @@ function RoutingPage() {
 		</Card.Body>
 	   </Card>
 	  </div>
-	</div>
+	  </Col>
+	</Row>
   );
 }
 

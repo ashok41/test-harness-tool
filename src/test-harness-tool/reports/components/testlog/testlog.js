@@ -14,7 +14,7 @@ const TestLog = (props) => {
   const logRef = useRef()
   const drawLog = () => {
 	const width = 170;
-    const height = 130;
+    const height = 150;
     const radius = Math.min(width, height) / 2;
 
     const svg = d3.select(logRef.current)
