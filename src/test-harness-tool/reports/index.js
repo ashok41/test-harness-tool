@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom'
 import ProfileList from '../common/profile-list'
 import TestLog from './components/testlog';
 import styles from './reports.scss';
+import common from '../common/common.scss';
 
 function createLogData(data) {
 	const cases = []
@@ -36,6 +37,7 @@ function ControlledTabs(props) {
   const indexOfLastTodo = page[key] * 10;
   const indexOfFirstTodo = indexOfLastTodo - 10;
   const paginationData = filteredData.slice(indexOfFirstTodo, indexOfLastTodo);
+  //const headerDetails = {'Small Business Loan':
   return (
     <Tabs
       activeKey={key}
@@ -113,7 +115,10 @@ function RoutingPage() {
 	   </Col>
 	  </Row>
 	  <Card>
-	    <Card.Header>Test Execution Summary</Card.Header>
+	    <Card.Header className={styles.headerContainer}>
+		 <div>Test Execution Summary</div>
+		 <div className={common.environment}><span>Environment:</span> {data.environment}</div>
+		</Card.Header>
 	    <Card.Body className={styles.cardBody}>
 		  <div className={styles.relative}>
 		   <div className={styles.download}>

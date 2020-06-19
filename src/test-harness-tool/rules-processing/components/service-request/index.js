@@ -37,6 +37,7 @@ function ServiceRequest() {
 			"totalTestCases": 27,
 			"passed": 24,
 			"failed": 3,
+			"environment": "NFT",
 			"testcasesResultList": [
 			{
 					"actualAir": 7.6,
@@ -218,10 +219,11 @@ function ServiceRequest() {
 	    <Col md="12">
 		 <Row>
 		   <Col md="9">
+		     <div className={common.environment}><span>Environment:</span> {paginationData[0].environment}</div>
 		   </Col>
 		   <Col md="3">
 		    <ProfileList />
-		   </Col>
+		   </Col>	
 		  </Row>
 		  <Table responsive striped bordered hover size="md">
 			  <thead>

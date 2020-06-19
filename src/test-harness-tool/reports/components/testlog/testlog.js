@@ -1,12 +1,16 @@
 import React, { useRef } from 'react';
-import { Container, Row, Col, Card, ListGroup, Form, Button } from 'react-bootstrap'
+import { Container, Row, Col, Card, ListGroup, Form, Button, Table } from 'react-bootstrap'
 import * as d3 from 'd3';
 import styles from './testlog.scss'
 
 function createCasesList(data) {
-	return data.map((item, index) => (
-		<li key={index}><i style={{backgroundColor:item.color}} />{item.cases}: <span>{item.count}</span></li>
-	))
+	return (data.map((item, index) => (
+	  <tr>
+	   <td key={index}>{item.cases}</td>
+	   <td>{item.count}</td>
+	   <td>{`${item.percent}%`}</td>
+	  </tr>
+	)))
 }
 
 const TestLog = (props) => {
@@ -89,11 +93,17 @@ const TestLog = (props) => {
 	  <div className={styles.logContainer}>
 		<div className={styles.logWrapper} ref={logRef} />
 		<div className={styles.logLables}>
-		  <ul className={styles.padBottom}>
-			<li><i />Test Cases Run: <span>{testCasesRun}</span></li>
+  		  <div className={styles.padBottom}>Execution duration: <span>{executionTime}</span></div>
+		  <Table responsive striped bordered hover size="md">
+		    <tbody>
+			 <tr>
+			   <td>Test Cases Run</td>
+			   <td>{testCasesRun}</td>
+			   <td>100%</td>
+			 </tr>
 			{createCasesList(logData)}
-		  </ul>
-		  <div>Execution duration: <span>{executionTime}</span></div>
+			</tbody>
+		  </Table>
 		</div>
 	  </div>
 	</div>

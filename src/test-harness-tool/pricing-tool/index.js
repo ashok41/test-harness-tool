@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 import Service from '../common/service'
+import axios from 'axios'
 import ProfileList from '../common/profile-list'
 import styles from './pricing-tool.scss'
 import common from '../common/common.scss'
@@ -10,6 +11,7 @@ function Dashboard() {
   const history = useHistory()
   const location = useLocation()
   const { state: backFormData } = location
+  const productMapDetails = { 3: [4], 7: [5,6] }
   const initial = {
 	  borrowingAmount: {data: '', error: ''},
 	  riskBand:{data: '', error: ''},
@@ -75,7 +77,27 @@ function Dashboard() {
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": {},
 			"refDataDesc": "Loans",
+			"refDataKey": "PF001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"attributeId": 6,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Agri Facility",
 			"refDataKey": "PR001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"attributeId": 7,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Overdraft",
+			"refDataKey": "PF001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
 		},
@@ -85,7 +107,7 @@ function Dashboard() {
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": {},
 			"refDataDesc": "Small Business Loan",
-			"refDataKey": "PF001",
+			"refDataKey": "PR001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
 		}, {
@@ -93,8 +115,8 @@ function Dashboard() {
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": {},
-			"refDataDesc": "Large Business Loan",
-			"refDataKey": "PF001",
+			"refDataDesc": "Overdraft",
+			"refDataKey": "PR001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
 		}]
@@ -158,7 +180,8 @@ function Dashboard() {
 	  lists['productFamily'] = Number(forms.productFamily.data);
 	  lists['productName'] = Number(forms.productName.data);
 	  lists['userId'] = "R123";
-	  Service.post('http://localhost:8081/rbs/th/testdata', lists)
+	  lists['environment'] = forms.environment.data;
+	  Service.post('/rbs/th/testdata', lists)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
@@ -185,7 +208,8 @@ function Dashboard() {
 			"testTransactionId": 1,
 			"testTransactionNo": "TH_001_001",
 			"totalRecord": 2,
-			"xmlDifference": ""
+			"xmlDifference": "",
+			"environment": "NFT"
 	    },
 		{
 			"actualAir": 0,
@@ -810,6 +834,19 @@ function Dashboard() {
 	  return valid
   }
   
+  function createProductName() {
+	if (state.productFamily.data) {
+		return productMapDetails[state.productFamily.data].map((familyItem) => {
+			return businessAttributes['PR001'].map((item) => {
+			  if (familyItem === item.attributeId) {
+				return (<option value={item.attributeId}>{item.refDataDesc}</option>)
+			  }
+			})
+		})
+	}
+	return []
+  }
+  
   return (
     <>
       <Row className={styles.section}>
@@ -882,9 +919,7 @@ function Dashboard() {
 					<Col sm="6">
 					  <Form.Control as="select" value={state.productName.data} onChange={onSelectedSingleOptionChange('productName')}>
 						<option value="">Please Select</option>
-						{businessAttributes['PR001'] && businessAttributes['PR001'].map((item) => {
-						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
-						})}
+						{createProductName()}
 					  </Form.Control>
 					</Col>
 				  </Form.Group>
@@ -894,7 +929,7 @@ function Dashboard() {
 			    <Col md="6">
 				  <Form.Group as={Row} controlId="borrowingAmount">
 					<Form.Label column sm="4">Borrowing Amount</Form.Label>
-					<Col sm="8" className={styles.textform}>
+					<Col sm="6" className={styles.textform}>
 					  <Form.Control type="text" isInvalid={state.borrowingAmount.error} value={state.borrowingAmount.data} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
 					  <Form.Control.Feedback type="invalid" tooltip>
 					   {state.borrowingAmount.error}
@@ -916,17 +951,25 @@ function Dashboard() {
 					<Col sm="6">
 					  <Form.Control as="select" value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
 						<option value="">Please Select</option>
-						<option value="NFTe">NFTe</option>
+						<option value="NFT">NFT</option>
 						<option value="UAT">UAT</option>
 						<option value="Dev">Dev</option>
 					  </Form.Control>
+					  <OverlayTrigger
+						  placement="right"	
+						  overlay={
+							<Tooltip>Choose environment to run test cases</Tooltip>
+						  }
+						>
+						<div className={styles.tooltip}><div className={styles.qicon} /></div>
+					  </OverlayTrigger>
 					</Col>
 				  </Form.Group>
 				</Col>
 			  </Row>
 			  <Form.Group as={Row} controlId="term">
 				<Form.Label column sm="2">Term (Months)</Form.Label>
-				<Col sm="4" className={styles.textform}>
+				<Col sm="3" className={styles.textform}>
 				  <Form.Control type="text" isInvalid={state.term.error} value={state.term.data} autoComplete="off" onChange={onTextUpdated('term')} onBlur={removeUnwantedComma('term')} />
 				  <Form.Control.Feedback type="invalid" tooltip>
                    {state.term.error}
@@ -943,7 +986,7 @@ function Dashboard() {
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="riskBand">
 				<Form.Label column sm="2">Risk Band</Form.Label>
-				<Col sm="4" className={styles.textform}>
+				<Col sm="3" className={styles.textform}>
 				  <Form.Control type="text" isInvalid={state.riskBand.error} value={state.riskBand.data} autoComplete="off" onChange={onTextUpdated('riskBand')} onBlur={removeUnwantedComma('riskBand')} />
 				  <Form.Control.Feedback type="invalid" tooltip>
                    {state.riskBand.error}

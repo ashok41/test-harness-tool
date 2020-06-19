@@ -45,7 +45,8 @@ function TestData() {
 			"testTransactionId": 1,
 			"testTransactionNo": "TH_001_001",
 			"totalRecord": 2,
-			"xmlDifference": ""
+			"xmlDifference": "",
+			"environment": "NFT"
 		},
 		{
 			"actualAir": 0,
@@ -321,6 +322,7 @@ function TestData() {
 	    <Col md="12">
 		 <Row>
 		   <Col md="9">
+		    <div className={common.environment}><span>Environment:</span> {paginationData[0].environment}</div>
 		   </Col>
 		   <Col md="3">
 		    <ProfileList />

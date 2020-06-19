@@ -31,3 +31,13 @@
 	display: inline-block;
 	margin-right: 10px;
 }
+.header-container {
+	div {
+		display: inline-block
+	}
+	:nth-child(2) {
+		margin: 0px !important;
+		font-size: 14px;
+		float: right;
+	}
+}

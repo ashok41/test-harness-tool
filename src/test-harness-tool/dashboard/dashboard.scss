@@ -107,3 +107,9 @@ ul.list-group > li {
 :global(.list-group-item) {
 	color: #005093 !important;
 }
+.toast-container {
+	position: relative;
+}
+.upload-button {
+	margin-top: 5px;
+}

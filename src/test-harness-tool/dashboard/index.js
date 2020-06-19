@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Row, Col, Card, Dropdown, DropdownButton } from 'react-bootstrap'
+import { Row, Col, Card, Dropdown, DropdownButton, Popover,OverlayTrigger, Form, Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import common from '../common/common.scss'
 import styles from './dashboard.scss'
@@ -7,6 +7,8 @@ import styles from './dashboard.scss'
 
 function Dashboard() {
   const history = useHistory();
+  const [showA, setShowA] = useState(false);
+  const toggleShowA = () => setShowA(!showA);
   
   function logout() {
 	  localStorage.removeItem('logged');
@@ -15,6 +17,19 @@ function Dashboard() {
 		pathname: '/login',
 	  })
   }
+  
+  const popover = (
+  <Popover id="popover-basic">
+    <Popover.Content>
+      <Form.File 
+		id="custom-file"
+		label=""
+		custom
+	  />
+	  <Button variant="primary" className={styles.uploadButton}>Upload</Button>
+    </Popover.Content>
+  </Popover>
+);
   
   return (
     <>
@@ -42,6 +57,14 @@ function Dashboard() {
 			      <Dropdown.Item href="#/report-lists/business-report">Business Report</Dropdown.Item>
 			     </DropdownButton>
 			    </span>
+			  </li>
+			  <li className={styles.toastContainer}>
+			    <i />
+				<span>
+				  <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+					<a href="#" onClick={toggleShowA}>Update Reference Data</a>
+				  </OverlayTrigger>
+				</span>
 			  </li>
 			 </ul>
 			</div>
