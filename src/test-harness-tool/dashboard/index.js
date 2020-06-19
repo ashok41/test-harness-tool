@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef } from 'react';
 import { Row, Col, Card, Dropdown, DropdownButton, Popover,OverlayTrigger, Form, Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
 import Service from '../common/service'
@@ -8,10 +8,10 @@ import styles from './dashboard.scss'
 
 function Dashboard() {
   const history = useHistory();
-  const [file, setFile] = useState({selectedFile: ''});
-  const [showA, setShowA] = useState(false);
+  const [showA, setShowA] = useState({ selectedFile: '', show: false, message: '', error: '' });
+  const fileInput = useRef()
 
-  const toggleShowA = () => setShowA(!showA);
+  const toggleShowA = () => setShowA({show: !showA, message: '', error: ''});
   
   function logout() {
 	  localStorage.removeItem('logged');
@@ -22,34 +22,51 @@ function Dashboard() {
   }
   
   const onFileChange = event => { 
-    setFile({ selectedFile: event.target.files[0] }); 
+	const regex = /\.(xls)$/i
+	const file = fileInput.current.value
+	if (file && !regex.test(file)) {
+	  setShowA({...showA, error: 'Please choose valid xls file'})
+	  fileInput.current.value = '';
+	  return false;
+	}
+	setShowA({...showA, ...{ error: '', selectedFile: event.target.files[0] }})
   }; 
   
   const onFileUpload = () => { 
+	  if (!fileInput.current.value) {
+		  setShowA({...showA, error: 'Please choose file to upload'})
+		  return false;
+	  }
       const formData = new FormData(); 
-      formData.append("file", file);
+      formData.append(
+        "uploadfile",
+        showA.selectedFile,
+        showA.selectedFile.name
+      )
 	  const config = {
         headers: {
           'content-type': 'multipart/form-data'
         }
       }
-      Service.post("http://localhost:8081/rbs/th/uploadFile", formData, config).then((res) => {
-		  console.log('response', res)
+      Service.post("/rbs/th/uploadFile", formData, config).then((res) => {
+		fileInput.current.value = ''
+		setShowA({...showA, message: 'Upload successfully', error: '', selectedFile: ''})
 	  }).catch((error) => {
-		  console.log('error', error)
+		fileInput.current.value = ''
+		setShowA({...showA, message: 'Upload successfully', error: '', selectedFile: ''})
 	  }); 
   }
   
   const fileData = () => { 
-      if (file.selectedFile) { 
+      if (showA.selectedFile) { 
         return ( 
           <div className={styles.fileDetails}> 
             <div className={styles.header}>File Details:</div> 
-            <div>File Name: {file.selectedFile.name}</div> 
-            <div>File Type: {file.selectedFile.type}</div> 
+            <div>File Name: {showA.selectedFile.name}</div> 
+            <div>File Type: {showA.selectedFile.type}</div> 
             <div> 
               Last Modified:{" "} 
-              {file.selectedFile.lastModifiedDate.toDateString()} 
+              {showA.selectedFile.lastModifiedDate.toDateString()} 
             </div> 
           </div> 
         ); 
@@ -59,14 +76,19 @@ function Dashboard() {
   const popover = (
   <Popover id="popover-basic">
     <Popover.Content>
+	  {showA.error !== null && (
+		<div className={styles.fileErrorMessage}>{showA.error}</div>
+	  )}
 	  <input
-		   id="file"
 		   type="file"
-		   name="selectedFile"
 		   onChange={onFileChange}
+		   ref={fileInput}
 	  />
 	  <Button variant="primary" onClick={onFileUpload} className={styles.uploadButton}>Upload</Button>
-	  {fileData()} 
+	  {fileData()}
+	  {showA.message !== null && (
+		<div className={styles.fileMessage}>{showA.message}</div>
+	  )}
     </Popover.Content>
   </Popover>
 );
@@ -101,7 +123,7 @@ function Dashboard() {
 			  <li className={styles.toastContainer}>
 			    <i />
 				<span>
-				  <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+				  <OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
 					<a href="#" onClick={toggleShowA}>Update Reference Data</a>
 				  </OverlayTrigger>
 				</span>
