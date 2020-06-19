@@ -1,32 +1,72 @@
 import React, {useState} from 'react';
 import { Row, Col, Card, Dropdown, DropdownButton, Popover,OverlayTrigger, Form, Button } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
+import Service from '../common/service'
 import common from '../common/common.scss'
 import styles from './dashboard.scss'
 	
 
 function Dashboard() {
   const history = useHistory();
+  const [file, setFile] = useState({selectedFile: ''});
   const [showA, setShowA] = useState(false);
+
   const toggleShowA = () => setShowA(!showA);
   
   function logout() {
 	  localStorage.removeItem('logged');
 	  localStorage.removeItem('date');
 	  history.push({
-		pathname: '/login',
+		pathname: '/login',  
 	  })
   }
+  
+  const onFileChange = event => { 
+    setFile({ selectedFile: event.target.files[0] }); 
+  }; 
+  
+  const onFileUpload = () => { 
+      const formData = new FormData(); 
+      formData.append("file", file);
+	  const config = {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      }
+      Service.post("http://localhost:8081/rbs/th/uploadFile", formData, config).then((res) => {
+		  console.log('response', res)
+	  }).catch((error) => {
+		  console.log('error', error)
+	  }); 
+  }
+  
+  const fileData = () => { 
+      if (file.selectedFile) { 
+        return ( 
+          <div className={styles.fileDetails}> 
+            <div className={styles.header}>File Details:</div> 
+            <div>File Name: {file.selectedFile.name}</div> 
+            <div>File Type: {file.selectedFile.type}</div> 
+            <div> 
+              Last Modified:{" "} 
+              {file.selectedFile.lastModifiedDate.toDateString()} 
+            </div> 
+          </div> 
+        ); 
+      }
+    }
   
   const popover = (
   <Popover id="popover-basic">
     <Popover.Content>
-      <Form.File 
-		id="custom-file"
-		label=""
-		custom
+	  <input
+		   id="file"
+		   type="file"
+		   name="selectedFile"
+		   onChange={onFileChange}
 	  />
-	  <Button variant="primary" className={styles.uploadButton}>Upload</Button>
+	  <Button variant="primary" onClick={onFileUpload} className={styles.uploadButton}>Upload</Button>
+	  {fileData()} 
     </Popover.Content>
   </Popover>
 );
