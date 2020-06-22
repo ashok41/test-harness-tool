@@ -22,13 +22,13 @@ function Dashboard() {
   }
   
   const onFileChange = event => { 
-	const regex = /\.(xls)$/i
+	/*const regex = /\.(xls)$/i
 	const file = fileInput.current.value
 	if (file && !regex.test(file)) {
 	  setShowA({...showA, error: 'Please choose valid xls file'})
 	  fileInput.current.value = '';
 	  return false;
-	}
+	}*/
 	setShowA({...showA, ...{ error: '', selectedFile: event.target.files[0] }})
   }; 
   
