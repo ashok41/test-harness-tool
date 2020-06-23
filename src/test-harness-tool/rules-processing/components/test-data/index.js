@@ -261,7 +261,7 @@ function TestData() {
 	items.push(<Pagination.Item onClick={setPageItem(--prev)}>Prev</Pagination.Item>)
   }
   for (let number = 1; number <= total; number++) {
-	if (number > 10 ) {
+	if (number > 5 ) {
 		continue;
 	}
 	items.push(
@@ -270,7 +270,7 @@ function TestData() {
       </Pagination.Item>,
     );
   }
-  if (total > 10) {
+  if (total > 5) {
 	let next = page
 	items.push(<Pagination.Item onClick={setPageItem(++next)}>Next</Pagination.Item>)
   }

@@ -140,7 +140,7 @@ function ReportLists() {
 	  const error = validation(state)
 	  if (error === '') {
 		setError('')
-		Service.get(`/rbs/th/testsets/${formatDate(state.from)}}/${formatDate(state.to)}/${state.environment}/${state.business}`)
+		Service.get(`/rbs/th/testsets/${formatDate(state.from)}/${formatDate(state.to)}/${state.environment}/${state.business}`)
 		.then((response) => {
 		  const { data } = response
 	      setState({...state, data: data})
@@ -241,7 +241,6 @@ function ReportLists() {
 		    </Alert>
 		   }
 		    <Card>
-			 <Card.Header>Date Range</Card.Header>
              <Card.Body>
               <Form>
 			    <Row>
@@ -302,14 +301,10 @@ function ReportLists() {
                 <Button variant="primary" onClick={handleSubmit}>Generate Report</Button>	
 			  </Form>
 			  {state.data.length >0 && <div className={styles.tableWrapper}>
-			   <Table responsive striped bordered hover size="md">
+			   <Table responsive striped bordered hover size="md" className={styles.tableContainer}>
 			    <thead>
 				 <tr>
 				  <th rowSpan="2">ID</th>
-				  <th rowSpan="2">Application Identity</th>
-				  <th rowSpan="2">Bank Division</th>
-				  <th rowSpan="2">Product Family</th>
-				  <th rowSpan="2">Product Name</th>
 				  <th rowSpan="2">Borrowing Amount(GBP)</th>
 				  <th rowSpan="2">Term (Months)</th>
 				  <th rowSpan="2">Risk Band</th>
@@ -318,11 +313,7 @@ function ReportLists() {
 			    <tbody>
 			     {paginationData.map((item) => (
 				  <tr>
-					<td><a href={`#reports/${item.testSetId}`}>{item.testSetId}</a></td>
-					<td>{item.applicationIdentity}</td>
-					<td>{item.bankDivision}</td>
-					<td>{item.productFamily}</td>
-					<td>{item.productName}</td>
+					<td><a href={`#reports/${item.testSetId}/${state.environment}`}>{item.testSetId}</a></td>
 					<td>{item.borrowingAmount}</td>
 					<td>{item.riskBand}</td>
 					<td>{item.termFactor}</td>

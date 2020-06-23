@@ -93,7 +93,7 @@ const TestLog = (props) => {
 	  <div className={styles.logContainer}>
 		<div className={styles.logWrapper} ref={logRef} />
 		<div className={styles.logLables}>
-  		  <div className={styles.padBottom}>Execution duration: <span>{executionTime}</span></div>
+		  {executionTime && <div className={styles.padBottom}>Execution duration: <span>{executionTime}</span></div>}
 		  <Table responsive striped bordered hover size="md">
 		    <tbody>
 			 <tr>

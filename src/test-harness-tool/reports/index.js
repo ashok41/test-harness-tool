@@ -4,6 +4,7 @@ import { useLocation, useParams } from 'react-router-dom'
 import ProfileList from '../common/profile-list'
 import TestLog from './components/testlog';
 import Service from '../common/service'
+import datas from './reports.json'
 import styles from './reports.scss';
 import common from '../common/common.scss';
 
@@ -30,21 +31,22 @@ function ControlledTabs(props) {
   const total = Math.ceil(filteredData.length/10)
   if (page[key] > 1) {
     let prev = page[key]
-	items.push(<Pagination.Item onClick={setPageItem(--prev)}>Prev</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;&lt;</Pagination.Item>)
   }
-  for (let number = 1; number <= total; number++) {
-	if (number > 5 ) {
+  let x = page[key] > 5 ? page[key] : 1
+  for (let number = x; number <= 5; number++) {
+	if (number > total ) {
 		continue;
 	}
 	items.push(
       <Pagination.Item key={number} active={number === page[key]} onClick={setPageItem(number)}>
         {number}
-      </Pagination.Item>,
+      </Pagination.Item>
     );
   }
   if (total > 5) {
 	let next = page[key]
-	items.push(<Pagination.Item onClick={setPageItem(++next)}>Next</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(++next)} className={common.paginationArrow}>&gt;&gt;</Pagination.Item>)
   }
   const indexOfLastTodo = page[key] * 10;
   const indexOfFirstTodo = indexOfLastTodo - 10;
@@ -85,10 +87,12 @@ function ControlledTabs(props) {
   if (paginationData[0].productName === 'Agri Facility') {
 	Array.prototype.push.apply(firstColumns, [{
 	  name: 'Start Margin',
-	  key: 'startMargin'
+	  key: 'startMargin',
+	  rowSpan: 2,
 	}, {
 	  name: 'Term Margin Premium',
-	  key: 'termMarginPremium'
+	  key: 'termMarginPremium',
+	  rowSpan: 2,
 	}])
   }
   Array.prototype.push.apply(firstColumns, [{
@@ -215,7 +219,7 @@ function ControlledTabs(props) {
 function RoutingPage() {
   const [file, setFile] = useState('')
   const params = useParams();
-  const { slug } = params;
+  const { slug, slug1 } = params;
   let reportsData = {data: {}, executionTime: ''}
   if (!slug) { 
 	const location = useLocation();
@@ -231,7 +235,7 @@ function RoutingPage() {
   
   useEffect(() => {
 	if (slug) {
-	  Service.get(`/rbs/th/testdata/${slug}`)
+	  Service.get(`/rbs/th/reports/${slug}`)
 		.then((response) => {
 		  const { data } = response
 	      setReports({...reports, data: data})
@@ -241,8 +245,197 @@ function RoutingPage() {
 			"totalTestCases": 27,
 			"passed": 24,
 			"failed": 3,
-			"environment": "NFT",
 			"testcasesResultList": [
+			{
+					"actualAir": 7.6,
+					"actualApr": 0.6,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 6,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_001",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 7.2,
+					"actualApr": 0.2,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 7,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_002",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 1.3,
+					"actualApr": 2,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_003",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 0,
+					"actualApr": 0,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_004",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 0,
+					"actualApr": 0,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_005",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 7.6,
+					"actualApr": 0.6,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 6,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_001",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 7.2,
+					"actualApr": 0.2,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 7,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_002",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 1.3,
+					"actualApr": 2,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_003",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 0,
+					"actualApr": 0,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_004",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 0,
+					"actualApr": 0,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_005",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
 			{
 					"actualAir": 7.6,
 					"actualApr": 0.6,
@@ -363,14 +556,14 @@ function RoutingPage() {
 	  <Card>
 	    <Card.Header className={styles.headerContainer}>
 		 <div>Test Execution Summary</div>
-		 <div className={common.environment}><span>Environment:</span> {reports.data.environment}</div>
+		 <div className={common.environment}><span>Environment:</span> {slug1? slug1 : reports.data.environment}</div>
 		</Card.Header>
 	    <Card.Body className={styles.cardBody}>
 		  <div className={styles.relative}>
 		   <div className={styles.download}>
 		    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
-			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generatepdf/${reports.data.testcasesResultList[0].testSetId}`} download>PDF</Dropdown.Item>
-			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generateexcel/${reports.data.testcasesResultList[0].testSetId}`} download>Excel</Dropdown.Item>
+			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generatepdf/${reports.data.testcasesResultList[0].testSetId}`} download target="_blank">PDF</Dropdown.Item>
+			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generateexcel/${reports.data.testcasesResultList[0].testSetId}`} download target="_blank">Excel</Dropdown.Item>
 			 </DropdownButton>
 		    <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
 		    <Button variant="primary" disabled>Print</Button>

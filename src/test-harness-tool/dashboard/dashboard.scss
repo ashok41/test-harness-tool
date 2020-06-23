@@ -3,7 +3,7 @@
   padding: 20px 0;
 }
 .card-wrapper {
-	height: 495px;
+	height: 550px;
 }
 
 .list-wrapper {
@@ -126,4 +126,7 @@ ul.list-group > li {
 }
 .file-error-message {
 	color: #dc3545;
+}
+.popover-container {
+	left: 35px !important;
 }

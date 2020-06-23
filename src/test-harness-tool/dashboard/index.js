@@ -74,7 +74,7 @@ function Dashboard() {
     }
   
   const popover = (
-  <Popover id="popover-basic">
+  <Popover id="popover-basic" className={styles.popoverContainer}>
     <Popover.Content>
 	  {showA.error !== null && (
 		<div className={styles.fileErrorMessage}>{showA.error}</div>

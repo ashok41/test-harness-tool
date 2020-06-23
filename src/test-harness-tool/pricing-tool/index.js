@@ -141,28 +141,28 @@ function Dashboard() {
   function validation(forms) {
 	let errors = ''
 	if (forms.locationIdentity.data === '') {
-		errors = 'Please enter Application Identity';
+		errors = 'Please select Application Identity';
 	} 
 	if (errors === '' && forms.bankDivision.data === '') {
-		errors = 'Please enter Bank Division';
+		errors = 'Please select Bank Division';
 	}
 	if (errors === '' && forms.productFamily.data === '') {
-		errors = 'Please enter Product Family';
+		errors = 'Please select Product Family';
 	}
 	if (errors === '' && forms.productName.data === '') {
-		errors = 'Please enter Product Name';
+		errors = 'Please select Product Name';
 	}
 	if (errors === '' && forms.borrowingAmount.data === '') {
 		errors = 'Please enter Borrowing Amount';
 	} 
-	if (errors === '' && forms.environment.data === '') {
-		errors = 'Please enter Environment';
-	}
 	if (errors === '' && forms.riskBand.data === '') {
 		errors = 'Please enter Risk Band';
 	}
 	if (errors === '' && forms.term.data === '') {
 		errors = 'Please enter Term (Months)';
+	}
+	if (errors === '' && forms.environment.data === '') {
+		errors = 'Please select Environment';
 	}
 	return errors
   }
@@ -179,7 +179,7 @@ function Dashboard() {
 	  lists['bankDivision'] = Number(forms.bankDivision.data);
 	  lists['productFamily'] = Number(forms.productFamily.data);
 	  lists['productName'] = Number(forms.productName.data);
-	  lists['userId'] = "R123";
+	  lists['userId'] = localStorage.getItem('logged');
 	  lists['environment'] = forms.environment.data;
 	  Service.post('/rbs/th/testdata', lists)
 	  .then((response) => {
@@ -756,7 +756,7 @@ function Dashboard() {
   }
   
   const formFieldsInfo = { 
-    '4': { 
+    '4': { // small business loan (fixed)
 	  'borrowingAmount': {
 		min: 1000, max: 50000, upto: 15, errorMsg: 'Please check the value should be Min of 1000 and Max of 50000',
 		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
@@ -770,7 +770,21 @@ function Dashboard() {
 		tooltip: 'Min: 1, Max: 10 Delimiter [0-9,]'
 	  }
     },
-    '6': { 
+    '6': { // agri facility validation
+	  'borrowingAmount': {
+		min: 1000, max: 50000, upto: 15, errorMsg: 'Please check the value should be Min of 1000 and Max of 50000',
+		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
+	  },
+	  'term': {
+		min: 1, max: 120, upto: 4, errorMsg: 'Please check the value should be Min of 1 and Max of 120',
+		tooltip: 'Min: 1, Max: 120 Delimiter [0-9,]'
+	  },
+	  'riskBand': {
+		min: 1, max: 10, upto: 10, errorMsg: 'Please check the value should be Min of 1 and Max of 10',
+		tooltip: 'Min: 1, Max: 10 Delimiter [0-9,]'
+	  }
+    },
+    '5': { // overdraft validation
 	  'borrowingAmount': {
 		min: 1000, max: 50000, upto: 15, errorMsg: 'Please check the value should be Min of 1000 and Max of 50000',
 		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
@@ -778,20 +792,6 @@ function Dashboard() {
 	  'term': {
 		min: 1, max: 12, upto: 4, errorMsg: 'Please check the value should be Min of 1 and Max of 12',
 		tooltip: 'Min: 1, Max: 12 Delimiter [0-9,]'
-	  },
-	  'riskBand': {
-		min: 1, max: 10, upto: 10, errorMsg: 'Please check the value should be Min of 1 and Max of 10',
-		tooltip: 'Min: 1, Max: 10 Delimiter [0-9,]'
-	  }
-    },
-    '5': { 
-	  'borrowingAmount': {
-		min: 1000, max: 50000, upto: 15, errorMsg: 'Please check the value should be Min of 1000 and Max of 50000',
-		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
-	  },
-	  'term': {
-		min: 24, max: 24, upto: 4, errorMsg: 'Please check the value should be Min of 24 and Max of 24',
-		tooltip: 'Min: 24, Max: 24 Delimiter [0-9,]'
 	  },
 	  'riskBand': {
 		min: 1, max: 10, upto: 10, errorMsg: 'Please check the value should be Min of 1 and Max of 10',
