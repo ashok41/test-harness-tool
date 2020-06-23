@@ -3,6 +3,7 @@ import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card, Dropdo
 import { useLocation } from 'react-router-dom'
 import ProfileList from '../common/profile-list'
 import TestLog from './components/testlog';
+import Service from '../common/service'
 import styles from './reports.scss';
 import common from '../common/common.scss';
 
@@ -27,17 +28,112 @@ function ControlledTabs(props) {
   }
   let items = [];
   const total = Math.ceil(filteredData.length/10)
+  if (page[key] > 1) {
+    let prev = page[key]
+	items.push(<Pagination.Item onClick={setPageItem(--prev)}>Prev</Pagination.Item>)
+  }
   for (let number = 1; number <= total; number++) {
-    items.push(
+	if (number > 5 ) {
+		continue;
+	}
+	items.push(
       <Pagination.Item key={number} active={number === page[key]} onClick={setPageItem(number)}>
         {number}
-      </Pagination.Item>
+      </Pagination.Item>,
     );
+  }
+  if (total > 5) {
+	let next = page[key]
+	items.push(<Pagination.Item onClick={setPageItem(++next)}>Next</Pagination.Item>)
   }
   const indexOfLastTodo = page[key] * 10;
   const indexOfFirstTodo = indexOfLastTodo - 10;
   const paginationData = filteredData.slice(indexOfFirstTodo, indexOfLastTodo);
-  //const headerDetails = {'Small Business Loan':
+  const firstColumns = [{
+	  name: 'ID',
+	  key: 'id',
+	  rowSpan: 2,
+  }, {
+	  name: 'Application Identity',
+	  key: 'applicationIdentity',
+	  rowSpan: 2,
+  }, {
+	  name: 'Bank Division',
+	  key: 'bankDivision',
+	  rowSpan: 2,
+  }, {
+	  name: 'Product Family',
+	  key: 'productFamily',
+	  rowSpan: 2,
+  }, {
+	  name: 'Product Name',
+	  key: 'productName',
+	  rowSpan: 2,
+  }, {
+	  name: 'Borrowing Amount(GBP)',
+	  key: 'borrowingAmount',
+	  rowSpan: 2,
+  }, {
+	  name: 'Term (Months)',
+	  key: 'termFactor',
+	  rowSpan: 2,
+  }, {
+	  name: 'Risk Band',
+	  key: 'riskBand',
+	  rowSpan: 2,
+  }]
+  if (paginationData[0].productName === 'Agri Facility') {
+	Array.prototype.push.apply(firstColumns, [{
+	  name: 'Start Margin',
+	  key: 'startMargin'
+	}, {
+	  name: 'Term Margin Premium',
+	  key: 'termMarginPremium'
+	}])
+  }
+  Array.prototype.push.apply(firstColumns, [{
+	  name: 'Expected',
+	  key: 'expected',
+	  className: styles.rateHead,
+	  colSpan: 2,
+	}, {
+	  name: 'Actual',
+	  key: 'actual',
+	  className: styles.actualHead,
+	  colSpan: 2,
+  }])
+  const secondColumns = []
+  if (paginationData[0].productName === 'Small Business Loan (Fixed)') {
+	Array.prototype.push.apply(secondColumns, [{
+	  name: 'AIR(%)',
+	  key: 'air'
+	}, {
+	  name: 'APR(%)',
+	  key: 'apr'
+	}, {
+	  name: 'AIR(%)',
+	  key: 'air'
+	}, {
+	  name: 'APR(%)',
+	  key: 'apr'
+	}])
+  }
+  if (paginationData[0].productName === 'Overdraft' || paginationData[0].productName === 'Agri Facility') {
+	Array.prototype.push.apply(secondColumns, [{
+	  name: 'Margin Fee',
+	  key: 'marginFee'
+	}, {
+	  name: 'Arrangement Fee',
+	  key: 'arrangementFee'
+	}, {
+	  name: 'Margin Fee',
+	  key: 'marginFee'
+	}, {
+	  name: 'Arrangement Fee',
+	  key: 'arrangementFee'
+	}])
+  }
+  
   return (
     <Tabs
       activeKey={key}
@@ -49,22 +145,21 @@ function ControlledTabs(props) {
         <Table responsive striped bordered hover size="md">
 		  <thead>
 			<tr>
-			  <th rowSpan="2">ID</th>
-			  <th rowSpan="2">Application Identity</th>
-			  <th rowSpan="2">Bank Division</th>
-			  <th rowSpan="2">Product Family</th>
-			  <th rowSpan="2">Product Name</th>
-			  <th rowSpan="2">Borrowing Amount(GBP)</th>
-			  <th rowSpan="2">Term (Months)</th>
-			  <th rowSpan="2">Risk Band</th>
-			  <th colSpan="2" className={styles.rateHead}>Expected</th>
-			  <th colSpan="2" className={styles.actualHead}>Actual</th>
+			  {firstColumns.map((item) => {
+				const colSpan = item.colSpan ? { colSpan: item.colSpan } : {}
+				const rowSpan = item.rowSpan ? { rowSpan: item.rowSpan } : {}
+				const className = item.className ? { className: item.className } : {}
+				return <th {...rowSpan} {...colSpan} {...className}>
+				  {item.name}
+				</th>
+		      })}
 			</tr>
 			<tr>
-		      <th>AIR(%)</th>
-			  <th>APR(%)</th>
-			  <th>AIR(%)</th>
-			  <th>APR(%)</th>
+			  {secondColumns.map((item2) => {
+				return <th>
+				  {item2.name}
+				</th>
+		      })}
 			</tr>
 		  </thead>
 		  <tbody>
@@ -78,10 +173,32 @@ function ControlledTabs(props) {
 				<td>{item.borrowingAmount}</td>
 				<td>{item.termFactor}</td>
 				<td>{item.riskBand}</td>
-				<td>{item.expectetAir}</td>
-				<td>{item.expectetApr}</td>
-				<td>{item.actualAir}</td>
-				<td>{item.actualApr}</td>
+				{paginationData[0].productName === 'Agri Facility' &&
+				  <>
+				   <td>{item.startMargin}</td>
+				   <td>{item.termMarginPremium}</td>
+				   <td>{item.expectetMarginFee}</td>
+				   <td>{item.expectetArrangementFee}</td>
+				   <td>{item.actualMarginFee}</td>
+				   <td>{item.actualArrangementFee}</td> 
+			  	  </>
+				}
+				{paginationData[0].productName === 'Small Business Loan (Fixed)' &&
+				  <>
+				   <td>{item.expectetAir}</td>
+				   <td>{item.expectetApr}</td>
+				   <td>{item.actualAir}</td>
+				   <td>{item.actualApr}</td>
+			  	  </>
+				}
+				{paginationData[0].productName === 'Overdraft' &&
+				  <>
+				   <td>{item.expectetMarginFee}</td>
+				   <td>{item.expectetArrangementFee}</td>
+				   <td>{item.actualMarginFee}</td>
+				   <td>{item.actualArrangementFee}</td>
+			  	  </>
+				}
 			  </tr>
 			))}
 		  </tbody>
@@ -97,9 +214,11 @@ function ControlledTabs(props) {
 
 function RoutingPage() {
   const location = useLocation();
+  const [file, setFile] = useState('')
   const {state: {data, executionTime}} = location
   data['passedPercent'] = Math.round((data.passed/data.totalTestCases) * 100);
   data['failedPercent'] = Math.round((data.failed/data.totalTestCases) * 100);
+  
   return (
 	<Row className={styles.container}>
 	<Col md="12">
@@ -123,8 +242,8 @@ function RoutingPage() {
 		  <div className={styles.relative}>
 		   <div className={styles.download}>
 		    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
-			  <Dropdown.Item href="#">PDF</Dropdown.Item>
-			  <Dropdown.Item href="#">Excel</Dropdown.Item>
+			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generatepdf/${data.testcasesResultList[0].testSetId}`} download>PDF</Dropdown.Item>
+			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generateexcel/${data.testcasesResultList[0].testSetId}`} download>Excel</Dropdown.Item>
 			 </DropdownButton>
 		    <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
 		    <Button variant="primary" disabled>Print</Button>
