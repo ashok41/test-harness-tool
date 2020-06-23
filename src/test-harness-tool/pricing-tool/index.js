@@ -772,8 +772,8 @@ function Dashboard() {
     },
     '6': { 
 	  'borrowingAmount': {
-		min: 15000, max: 15000, upto: 15, errorMsg: 'Please check the value should be Min of 15000 and Max of 15000',
-		tooltip: 'Min: 15000, Max: 15000 Delimiter [0-9,]'
+		min: 1000, max: 50000, upto: 15, errorMsg: 'Please check the value should be Min of 1000 and Max of 50000',
+		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
 	  },
 	  'term': {
 		min: 1, max: 12, upto: 4, errorMsg: 'Please check the value should be Min of 1 and Max of 12',
@@ -786,8 +786,8 @@ function Dashboard() {
     },
     '5': { 
 	  'borrowingAmount': {
-		min: 15000, max: 15000, upto: 15, errorMsg: 'Please check the value should be Min of 15000 and Max of 15000',
-		tooltip: 'Min: 15000, Max: 15000 Delimiter [0-9,]'
+		min: 1000, max: 50000, upto: 15, errorMsg: 'Please check the value should be Min of 1000 and Max of 50000',
+		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
 	  },
 	  'term': {
 		min: 24, max: 24, upto: 4, errorMsg: 'Please check the value should be Min of 24 and Max of 24',
