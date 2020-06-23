@@ -963,7 +963,7 @@ function Dashboard() {
 			  </Row>
 			  <Row>
 			    <Col md="6">
-				  <Form.Group as={Row} controlId="borrowingAmount">
+			      <Form.Group as={Row} controlId="borrowingAmount">
 					<Form.Label column sm="4">Borrowing Amount <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6" className={styles.textform}>
 					  <Form.Control type="text" isInvalid={state.borrowingAmount.error} value={state.borrowingAmount.data} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
@@ -981,9 +981,45 @@ function Dashboard() {
 					  </OverlayTrigger>}
 					</Col>
 				  </Form.Group>
-				</Col>
-				<Col md="6">
-				  <Form.Group as={Row} controlId="environment">
+				  <Form.Group as={Row} controlId="term">
+				    <Form.Label column sm="4">Term (Months) <span className={styles.mandatory}>*</span></Form.Label>
+				    <Col sm="6" className={styles.textform}>
+				     <Form.Control type="text" isInvalid={state.term.error} value={state.term.data} autoComplete="off" onChange={onTextUpdated('term')} onBlur={removeUnwantedComma('term')} />
+				     <Form.Control.Feedback type="invalid" tooltip>
+                      {state.term.error}
+                     </Form.Control.Feedback>
+				     {formFieldsInfo[state.productName.data] &&
+				     <OverlayTrigger
+					  placement="right"	
+					  overlay={
+						<Tooltip>{formFieldsInfo[state.productName.data]['term']['tooltip']}</Tooltip>
+					  }
+					 >
+					 <div className={styles.tooltip}><div className={styles.qicon} /></div>
+                     </OverlayTrigger>}
+				    </Col>
+			      </Form.Group>
+			      <Form.Group as={Row} controlId="riskBand">
+				   <Form.Label column sm="4">Risk Band <span className={styles.mandatory}>*</span></Form.Label>
+				   <Col sm="6" className={styles.textform}>
+				     <Form.Control type="text" isInvalid={state.riskBand.error} value={state.riskBand.data} autoComplete="off" onChange={onTextUpdated('riskBand')} onBlur={removeUnwantedComma('riskBand')} />
+				     <Form.Control.Feedback type="invalid" tooltip>
+                      {state.riskBand.error}
+                     </Form.Control.Feedback>
+				     {formFieldsInfo[state.productName.data] &&
+				     <OverlayTrigger
+					  placement="right"	
+					  overlay={
+						<Tooltip>{formFieldsInfo[state.productName.data]['riskBand']['tooltip']}</Tooltip>
+					  }
+					 >
+					 <div className={styles.tooltip}><div className={styles.qicon} /></div>
+                     </OverlayTrigger>}
+				   </Col>
+			      </Form.Group>
+			    </Col>
+			    <Col sm="6">
+			     <Form.Group as={Row} controlId="environment">
 					<Form.Label column sm="3">Environment <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
 					  <Form.Control as="select" value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
@@ -1004,42 +1040,6 @@ function Dashboard() {
 				  </Form.Group>
 				</Col>
 			  </Row>
-			  <Form.Group as={Row} controlId="term">
-				<Form.Label column sm="2">Term (Months) <span className={styles.mandatory}>*</span></Form.Label>
-				<Col sm="3" className={styles.textform}>
-				  <Form.Control type="text" isInvalid={state.term.error} value={state.term.data} autoComplete="off" onChange={onTextUpdated('term')} onBlur={removeUnwantedComma('term')} />
-				  <Form.Control.Feedback type="invalid" tooltip>
-                   {state.term.error}
-                  </Form.Control.Feedback>
-				  {formFieldsInfo[state.productName.data] &&
-				  <OverlayTrigger
-					  placement="right"	
-					  overlay={
-						<Tooltip>{formFieldsInfo[state.productName.data]['term']['tooltip']}</Tooltip>
-					  }
-					>
-					<div className={styles.tooltip}><div className={styles.qicon} /></div>
-                  </OverlayTrigger>}
-				</Col>
-			  </Form.Group>
-			  <Form.Group as={Row} controlId="riskBand">
-				<Form.Label column sm="2">Risk Band <span className={styles.mandatory}>*</span></Form.Label>
-				<Col sm="3" className={styles.textform}>
-				  <Form.Control type="text" isInvalid={state.riskBand.error} value={state.riskBand.data} autoComplete="off" onChange={onTextUpdated('riskBand')} onBlur={removeUnwantedComma('riskBand')} />
-				  <Form.Control.Feedback type="invalid" tooltip>
-                   {state.riskBand.error}
-                  </Form.Control.Feedback>
-				  {formFieldsInfo[state.productName.data] &&
-				  <OverlayTrigger
-					  placement="right"	
-					  overlay={
-						<Tooltip>{formFieldsInfo[state.productName.data]['riskBand']['tooltip']}</Tooltip>
-					  }
-					>
-					<div className={styles.tooltip}><div className={styles.qicon} /></div>
-                  </OverlayTrigger>}
-				</Col>
-			  </Form.Group>
 			  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
               <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
             </Form>
