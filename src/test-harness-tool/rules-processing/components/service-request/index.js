@@ -10,7 +10,219 @@ function ServiceRequest() {
   
   const history = useHistory();
   const location = useLocation();
-  const {state} = location;
+  //const {state} = location;
+  const state = [
+        {
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 10,
+			"expectetAir": 6.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 2,
+			"termFactor": 1,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 1,
+			"testTransactionNo": "TH_001_001",
+			"totalRecord": 2,
+			"xmlDifference": "",
+			"environment": "NFT"
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 20,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_002",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 40,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_003",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 70,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_004",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 90,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_005",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 20,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_006",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 90,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_007",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 70,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_004",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 90,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_005",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 20,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_006",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 100,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_007",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		}
+		]
   const testsetid = state[0].testSetId
   const [sort, setSort] = useState({})
   
@@ -147,15 +359,28 @@ function ServiceRequest() {
   const setPageItem = (number) => () => {
 	  setPage(number)
   }
+  
   let items = [];
   const total = Math.ceil(state.length/10)
+  if (page > 1) {
+    let prev = page
+	items.push(<Pagination.Item onClick={setPageItem(--prev)}>Prev</Pagination.Item>)
+  }
   for (let number = 1; number <= total; number++) {
-    items.push(
+	if (number > 5 ) {
+		continue;
+	}
+	items.push(
       <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
         {number}
-      </Pagination.Item>
+      </Pagination.Item>,
     );
   }
+  if (total > 5) {
+	let next = page
+	items.push(<Pagination.Item onClick={setPageItem(++next)}>Next</Pagination.Item>)
+  }
+  
   const indexOfLastTodo = page * 10;
   const indexOfFirstTodo = indexOfLastTodo - 10;
   const paginationData = state.slice(indexOfFirstTodo, indexOfLastTodo);
@@ -187,13 +412,35 @@ function ServiceRequest() {
   }, {
 	  name: 'Risk Band',
 	  key: 'riskBand'
-  }, {
-	  name: 'AIR(%)',
-	  key: 'air',
-  }, {
-	  name: 'APR(%)',
-	  key: 'apr',
   }]
+  
+  if (paginationData[0].productName === 'Agri Facility') {
+	Array.prototype.push.apply(columns, [{
+	  name: 'Start Margin',
+	  key: 'startMargin'
+	}, {
+	  name: 'Term Margin Premium',
+	  key: 'termMarginPremium'
+	}])
+  }
+  if (paginationData[0].productName === 'Small Business Loan (Fixed)') {
+	  Array.prototype.push.apply(columns, [{
+		  name: 'AIR(%)',
+		  key: 'air'
+		}, {
+		  name: 'APR(%)',
+		  key: 'apr'
+		}])
+  }
+  if (paginationData[0].productName === 'Overdraft' || paginationData[0].productName === 'Agri Facility') {
+	  Array.prototype.push.apply(columns, [{
+	  name: 'Margin Fee',
+	  key: 'marginFee'
+	}, {
+	  name: 'Arrangement Fee',
+	  key: 'arrangementFee'
+	}])
+  }
   
   const sortable = (sortKey, direction, isSortable) => () => {
     if (isSortable) {
@@ -249,8 +496,26 @@ function ServiceRequest() {
 					<td>{item.borrowingAmount}</td>
 					<td>{item.termFactor}</td>
 					<td>{item.riskBand}</td>
-					<td>{item.expectetAir}</td>
-					<td>{item.expectetApr}</td>
+					{paginationData[0].productName === 'Agri Facility' &&
+					  <>
+					   <td>{item.startMargin}</td>
+					   <td>{item.termMarginPremium}</td>
+					   <td>{item.expectetMarginFee}</td>
+					   <td>{item.expectetArrangementFee}</td>
+					  </>
+					}
+					{paginationData[0].productName === 'Small Business Loan (Fixed)' &&
+					  <>
+					   <td>{item.expectetAir}</td>
+					   <td>{item.expectetApr}</td>
+					  </>
+					}
+					{paginationData[0].productName === 'Overdraft' &&
+					  <>
+					   <td>{item.expectetMarginFee}</td>
+					   <td>{item.expectetArrangementFee}</td>
+					  </>
+					}
 				  </tr>
 				))}
 			  </tbody>

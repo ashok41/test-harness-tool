@@ -256,12 +256,23 @@ function TestData() {
   
   let items = [];
   const total = Math.ceil(dataLists.length/10)
+  if (page > 1) {
+    let prev = page
+	items.push(<Pagination.Item onClick={setPageItem(--prev)}>Prev</Pagination.Item>)
+  }
   for (let number = 1; number <= total; number++) {
-    items.push(
+	if (number > 10 ) {
+		continue;
+	}
+	items.push(
       <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
         {number}
       </Pagination.Item>,
     );
+  }
+  if (total > 10) {
+	let next = page
+	items.push(<Pagination.Item onClick={setPageItem(++next)}>Next</Pagination.Item>)
   }
   
   const indexOfLastTodo = page * 10;

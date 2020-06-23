@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card, DropdownButton, Dropdown, Breadcrumb } from 'react-bootstrap'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import ProfileList from '../common/profile-list'
 import TestLog from './components/testlog';
 import Service from '../common/service'
@@ -213,14 +213,141 @@ function ControlledTabs(props) {
 }
 
 function RoutingPage() {
-  const location = useLocation();
   const [file, setFile] = useState('')
-  const {state: {data, executionTime}} = location
-  data['passedPercent'] = Math.round((data.passed/data.totalTestCases) * 100);
-  data['failedPercent'] = Math.round((data.failed/data.totalTestCases) * 100);
+  const params = useParams();
+  const { slug } = params;
+  let reportsData = {data: {}, executionTime: ''}
+  if (!slug) { 
+	const location = useLocation();
+	const {state: {data, executionTime}} = location
+	reportsData.data = data
+	reportsData.executionTime = executionTime
+  }
+  const [reports, setReports] = useState(reportsData)
+  if (Object.keys(reports.data).length > 0) {
+	reports.data['passedPercent'] = Math.round((reports.data.passed/reports.data.totalTestCases) * 100);
+	reports.data['failedPercent'] = Math.round((reports.data.failed/reports.data.totalTestCases) * 100);
+  }
+  
+  useEffect(() => {
+	if (slug) {
+	  Service.get(`/rbs/th/testdata/${slug}`)
+		.then((response) => {
+		  const { data } = response
+	      setReports({...reports, data: data})
+		})
+		.catch((error) => {
+		  const data = {
+			"totalTestCases": 27,
+			"passed": 24,
+			"failed": 3,
+			"environment": "NFT",
+			"testcasesResultList": [
+			{
+					"actualAir": 7.6,
+					"actualApr": 0.6,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 6,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_001",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 7.2,
+					"actualApr": 0.2,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 7,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_002",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 1.3,
+					"actualApr": 2,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_003",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 0,
+					"actualApr": 0,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_004",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				},
+				{
+					"actualAir": 0,
+					"actualApr": 0,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 12.69,
+					"expectetApr": 0,
+					"productFamily": "Small Business Loan",
+					"productName": "Loan",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_005",
+					"totalRecord": 2,
+					"xmlDifference": ""
+				}
+			]
+		  } 
+	      setReports({...reports, data: data})
+		})
+	}
+  }, slug)
   
   return (
 	<Row className={styles.container}>
+	{Object.keys(reports.data).length > 0 &&
 	<Col md="12">
 	  <Row>
 	   <Col md="9">
@@ -236,32 +363,32 @@ function RoutingPage() {
 	  <Card>
 	    <Card.Header className={styles.headerContainer}>
 		 <div>Test Execution Summary</div>
-		 <div className={common.environment}><span>Environment:</span> {data.environment}</div>
+		 <div className={common.environment}><span>Environment:</span> {reports.data.environment}</div>
 		</Card.Header>
 	    <Card.Body className={styles.cardBody}>
 		  <div className={styles.relative}>
 		   <div className={styles.download}>
 		    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
-			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generatepdf/${data.testcasesResultList[0].testSetId}`} download>PDF</Dropdown.Item>
-			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generateexcel/${data.testcasesResultList[0].testSetId}`} download>Excel</Dropdown.Item>
+			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generatepdf/${reports.data.testcasesResultList[0].testSetId}`} download>PDF</Dropdown.Item>
+			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generateexcel/${reports.data.testcasesResultList[0].testSetId}`} download>Excel</Dropdown.Item>
 			 </DropdownButton>
 		    <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
 		    <Button variant="primary" disabled>Print</Button>
 		   </div>
 		 </div>
 		  <div>
-		    <TestLog testCasesRun={data.totalTestCases} executionTime={executionTime} logData={createLogData(data)} />
+		    <TestLog testCasesRun={reports.data.totalTestCases} executionTime={reports.executionTime} logData={createLogData(reports.data)} />
 		  </div>
 		 </Card.Body>
 	  </Card>
 	  <div className={styles.tabWrapper}>
 	   <Card>
 	    <Card.Body>
-	     <ControlledTabs data={createLogData(data)} testCasesRun={data.totalTestCases} testDataList={data.testcasesResultList} />
+	     <ControlledTabs data={createLogData(reports.data)} testCasesRun={reports.data.totalTestCases} testDataList={reports.data.testcasesResultList} />
 		</Card.Body>
 	   </Card>
 	  </div>
-	  </Col>
+	</Col>}
 	</Row>
   );
 }

@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Row, Col, Card, Breadcrumb, ListGroup, Form, Button, Table, Pagination, Dropdown, DropdownButton, Alert } from 'react-bootstrap'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import DatePicker from  'react-date-picker'
 import ProfileList from '../common/profile-list'
-import data from './reports.json';
+import Service from '../common/service'
 import common from '../common/common.scss'
 import styles from './report-lists.scss'
 	
@@ -11,12 +11,11 @@ import styles from './report-lists.scss'
 function ReportLists() {
   const date = new Date()
   const minDate = new Date(date.getFullYear(), 0, 1)
-  const initial = {from: date, to: date, business: '', data: []}
+  const initial = {from: date, to: date, business: '', data: [], environment: ''}
   const [state, setState] = useState(initial)
+  const [businessAttributes, setBusinessAttributes] = useState({})
   const [error, setError] = useState('')
   const [page, setPage] = useState(1);
-  const params = useParams()
-  const { slug } = params
   const setPageItem = (number) => () => {
 	  setPage(number)
   }
@@ -34,17 +33,143 @@ function ReportLists() {
   const indexOfLastTodo = page * 10;
   const indexOfFirstTodo = indexOfLastTodo - 10;
   const paginationData = state.data.slice(indexOfFirstTodo, indexOfLastTodo);
-
-  const leftMenu = {
-	  "date-range": {"url": "#/report-lists", "name": "Date Range"},
-	  "business-report": {"name": "#/report-lists", "name": "Business Report"}
+  
+  function getBusinessAttributes() {
+	  Service.get('/rbs/th/businessAttributes')
+	  .then((response) => {
+		const { data } = response
+		let attrs = {}
+		data.map((item) => {
+		  if (attrs[item.refDataKey] === undefined) {
+			attrs[item.refDataKey] = []
+		  }
+		  attrs[item.refDataKey].push(item)
+		})
+		setBusinessAttributes(attrs)
+	  })
+	  .catch(() => {
+		const data = [
+		{
+			"attributeId": 1,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Ulster",
+			"refDataKey": "AP001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"attributeId": 2,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Business",
+			"refDataKey": "BU001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"attributeId": 3,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Loans",
+			"refDataKey": "PF001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"attributeId": 6,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Agri Facility",
+			"refDataKey": "PR001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"attributeId": 7,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Overdraft",
+			"refDataKey": "PF001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"attributeId": 4,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Small Business Loan",
+			"refDataKey": "PR001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		}, {
+			"attributeId": 5,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Overdraft",
+			"refDataKey": "PR001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		}]
+		let attrs = {}
+		data.map((item) => {
+		  if (attrs[item.refDataKey] === undefined) {
+			attrs[item.refDataKey] = []
+		  }
+		  attrs[item.refDataKey].push(item)
+		})
+		setBusinessAttributes(attrs)
+	  })
   }
   
+  useEffect(() => {
+	 const businessAttributesData = Object.keys(businessAttributes).length
+	 if (businessAttributesData === 0) {
+		getBusinessAttributes()
+	 }
+  }, [businessAttributes])
+
   function handleSubmit(e) {
 	  const error = validation(state)
 	  if (error === '') {
-		setError('')	
-	    setState({...state, data: data})
+		setError('')
+		Service.get(`/rbs/th/testsets/${formatDate(state.from)}}/${formatDate(state.to)}/${state.environment}/${state.business}`)
+		.then((response) => {
+		  const { data } = response
+	      setState({...state, data: data})
+		})
+		.catch((error) => {
+			const data = [
+			{
+				"testSetId": 1173,
+				"applicationIdentity": "Ulster",
+				"bankDivision": "Business",
+				"productFamily": "Overdraft",
+				"productName": "Agri Facility",
+				"riskBand": "5,3,9",
+				"borrowingAmount": "10000",
+				"termFactor": "12",
+				"processedFlag": "Y"
+			}, {
+				"testSetId": 1174,
+				"applicationIdentity": "Ulster",
+				"bankDivision": "Business",
+				"productFamily": "Overdraft",
+				"productName": "Agri Facility",
+				"riskBand": "5,3,9",
+				"borrowingAmount": "10000",
+				"termFactor": "12",
+				"processedFlag": "Y"
+			}]
+		    setState({...state, data: data})
+		})
 	  } else {
 		setError(error)	
 	  }
@@ -52,7 +177,13 @@ function ReportLists() {
   
   function validation(forms) {
 	let errors = ''
-	if (forms.from === null) {
+	if (forms.environment === '') {
+		errors = 'Please enter environment';
+	} 
+	if (errors === '' && forms.business === '') {
+		errors = 'Please enter business';
+	} 
+	if (errors === '' && forms.from === null) {
 		errors = 'Please enter valid from date';
 	} 
 	if (errors === '' && forms.to === null) {
@@ -71,9 +202,23 @@ function ReportLists() {
   
   const onSelectedSingleOptionChange = (label) => (e) => {
 	setState({...state, [label]: e.target.value})
-  }	
+  }
+
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
   
-  return (
+   return (
     <>
       <Row className={styles.section}>
         <Col md="12">
@@ -96,58 +241,67 @@ function ReportLists() {
 		    </Alert>
 		   }
 		    <Card>
-			 <Card.Header>{leftMenu[slug].name}</Card.Header>
+			 <Card.Header>Date Range</Card.Header>
              <Card.Body>
               <Form>
-			    {slug === "business-report" && <Row><Col md="8">
-                 <Form.Group as={Row} controlId="business">
-				  <Form.Label column sm="2">Product Name</Form.Label>
-				  <Col sm="4">
-				   <Form.Control as="select" value={state.business} onChange={onSelectedSingleOptionChange('business')}>
-                      <option value="">Please Select</option>
-					  <option value="01">Small Business</option>
-                   </Form.Control>
-				  </Col>
-		         </Form.Group>
-			    </Col></Row>}
-			    {((slug === "business-report" && state.business != "") || (slug === "date-range")) &&
-				 <>
-				  <Row>
-				   <Col md="12" className={styles.dateBox}>
-				    <div className={slug === "business-report" ? styles.listBox :styles.fromBox}>From</div>
-				    <div className={styles.listBox}>
-				     <DatePicker
+			    <Row>
+				  <Col md="5">
+				    <Form.Group as={Row} controlId="environment">
+					  <Form.Label column sm="3">Environment</Form.Label>
+					  <Col sm="6">
+					    <Form.Control as="select" value={state.environment} onChange={onSelectedSingleOptionChange('environment')}>
+						 <option value="">Please Select</option>
+						 <option value="NFT">NFT</option>
+						 <option value="UAT">UAT</option>
+						 <option value="Dev">Dev</option>
+					    </Form.Control>
+					  </Col>
+				    </Form.Group>
+				   </Col>
+				   <Col md="6">
+				    <Form.Group as={Row} controlId="business">
+				     <Form.Label column sm="3">Product Name</Form.Label>
+				     <Col sm="5">
+				      <Form.Control as="select" value={state.business} onChange={onSelectedSingleOptionChange('business')}>
+                       <option value="">Please Select</option>
+					   {businessAttributes['PR001'] && businessAttributes['PR001'].map((item) => {
+						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
+						})}
+                      </Form.Control>
+				     </Col>
+		            </Form.Group>
+				   </Col>
+				   <Col md="5">
+				    <Form.Group as={Row} controlId="from">
+				     <Form.Label column sm="3">From</Form.Label>
+				     <Col sm="5">
+				      <DatePicker
 					  onChange={onTextUpdated('from')}
 					  value={state.from}
 					  maxDate={date}
 					  minDate={minDate}
 					 />
-				    </div>
-				    <div className={styles.toBox}>To</div>
-				    <div className={styles.toBox}>
-				     <DatePicker
+				     </Col>
+		            </Form.Group>
+				   </Col>
+				   <Col md="6">
+				    <Form.Group as={Row} controlId="to">
+				     <Form.Label column sm="3">To</Form.Label>
+				     <Col sm="5">
+				      <DatePicker
 					  onChange={onTextUpdated('to')}
 					  value={state.to}
 					  maxDate={date}
 				      minDate={minDate}
 				     />
-				    </div>
+				     </Col>
+		            </Form.Group>
 				   </Col>
-				  </Row>
-				  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
-                  <Button variant="primary" onClick={handleSubmit}>Generate Report</Button>
-				 </>
-				}
+				</Row>
+				<Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
+                <Button variant="primary" onClick={handleSubmit}>Generate Report</Button>	
 			  </Form>
 			  {state.data.length >0 && <div className={styles.tableWrapper}>
-			   <div className={styles.buttonBox}>
-			    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
-			     <Dropdown.Item href="#">PDF</Dropdown.Item>
-			     <Dropdown.Item href="#">Excel</Dropdown.Item>
-			    </DropdownButton>
-		        <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
-		        <Button variant="primary" disabled>Print</Button>
-			   </div>
 			   <Table responsive striped bordered hover size="md">
 			    <thead>
 				 <tr>
@@ -159,31 +313,19 @@ function ReportLists() {
 				  <th rowSpan="2">Borrowing Amount(GBP)</th>
 				  <th rowSpan="2">Term (Months)</th>
 				  <th rowSpan="2">Risk Band</th>
-				  <th colSpan="2" className={styles.rateHead}>Expected</th>
-				  <th colSpan="2" className={styles.actualHead}>Actual</th>
-				 </tr>
-				 <tr>
-				  <th className={styles.rate}>AIR(%)</th>
-				  <th className={styles.rate}>APR(%)</th>
-				  <th className={styles.actual}>AIR(%)</th>
-				  <th className={styles.actual}>APR(%)</th>
 				 </tr>
 			    </thead>
 			    <tbody>
 			     {paginationData.map((item) => (
 				  <tr>
-					<td>{item.id}</td>
+					<td><a href={`#reports/${item.testSetId}`}>{item.testSetId}</a></td>
 					<td>{item.applicationIdentity}</td>
 					<td>{item.bankDivision}</td>
 					<td>{item.productFamily}</td>
 					<td>{item.productName}</td>
-					<td>{item.barrowAmount}</td>
+					<td>{item.borrowingAmount}</td>
+					<td>{item.riskBand}</td>
 					<td>{item.termFactor}</td>
-					<td>{item.riskFactor}</td>
-					<td className={styles.rate}>{item.expectedAllInRate}</td>
-					<td className={styles.rate}>{item.expectedAnnualPercentageRate}</td>
-					<td className={styles.actual}>{item.allInRate}</td>
-					<td className={styles.actual}>{item.annualPercentageRate}</td>
 				  </tr>
 				 ))}
 			    </tbody>

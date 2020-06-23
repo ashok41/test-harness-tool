@@ -106,7 +106,7 @@ function Dashboard() {
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": {},
-			"refDataDesc": "Small Business Loan",
+			"refDataDesc": "Small Business Loan (Fixed)",
 			"refDataKey": "PR001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
@@ -756,15 +756,48 @@ function Dashboard() {
   }
   
   const formFieldsInfo = { 
-	'borrowingAmount': {
-		min: 1000, max: 50000, upto: 15, errorMsg: 'Please check the value should be Min of 1000 and Max of 50000'
-	},
-	'term': {
-		min: 12, max: 120, upto: 4, errorMsg: 'Please check the value should be Min of 12 and Max of 120'
-	},
-	'riskBand': {
-		min: 1, max: 10, upto: 10, errorMsg: 'Please check the value should be Min of 1 and Max of 10'
-	}
+    '4': { 
+	  'borrowingAmount': {
+		min: 1000, max: 50000, upto: 15, errorMsg: 'Please check the value should be Min of 1000 and Max of 50000',
+		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
+	  },
+	  'term': {
+		min: 12, max: 120, upto: 4, errorMsg: 'Please check the value should be Min of 12 and Max of 120',
+		tooltip: 'Min: 12, Max: 120 Delimiter [0-9,]'
+	  },
+	  'riskBand': {
+		min: 1, max: 10, upto: 10, errorMsg: 'Please check the value should be Min of 1 and Max of 10',
+		tooltip: 'Min: 1, Max: 10 Delimiter [0-9,]'
+	  }
+    },
+    '6': { 
+	  'borrowingAmount': {
+		min: 15000, max: 15000, upto: 15, errorMsg: 'Please check the value should be Min of 15000 and Max of 15000',
+		tooltip: 'Min: 15000, Max: 15000 Delimiter [0-9,]'
+	  },
+	  'term': {
+		min: 1, max: 12, upto: 4, errorMsg: 'Please check the value should be Min of 1 and Max of 12',
+		tooltip: 'Min: 1, Max: 12 Delimiter [0-9,]'
+	  },
+	  'riskBand': {
+		min: 1, max: 10, upto: 10, errorMsg: 'Please check the value should be Min of 1 and Max of 10',
+		tooltip: 'Min: 1, Max: 10 Delimiter [0-9,]'
+	  }
+    },
+    '5': { 
+	  'borrowingAmount': {
+		min: 15000, max: 15000, upto: 15, errorMsg: 'Please check the value should be Min of 15000 and Max of 15000',
+		tooltip: 'Min: 15000, Max: 15000 Delimiter [0-9,]'
+	  },
+	  'term': {
+		min: 24, max: 24, upto: 4, errorMsg: 'Please check the value should be Min of 24 and Max of 24',
+		tooltip: 'Min: 24, Max: 24 Delimiter [0-9,]'
+	  },
+	  'riskBand': {
+		min: 1, max: 10, upto: 10, errorMsg: 'Please check the value should be Min of 1 and Max of 10',
+		tooltip: 'Min: 1, Max: 10 Delimiter [0-9,]'
+	  }
+    }
   }
   
   const onTextUpdated = (label) => (e) => {
@@ -775,7 +808,7 @@ function Dashboard() {
 	  const lastBeforeData = checkCommas[totCommas-2]
 	  const regex = /^[\d\,]+$/g
 	  let valid = ''
-	  const {min, max, upto, errorMsg} = formFieldsInfo[label]
+	  const {min, max, upto, errorMsg} = formFieldsInfo[state.productName.data][label]
 	  if (label === "borrowingAmount" && lastBeforeData && (Number(lastBeforeData) < min || Number(lastBeforeData) > max)) {
 		  valid = errorMsg
 	  }
@@ -801,7 +834,7 @@ function Dashboard() {
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
 	  const eachData = Number(checkCommas[totCommas-1])
-	  const {min, max, upto, errorMsg} = formFieldsInfo[label]
+	  const {min, max, upto, errorMsg} = formFieldsInfo[state.productName.data][label]
 	  let valid = ''
 	  if (label === "borrowingAmount" && eachData && (Number(eachData) < min || Number(eachData) > max)) {
 		  valid = errorMsg
@@ -868,13 +901,16 @@ function Dashboard() {
 		    </Alert>
 		  }
           <Card>
-            <Card.Header>Pricing Business Parameters</Card.Header>
+            <Card.Header className={styles.headerContainer}>
+			 <div>Pricing Business Parameters</div>
+			 <div><span className={styles.mandatory}>*</span> Mandatory Fields</div>
+			</Card.Header>
             <Card.Body>
             <Form>
 			  <Row>
 			    <Col md="6">
 			     <Form.Group as={Row} controlId="locationIdentity">
-                   <Form.Label column sm="4">Application Identity</Form.Label>
+                   <Form.Label column sm="4">Application Identity <span className={styles.mandatory}>*</span></Form.Label>
                    <Col sm="6">
 				     <Form.Control as="select" value={state.locationIdentity.data} onChange={onSelectedSingleOptionChange('locationIdentity')}>
                       <option value="">Please Select</option>
@@ -887,7 +923,7 @@ function Dashboard() {
 			    </Col>
 				<Col md="6">
 				  <Form.Group as={Row} controlId="bankDivision">
-                  <Form.Label column sm="3">Bank Division</Form.Label>
+                  <Form.Label column sm="3">Bank Division <span className={styles.mandatory}>*</span></Form.Label>
                   <Col sm="6">
 				    <Form.Control as="select" value={state.bankDivision.data} onChange={onSelectedSingleOptionChange('bankDivision')}>
                       <option value="">Please Select</option>
@@ -902,7 +938,7 @@ function Dashboard() {
 			  <Row>
 			    <Col md="6">
 				  <Form.Group as={Row} controlId="productFamily">
-					<Form.Label column sm="4">Product Family</Form.Label>
+					<Form.Label column sm="4">Product Family <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
 					  <Form.Control as="select" value={state.productFamily.data} onChange={onSelectedSingleOptionChange('productFamily')}>
 						<option value="">Please Select</option>
@@ -915,7 +951,7 @@ function Dashboard() {
 				</Col>
 				<Col md="6">
 				  <Form.Group as={Row} controlId="productName">
-					<Form.Label column sm="3">Product Name</Form.Label>
+					<Form.Label column sm="3">Product Name <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
 					  <Form.Control as="select" value={state.productName.data} onChange={onSelectedSingleOptionChange('productName')}>
 						<option value="">Please Select</option>
@@ -928,26 +964,27 @@ function Dashboard() {
 			  <Row>
 			    <Col md="6">
 				  <Form.Group as={Row} controlId="borrowingAmount">
-					<Form.Label column sm="4">Borrowing Amount</Form.Label>
+					<Form.Label column sm="4">Borrowing Amount <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6" className={styles.textform}>
 					  <Form.Control type="text" isInvalid={state.borrowingAmount.error} value={state.borrowingAmount.data} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
 					  <Form.Control.Feedback type="invalid" tooltip>
 					   {state.borrowingAmount.error}
 					  </Form.Control.Feedback>
+					  {formFieldsInfo[state.productName.data] &&
 					  <OverlayTrigger
 						  placement="right"	
 						  overlay={
-							<Tooltip>Min: 1000, Max: 50000 Delimiter [0-9,]</Tooltip>
+							<Tooltip>{formFieldsInfo[state.productName.data]['borrowingAmount']['tooltip']}</Tooltip>
 						  }
 						>
 						<div className={styles.tooltip}><div className={styles.qicon} /></div>
-					  </OverlayTrigger>
+					  </OverlayTrigger>}
 					</Col>
 				  </Form.Group>
 				</Col>
 				<Col md="6">
 				  <Form.Group as={Row} controlId="environment">
-					<Form.Label column sm="3">Environment</Form.Label>
+					<Form.Label column sm="3">Environment <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
 					  <Form.Control as="select" value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
 						<option value="">Please Select</option>
@@ -968,37 +1005,39 @@ function Dashboard() {
 				</Col>
 			  </Row>
 			  <Form.Group as={Row} controlId="term">
-				<Form.Label column sm="2">Term (Months)</Form.Label>
+				<Form.Label column sm="2">Term (Months) <span className={styles.mandatory}>*</span></Form.Label>
 				<Col sm="3" className={styles.textform}>
 				  <Form.Control type="text" isInvalid={state.term.error} value={state.term.data} autoComplete="off" onChange={onTextUpdated('term')} onBlur={removeUnwantedComma('term')} />
 				  <Form.Control.Feedback type="invalid" tooltip>
                    {state.term.error}
                   </Form.Control.Feedback>
+				  {formFieldsInfo[state.productName.data] &&
 				  <OverlayTrigger
 					  placement="right"	
 					  overlay={
-						<Tooltip>Min: 12, Max: 120 Delimiter [0-9,]</Tooltip>
+						<Tooltip>{formFieldsInfo[state.productName.data]['term']['tooltip']}</Tooltip>
 					  }
 					>
 					<div className={styles.tooltip}><div className={styles.qicon} /></div>
-                  </OverlayTrigger>
+                  </OverlayTrigger>}
 				</Col>
 			  </Form.Group>
 			  <Form.Group as={Row} controlId="riskBand">
-				<Form.Label column sm="2">Risk Band</Form.Label>
+				<Form.Label column sm="2">Risk Band <span className={styles.mandatory}>*</span></Form.Label>
 				<Col sm="3" className={styles.textform}>
 				  <Form.Control type="text" isInvalid={state.riskBand.error} value={state.riskBand.data} autoComplete="off" onChange={onTextUpdated('riskBand')} onBlur={removeUnwantedComma('riskBand')} />
 				  <Form.Control.Feedback type="invalid" tooltip>
                    {state.riskBand.error}
                   </Form.Control.Feedback>
+				  {formFieldsInfo[state.productName.data] &&
 				  <OverlayTrigger
 					  placement="right"	
 					  overlay={
-						<Tooltip>Min: 1, Max: 10 Delimiter [0-9,]</Tooltip>
+						<Tooltip>{formFieldsInfo[state.productName.data]['riskBand']['tooltip']}</Tooltip>
 					  }
 					>
 					<div className={styles.tooltip}><div className={styles.qicon} /></div>
-                  </OverlayTrigger>
+                  </OverlayTrigger>}
 				</Col>
 			  </Form.Group>
 			  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}

@@ -6,7 +6,7 @@ import styles from './testlog.scss'
 function createCasesList(data) {
 	return (data.map((item, index) => (
 	  <tr>
-	   <td key={index}>{item.cases}</td>
+	   <td key={index}><span>{item.cases}</span></td>
 	   <td>{item.count}</td>
 	   <td>{`${item.percent}%`}</td>
 	  </tr>
@@ -97,7 +97,7 @@ const TestLog = (props) => {
 		  <Table responsive striped bordered hover size="md">
 		    <tbody>
 			 <tr>
-			   <td>Test Cases Run</td>
+			   <td><span>Test Cases Run</span></td>
 			   <td>{testCasesRun}</td>
 			   <td>100%</td>
 			 </tr>

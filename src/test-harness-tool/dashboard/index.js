@@ -112,13 +112,7 @@ function Dashboard() {
 			    <i /><span><a href="#">Product Finder</a></span>
 			  </li>
 			  <li>
-			    <i />
-				<span>
-				 <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Report">
-			      <Dropdown.Item href="#/report-lists/date-range">Date Range</Dropdown.Item>
-			      <Dropdown.Item href="#/report-lists/business-report">Business Report</Dropdown.Item>
-			     </DropdownButton>
-			    </span>
+			    <i /><i /><span><a href="#report-lists">Reports</a></span>
 			  </li>
 			  <li className={styles.toastContainer}>
 			    <i />
