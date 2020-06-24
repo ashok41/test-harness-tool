@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Row, Col, Button, Table, Pagination, Card } from 'react-bootstrap'
+import { Row, Col, Button, Table, Pagination, Card, Spinner } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 import ProfileList from '../../../common/profile-list'
 import Service from '../../../common/service'
@@ -7,7 +7,7 @@ import styles from './service-request.scss'
 import common from '../../../common/common.scss'
 
 function ServiceRequest() {
-  
+  const [loading, setLoading] = useState(false)
   const history = useHistory();
   const location = useLocation();
   const {state} = location;
@@ -20,6 +20,7 @@ function ServiceRequest() {
   
   function handleSubmit() {
 	  const start = Date.now();
+	  setLoading(true)
 	  Service.get(`/rbs/th/testdata/result/${testsetid}`)
 	  .then((response) => {
 		  const seconds = Date.now() - start;
@@ -152,21 +153,21 @@ function ServiceRequest() {
   const total = Math.ceil(state.length/10)
   if (page > 1) {
     let prev = page
-	items.push(<Pagination.Item onClick={setPageItem(--prev)}>Prev</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;&lt;</Pagination.Item>)
   }
-  for (let number = 1; number <= total; number++) {
-	if (number > 5 ) {
-		continue;
-	}
+  let start = page > 5 ? page - 4 : 1
+  const totalItems = page > 5 ? page : 5
+  for (let number = start; number <= totalItems; number++) {
+	
 	items.push(
       <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
         {number}
-      </Pagination.Item>,
+      </Pagination.Item>
     );
   }
-  if (total > 5) {
+  if (total > 5 && page < total) {
 	let next = page
-	items.push(<Pagination.Item onClick={setPageItem(++next)}>Next</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(++next)} className={common.paginationArrow}>&gt;&gt;</Pagination.Item>)
   }
   
   const indexOfLastTodo = page * 10;
@@ -312,8 +313,21 @@ function ServiceRequest() {
 		    <Pagination>{items}</Pagination>
 	      </div>}
 		  <div>
-		   <Button variant="primary" disabled onClick={() => history.goBack()}>Back</Button>{' '}
-		   <Button variant="primary" onClick={handleSubmit}>Confirm & Execute</Button>
+		   <Button variant="primary" disabled onClick={() => history.goBack()}>
+		   Back</Button>{' '}
+		   {loading ? 
+		    <Button variant="primary" disabled>
+			 <Spinner
+			  as="span"
+			  animation="grow"
+			  size="sm"
+			  role="status"
+			  aria-hidden="true"
+			/>
+			Inprogress...
+		    </Button>
+			: <Button variant="primary" onClick={handleSubmit}>Confirm & Execute</Button>
+		   }
 		  </div>
 		</Col>
 	  </Row>

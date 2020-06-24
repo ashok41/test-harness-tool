@@ -258,21 +258,23 @@ function TestData() {
   const total = Math.ceil(dataLists.length/10)
   if (page > 1) {
     let prev = page
-	items.push(<Pagination.Item onClick={setPageItem(--prev)}>Prev</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;&lt;</Pagination.Item>)
   }
-  for (let number = 1; number <= total; number++) {
-	if (number > 5 ) {
-		continue;
+  let start = page > 5 ? page - 4 : 1
+  const totalItems = page > 5 ? page : 5
+  for (let number = start; number <= totalItems; number++) {
+	if (number > total ) {
+	  continue;
 	}
 	items.push(
       <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
         {number}
-      </Pagination.Item>,
+      </Pagination.Item>
     );
   }
-  if (total > 5) {
+  if (total > 5 && page < total) {
 	let next = page
-	items.push(<Pagination.Item onClick={setPageItem(++next)}>Next</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(++next)} className={common.paginationArrow}>&gt;&gt;</Pagination.Item>)
   }
   
   const indexOfLastTodo = page * 10;

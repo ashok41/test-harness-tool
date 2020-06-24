@@ -22,12 +22,25 @@ function ReportLists() {
   
   let items = [];
   const total = Math.ceil(state.data.length/10)
-  for (let number = 1; number <= total; number++) {
-    items.push(
+  if (page > 1) {
+    let prev = page
+	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;&lt;</Pagination.Item>)
+  }
+  let start = page > 5 ? page - 4 : 1
+  const totalItems = page > 5 ? page : 5
+  for (let number = start; number <= totalItems; number++) {
+	if (number > total ) {
+	  continue;
+	}
+	items.push(
       <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
         {number}
       </Pagination.Item>
     );
+  }
+  if (total > 5 && page < total) {
+	let next = page
+	items.push(<Pagination.Item onClick={setPageItem(++next)} className={common.paginationArrow}>&gt;&gt;</Pagination.Item>)
   }
   
   const indexOfLastTodo = page * 10;
@@ -178,10 +191,10 @@ function ReportLists() {
   function validation(forms) {
 	let errors = ''
 	if (forms.environment === '') {
-		errors = 'Please enter environment';
+		errors = 'Please select Environment';
 	} 
 	if (errors === '' && forms.business === '') {
-		errors = 'Please enter business';
+		errors = 'Please select Product Name';
 	} 
 	if (errors === '' && forms.from === null) {
 		errors = 'Please enter valid from date';
