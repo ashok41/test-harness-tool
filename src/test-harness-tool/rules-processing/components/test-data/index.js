@@ -334,8 +334,9 @@ function TestData() {
 	  <Row className={styles.wrapper}>
 	    <Col md="12">
 		 <Row>
-		   <Col md="9">
+		   <Col md="9" className={common.listContainer}>
 		    <div className={common.environment}><span>Environment:</span> {paginationData[0].environment}</div>
+			<div><span>Total Test Cases:</span> {paginationData[0].totalRecord}</div>
 		   </Col>
 		   <Col md="3">
 		    <ProfileList />

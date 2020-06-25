@@ -32,7 +32,7 @@ const PrivateRoute = ({ component: Component , ...rest}) => (
 );
 
 const  root = document.getElementById('root');
-root.style = "min-height: 100%;height:100%;"
+//root.style = "min-height: 100%;height:100%;"
 render((
  <Router>
      <Container className={styles.container}>

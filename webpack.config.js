@@ -7,7 +7,7 @@ const { env } = process;
 
 const options = {
   mode: env.NODE_ENV,
-  entry: './src/app/index.js',
+  entry: ['@babel/polyfill', './src/app/index.js'],
   output: {
     filename: '[name].js'
   },
@@ -60,12 +60,20 @@ const options = {
   },
   plugins: [
     new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV) }),
-    new HtmlWebpackPlugin()
+    new HtmlWebpackPlugin({
+	  title: 'Test Harness Tool',
+	  env: env.NODE_ENV,
+	  config: 'environment.js',
+      template: './src/app/index.html',
+	  filename: 'index.html'
+    })
   ],
   devServer: {
     hot: true,
 	proxy: {
-	}
+		
+	},
+	contentBase: path.join(__dirname, 'src/app/config'),
   },
   devtool: env.NODE_ENV === 'development' ? 'cheap-module-eval-source-map' : undefined
 };

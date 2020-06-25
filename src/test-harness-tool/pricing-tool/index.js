@@ -762,7 +762,7 @@ function Dashboard() {
 		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
 	  },
 	  'term': {
-		min: 12, max: 120, upto: 4, errorMsg: 'Please check the value should be Min of 12 and Max of 120',
+		min: 12, max: 120, upto: 6, errorMsg: 'Please check the value should be Min of 12 and Max of 120',
 		tooltip: 'Min: 12, Max: 120 Delimiter [0-9,]'
 	  },
 	  'riskBand': {
@@ -776,7 +776,7 @@ function Dashboard() {
 		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
 	  },
 	  'term': {
-		min: 1, max: 120, upto: 4, errorMsg: 'Please check the value should be Min of 1 and Max of 120',
+		min: 1, max: 120, upto: 6, errorMsg: 'Please check the value should be Min of 1 and Max of 120',
 		tooltip: 'Min: 1, Max: 120 Delimiter [0-9,]'
 	  },
 	  'riskBand': {
@@ -790,7 +790,7 @@ function Dashboard() {
 		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
 	  },
 	  'term': {
-		min: 1, max: 12, upto: 4, errorMsg: 'Please check the value should be Min of 1 and Max of 12',
+		min: 1, max: 12, upto: 6, errorMsg: 'Please check the value should be Min of 1 and Max of 12',
 		tooltip: 'Min: 1, Max: 12 Delimiter [0-9,]'
 	  },
 	  'riskBand': {

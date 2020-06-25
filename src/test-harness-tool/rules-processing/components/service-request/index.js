@@ -173,56 +173,76 @@ function ServiceRequest() {
   const indexOfLastTodo = page * 10;
   const indexOfFirstTodo = indexOfLastTodo - 10;
   const paginationData = state.slice(indexOfFirstTodo, indexOfLastTodo);
-  const columns = [{
+  const firstColumns = [{
 	  name: 'ID',
-	  key: 'id'
+	  key: 'id',
+	  rowSpan: 2
   }, {
 	  name: 'Application Identity',
 	  key: 'applicationIdentity',
 	  sortable: true,
-	  direction: 'asc'
+	  direction: 'asc',
+	  rowSpan: 2
   }, {
 	  name: 'Bank Division',
-	  key: 'bankDivision'
+	  key: 'bankDivision',
+	  rowSpan: 2
   }, {
 	  name: 'Product Family',
-	  key: 'productFamily'
+	  key: 'productFamily',
+	  rowSpan: 2
   }, {
 	  name: 'Product Name',
-	  key: 'productName'
+	  key: 'productName',
+	  rowSpan: 2
   }, {
 	  name: 'Borrowing Amount(GBP)',
 	  key: 'borrowingAmount',
 	  sortable: true,
-	  direction: 'asc'
+	  direction: 'asc',
+	  rowSpan: 2
   }, {
 	  name: 'Term (Months)',
-	  key: 'termFactor'
+	  key: 'termFactor',
+	  rowSpan: 2
   }, {
 	  name: 'Risk Band',
-	  key: 'riskBand'
+	  key: 'riskBand',
+	  rowSpan: 2
   }]
   
   if (paginationData[0].productName === 'Agri Facility') {
-	Array.prototype.push.apply(columns, [{
+	Array.prototype.push.apply(firstColumns, [{
 	  name: 'Start Margin',
-	  key: 'startMargin'
+	  key: 'startMargin',
+	  rowSpan: 2
 	}, {
 	  name: 'Term Margin Premium',
-	  key: 'termMarginPremium'
+	  key: 'termMarginPremium',
+	  rowSpan: 2
 	}])
   }
+  
+  Array.prototype.push.apply(firstColumns, [{
+	  name: 'Expected',
+	  key: 'expected',
+	  className: styles.rate,
+	  colSpan: 2
+  }])
+  
+  const secondColumns = []
   if (paginationData[0].productName === 'Small Business Loan (Fixed)') {
-	  Array.prototype.push.apply(columns, [{
-		  name: 'AIR(%)',
-		  key: 'air'
-		}, {
-		  name: 'APR(%)',
-		  key: 'apr'
-		}])
+	Array.prototype.push.apply(secondColumns, [{
+	  name: 'AIR(%)',
+	  key: 'air'
+	}, {
+	  name: 'APR(%)',
+	  key: 'apr'
+	}])
   }
+    
   if (paginationData[0].productName === 'Overdraft' || paginationData[0].productName === 'Agri Facility') {
-	  Array.prototype.push.apply(columns, [{
+	  Array.prototype.push.apply(secondColumns, [{
 	  name: 'Margin Fee',
 	  key: 'marginFee'
 	}, {
@@ -254,8 +274,9 @@ function ServiceRequest() {
 	  <Row className={styles.wrapper}>
 	    <Col md="12">
 		 <Row>
-		   <Col md="9">
-		     <div className={common.environment}><span>Environment:</span> {paginationData[0].environment}</div>
+		   <Col md="9" className={common.listContainer}>
+		    <div className={common.environment}><span>Environment:</span> {paginationData[0].environment}</div>
+			<div><span>Total Test Cases:</span> {paginationData[0].totalRecord}</div>
 		   </Col>
 		   <Col md="3">
 		    <ProfileList />
@@ -264,15 +285,24 @@ function ServiceRequest() {
 		  <Table responsive striped bordered hover size="md">
 			  <thead>
 				<tr>
-				  {columns.map((item) => {
+				  {firstColumns.map((item) => {
+					const colSpan = item.colSpan ? { colSpan: item.colSpan } : {}
+				    const rowSpan = item.rowSpan ? { rowSpan: item.rowSpan } : {}
 					const itemClassName = item.className ? ` ${item.className}`: ''
 					const className = styles.sortHeader.concat(itemClassName)
-					return <th className={className} onClick={sortable(item.key, item.direction, item.sortable)}>
+					return <th {...rowSpan} {...colSpan} className={className} onClick={sortable(item.key, item.direction, item.sortable)}>
 					  <span>{item.name}</span>
 					  {item.sortable ? <span className={styles.arrow}><div className={getSortDirection(item.key)} /></span> : ''}
 					</th>
 				  })}
 				</tr>
+				<tr>
+			    {secondColumns.map((item2) => {
+				  return <th>
+				    {item2.name}
+				  </th>
+		        })}
+			    </tr>
 			  </thead>
 			  <tbody>
 				{paginationData.map((item) => (
