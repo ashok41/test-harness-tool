@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card, DropdownButton, Dropdown, Breadcrumb,Spinner } from 'react-bootstrap'
+import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card, DropdownButton, Dropdown, Breadcrumb, Spinner } from 'react-bootstrap'
 import { useLocation, useParams } from 'react-router-dom'
 import ProfileList from '../common/profile-list'
 import TestLog from './components/testlog';
@@ -31,23 +31,16 @@ function ControlledTabs(props) {
   const total = Math.ceil(filteredData.length/10)
   if (page[key] > 1) {
     let prev = page[key]
-	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;&lt;</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(1)} className={common.paginationArrowStartEnd}>&lt;&lt;</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;</Pagination.Item>)
   }
   let start = page[key] > 5 ? page[key] - 4 : 1
   const totalItems = page[key] > 5 ? page[key] : 5
-  for (let number = start; number <= totalItems; number++) {
-	if (number > total ) {
-		continue;
-	}
-	items.push(
-      <Pagination.Item key={number} active={number === page[key]} onClick={setPageItem(number)}>
-        {number}
-      </Pagination.Item>
-    );
-  }
+   
   if (total > 5 && page[key] < total) {
 	let next = page[key]
-	items.push(<Pagination.Item onClick={setPageItem(++next)} className={common.paginationArrow}>&gt;&gt;</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(++next)} className={common.paginationArrow}>&gt;</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(total)} className={common.paginationArrowStartEnd}>&gt;&gt;</Pagination.Item>)
   }
   const indexOfLastTodo = page[key] * 10;
   const indexOfFirstTodo = indexOfLastTodo - 10;
@@ -143,6 +136,7 @@ function ControlledTabs(props) {
     <Tabs
       activeKey={key}
       onSelect={(k) => setKey(k)}
+	  className={styles.reportTabs}
     >
 	{data.map((item, index) => {
 	  const percent = item.percent ? ` (${item.percent}%)` : ''

@@ -17,6 +17,7 @@ body, html {
 
 .content-block {
 	margin-top: 60px;
+	max-width: inherit;
 }
 
 :global(.btn-primary) {
@@ -67,10 +68,16 @@ body, html {
 	}
 }
 
-.pagination-arrow a{
+.pagination-arrow-start-end a {
 	background-color: #002d64 !important;
     color: #fff !important;
     border: 1px solid #002d64 !important;
+}
+
+.pagination-arrow a {
+	background-color: #555 !important;
+    color: #fff !important;
+    border: 1px solid #555 !important;
 }
 
 .list-container {
@@ -84,4 +91,24 @@ body, html {
 			font-weight: 500;
 	   }
 	}
+}
+
+.overlay-container {
+	max-width: inherit;
+}
+
+.overlay-inner {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.1); 
+	position: fixed;
+	z-index:6;
+	max-width: inherit;
+}
+
+.overlay {
+  position: absolute; /* Sit on top of the page content */
+  top: 30%;
+  left: 50%;
+  z-index: 5; /* Specify a stack order in case you're using a different order for other elements */
 }

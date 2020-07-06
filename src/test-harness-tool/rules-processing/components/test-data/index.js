@@ -258,7 +258,8 @@ function TestData() {
   const total = Math.ceil(dataLists.length/10)
   if (page > 1) {
     let prev = page
-	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;&lt;</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(1)} className={common.paginationArrowStartEnd}>&lt;&lt;</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;</Pagination.Item>)
   }
   let start = page > 5 ? page - 4 : 1
   const totalItems = page > 5 ? page : 5
@@ -274,7 +275,8 @@ function TestData() {
   }
   if (total > 5 && page < total) {
 	let next = page
-	items.push(<Pagination.Item onClick={setPageItem(++next)} className={common.paginationArrow}>&gt;&gt;</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(++next)} className={common.paginationArrow}>&gt;</Pagination.Item>)
+	items.push(<Pagination.Item onClick={setPageItem(total)} className={common.paginationArrowStartEnd}>&gt;&gt;</Pagination.Item>)
   }
   
   const indexOfLastTodo = page * 10;
