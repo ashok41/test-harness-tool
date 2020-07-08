@@ -13,7 +13,6 @@
 	border-radius: 0px !important;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14);
 	border: none !important;
-	margin-left: 1px;
 }
 :global(.card-header:first-child) {
 	border-radius: 0px !important
@@ -69,9 +68,3 @@
 		float: right;
 	}
 }
-
-.tabs .nav-link.active {
-	border-color: #eee #eee #eee !important;
-	background-color: #eee !important;
-}
-
