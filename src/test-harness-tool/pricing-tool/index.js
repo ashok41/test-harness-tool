@@ -3,6 +3,7 @@ import { Row, Col, Breadcrumb, Spinner, Tabs, Tab } from 'react-bootstrap'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import BusinessParameters from './components/business-parameters'
 import UpdateReferenceData from './components/update-reference-data'
+import ProcessSelectedTest from './components/process-selected-test'
 import ProfileList from '../common/profile-list'
 import styles from './pricing-tool.scss'
 import common from '../common/common.scss'
@@ -41,6 +42,9 @@ function PricingTool() {
 			</Tab>
 			<Tab eventKey="update-reference-data" title="Update Reference Data">
 			 <UpdateReferenceData clear={true} />
+			</Tab>
+			<Tab eventKey="process-selected-test" title="Process Selected Test">
+			 <ProcessSelectedTest clear={true} />
 			</Tab>
 		  </Tabs>
         </Col>

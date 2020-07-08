@@ -359,7 +359,10 @@ function ServiceRequest() {
 			Inprogress...
 		    </Button>
 			: <Button variant="primary" onClick={handleSubmit}>Confirm & Execute</Button>
-		   }
+		   }{' '}
+		   <Button variant="primary" href={`http://localhost:8081/rbs/th/testdata/generatescenarioexcel/${testsetid}`} download target="_blank">
+		   Generate Test Scenario
+		   </Button>
 		  </div>
 		</Col>
 	  </Row>

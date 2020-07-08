@@ -3,30 +3,6 @@
   padding: 20px 0;
 }
 
-:global(.card-header) {
-	background-color: #fff !important;
-	font-size: 1.5rem;
-	font-weight: 400;
-	color: #002d64;
-}
-:global(.card) {
-	border-radius: 0px !important;
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14);
-	border: none !important;
-	margin-left: 1px;
-}
-:global(.card-header:first-child) {
-	border-radius: 0px !important
-}
-:global(.list-group-item.active) {
-	background-color: #005093 !important;
-    border-color: #005093 !important;
-	color: #fff !important;
-}
-:global(.list-group-item) {
-	color: #005093 !important;
-}
-
 .col-rounded {
   > div {
     border-radius: 15px !important;
