@@ -41,3 +41,21 @@
 		float: right;
 	}
 }
+
+.report-tabs :global(.nav-link:nth-child(1)) {
+	border-color: #00c21e #00c21e #fff !important;
+	background-color: #00c21e !important;
+
+}
+.report-tabs :global(.nav-link:nth-child(2)) {
+	border-color: #d81a36 #d81a36 #fff !important;
+	background-color: #d81a36 !important;
+
+}
+.report-tabs :global(.nav-link) {
+	color: #000 !important;
+	font-weight: 500;
+	background-color: #d81a36 !important;
+	border-color: #d81a36 #d81a36 #fff !important;
+	color: #fff !important;
+}

@@ -45,9 +45,14 @@
 		float: right;
 	}
 }
-
-.tabs .nav-link.active {
-	border-color: #eee #eee #eee !important;
-	background-color: #eee !important;
+.pricing-tabs :global(.nav-link.active) {
+	background-color: #fff !important;
+	border-color: #fff #fff #fff !important;
+	color: #000 !important;
 }
-
+.pricing-tabs :global(.nav-link) {
+	color: #000 !important;
+	background-color: #002d64 !important;
+	border-color: #002d64 #eeeeee #fff !important;
+	color: #fff !important;
+}

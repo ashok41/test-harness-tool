@@ -34,7 +34,7 @@ function PricingTool() {
 		   </Col>
 		  </Row>
 		  <Tabs activeKey={key}
-			className={styles.tabs}
+			className={styles.pricingTabs}
 			onSelect={(k) => setKey(k)}
 			>
 			<Tab eventKey="business-parameters" title="Business Parameters">

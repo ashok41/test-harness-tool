@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Row, Col, Button, Table, Pagination, Card, Spinner } from 'react-bootstrap'
+import { Row, Col, Button, Table, Pagination, Card, Spinner, Breadcrumb } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 import ProfileList from '../../../common/profile-list'
 import Service from '../../../common/service'
@@ -10,9 +10,223 @@ function ServiceRequest() {
   const [loading, setLoading] = useState(false)
   const history = useHistory();
   const location = useLocation();
-  const {state} = location;
+  //const {state} = location;
+  const state = [
+        {
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 10,
+			"expectetAir": 6.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 2,
+			"termFactor": 1,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 1,
+			"testTransactionNo": "TH_001_001",
+			"totalRecord": 2,
+			"xmlDifference": "",
+			"environment": "NFT"
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 20,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_002",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 40,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_003",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 70,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_004",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 90,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_005",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 20,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_006",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 90,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_007",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 70,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_004",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 90,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_005",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 20,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_006",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 100,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_007",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		}
+		]
   const testsetid = state[0].testSetId
+  const createdBy = state[0].createdBy
   const [sort, setSort] = useState({})
+  const [confirmDisabled, setConfirmDisabled] = useState(false)
   
   function toTimeString(seconds) {
 	return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
@@ -271,12 +485,20 @@ function ServiceRequest() {
   const getSortDirection = (key) => {
 	  return !sort[key] ? '' : (sort[key] === 'desc' ? styles.arrowDown : styles.arrowUp);
   }
+  
+  const downloadScenario = () => {
+	  setConfirmDisabled(true)
+  }
   return (
     <Card>
 	  <Row className={styles.wrapper}>
 	    <Col md="12">
 		 <Row>
 		   <Col md="9" className={common.listContainer}>
+		    <Breadcrumb>
+		     <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
+		     <Breadcrumb.Item active>Service Request</Breadcrumb.Item>
+		    </Breadcrumb>
 		    <div className={common.environment}><span>Environment:</span> {paginationData[0].environment}</div>
 			<div><span>Total Test Cases:</span> {paginationData[0].totalRecord}</div>
 		   </Col>
@@ -358,10 +580,10 @@ function ServiceRequest() {
 			/>
 			Inprogress...
 		    </Button>
-			: <Button variant="primary" onClick={handleSubmit}>Confirm & Execute</Button>
+			: <Button variant="primary" onClick={handleSubmit} disabled={confirmDisabled}>Confirm & Execute</Button>
 		   }{' '}
-		   <Button variant="primary" href={`http://localhost:8081/rbs/th/testdata/generatescenarioexcel/${testsetid}`} download target="_blank">
-		   Generate Test Scenario
+		   <Button variant="primary" href={`http://localhost:8081/rbs/th/testdata/generatescenarioexcel/${testsetid}/${createdBy}`} onClick={downloadScenario} download target="_blank">
+		    Download Test Scenario
 		   </Button>
 		  </div>
 		</Col>
