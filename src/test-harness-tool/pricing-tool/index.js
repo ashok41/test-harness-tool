@@ -21,7 +21,7 @@ function PricingTool() {
  return (
    <div className={common.overlayContainer}>
       <Row className={styles.section}>
-        <Col md="12">
+        <Col md="12" className={styles.pricingTabs}>
 		  <Row>
 		   <Col md="9">
 		    <Breadcrumb>
@@ -34,7 +34,6 @@ function PricingTool() {
 		   </Col>
 		  </Row>
 		  <Tabs activeKey={key}
-			className={styles.pricingTabs}
 			onSelect={(k) => setKey(k)}
 			>
 			<Tab eventKey="business-parameters" title="Business Parameters">

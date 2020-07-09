@@ -56,3 +56,10 @@
 	border-color: #002d64 #eeeeee #fff !important;
 	color: #fff !important;
 }
+
+.pricing-tabs :global(.card) {
+	box-shadow: none !important;
+}
+.pricing-tabs :global(.tab-content) {
+	box-shadow: 0 2px 0px 0 rgba(0,0,0,0.14);
+}
