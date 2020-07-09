@@ -42,7 +42,7 @@ function PricingTool() {
 			<Tab eventKey="update-reference-data" title="Update Reference Data">
 			 <UpdateReferenceData clear={true} />
 			</Tab>
-			<Tab eventKey="process-selected-test" title="Process Selected Test">
+			<Tab eventKey="process-selected-test" title="Process Selective Scenarios">
 			 <ProcessSelectedTest clear={true} />
 			</Tab>
 		  </Tabs>

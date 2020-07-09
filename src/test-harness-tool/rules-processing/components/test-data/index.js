@@ -339,7 +339,7 @@ function TestData() {
 		   <Col md="9" className={common.listContainer}>
 		   <Breadcrumb>
 		     <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
-		     <Breadcrumb.Item active>Test Data</Breadcrumb.Item>
+		     <Breadcrumb.Item active>Generated Test Cases</Breadcrumb.Item>
 		    </Breadcrumb>
 		    <div className={common.environment}><span>Environment:</span> {paginationData[0].environment}</div>
 			<div><span>Total Test Cases:</span> {paginationData[0].totalRecord}</div>

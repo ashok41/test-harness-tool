@@ -114,14 +114,6 @@ function Dashboard() {
 			  <li>
 			    <i /><i /><span><a href="#report-lists">Reports</a></span>
 			  </li>
-			  <li className={styles.toastContainer}>
-			    <i />
-				<span>
-				  <OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
-					<a href="#" onClick={toggleShowA}>Update Reference Data</a>
-				  </OverlayTrigger>
-				</span>
-			  </li>
 			 </ul>
 			</div>
             </Card.Body>

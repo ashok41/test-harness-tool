@@ -12,7 +12,7 @@ function ServiceRequest() {
   const location = useLocation();
   const {state} = location;
   const testsetid = state[0].testSetId
-  const createdBy = state[0].createdBy
+  const createdby = state[0].createdBy
   const [sort, setSort] = useState({})
   const [confirmDisabled, setConfirmDisabled] = useState(false)
   
@@ -285,7 +285,7 @@ function ServiceRequest() {
 		   <Col md="9" className={common.listContainer}>
 		    <Breadcrumb>
 		     <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
-		     <Breadcrumb.Item active>Service Request</Breadcrumb.Item>
+		     <Breadcrumb.Item active>Test Case Execution</Breadcrumb.Item>
 		    </Breadcrumb>
 		    <div className={common.environment}><span>Environment:</span> {paginationData[0].environment}</div>
 			<div><span>Total Test Cases:</span> {paginationData[0].totalRecord}</div>
@@ -370,8 +370,8 @@ function ServiceRequest() {
 		    </Button>
 			: <Button variant="primary" onClick={handleSubmit} disabled={confirmDisabled}>Confirm & Execute</Button>
 		   }{' '}
-		   <Button variant="primary" href={`http://localhost:8081/rbs/th/testdata/generatescenarioexcel/${testsetid}/${createdBy}`} onClick={downloadScenario} download target="_blank">
-		    Download Test Scenario
+		   <Button variant="primary" href={`http://localhost:8081/rbs/th/testdata/generatescenarioexcel/${testsetid}/${createdby}`} onClick={downloadScenario} download target="_blank">
+		    Download Test Scenarios
 		   </Button>
 		  </div>
 		</Col>

@@ -2553,7 +2553,7 @@ function RoutingPage() {
 		   <div className={styles.download}>
 		    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
 			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generatepdf/${reports.data.testcasesResultList[0].testSetId}`} download target="_blank">PDF</Dropdown.Item>
-			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generateexcel/${reports.data.testcasesResultList[0].testSetId}`} download target="_blank">Excel</Dropdown.Item>
+			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generateexcel/${reports.data.testcasesResultList[0].testSetId}/${reports.data.testcasesResultList[0].createdBy}`} download target="_blank">Excel</Dropdown.Item>
 			 </DropdownButton>
 		    <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
 		    <Button variant="primary" disabled>Print</Button>
