@@ -202,7 +202,7 @@ function processSelectedTest(props) {
 			/>
 			Inprogress...
 		    </Button>
-			: <Button variant="primary" onClick={onFileUpload}>Upload</Button>
+			: <Button variant="primary" onClick={onFileUpload}>Confirm & Execute</Button>
 	     }
 		</div>
 		{fileData()}
