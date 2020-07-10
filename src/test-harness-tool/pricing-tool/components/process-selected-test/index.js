@@ -55,7 +55,7 @@ function processSelectedTest(props) {
 					"bankDivision": "Business",
 					"borrowingAmount": 100,
 					"expectetAir": 6,
-					"expectetApr": 0,
+		  			"expectetApr": 0,
 					"productFamily": "Small Business Loan",
 					"productName": "Loan",
 					"riskBand": 3,
@@ -185,12 +185,13 @@ function processSelectedTest(props) {
 	    {showA.error !== null && (
 		  <div className={styles.fileErrorMessage}>{showA.error}</div>
 	    )}
+		<div className={common.uploadFile}>
          <input
 		  onChange={onFileChange}
 		  type="file"
 		  ref={fileInput}
-	    />
-		{loading ? 
+	     />
+		 {loading ? 
 		    <Button variant="primary" disabled>
 			 <Spinner
 			  as="span"
@@ -202,7 +203,8 @@ function processSelectedTest(props) {
 			Inprogress...
 		    </Button>
 			: <Button variant="primary" onClick={onFileUpload}>Upload</Button>
-	    }
+	     }
+		</div>
 		{fileData()}
 	  </Card.Body>
 	  </Card>

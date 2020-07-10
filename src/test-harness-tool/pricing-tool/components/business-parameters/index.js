@@ -845,7 +845,7 @@ function BusinessParameters(props) {
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
 	  const eachData = Number(checkCommas[totCommas-1])
-	  const {min, max, upto, errorMsg} = formFieldsInfo[state.productName.data][label]
+	  const {min, max, upto, errorMsg} = formFieldsInfo[state[label].data][label]
 	  let valid = ''
 	  if (label === "borrowingAmount" && eachData && (Number(eachData) < min || Number(eachData) > max)) {
 		  valid = errorMsg

@@ -22,7 +22,7 @@ function ReportLists() {
   
   let items = [];
   const total = Math.ceil(state.data.length/10)
-  if (page > 1) {
+  if (page > 1 && total > 5) {
     let prev = page
 	items.push(<Pagination.Item onClick={setPageItem(1)} className={common.paginationArrowStartEnd}>&lt;&lt;</Pagination.Item>)
 	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;</Pagination.Item>)

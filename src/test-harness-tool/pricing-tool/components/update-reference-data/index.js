@@ -67,12 +67,14 @@ function UpdateReferenceData(props) {
 	    {showA.error !== null && (
 		  <div className={styles.fileErrorMessage}>{showA.error}</div>
 	    )}
+		<div className={common.uploadFile}>
          <input
 		  onChange={onFileChange}
 		  type="file"
 		  ref={fileInput}
-	    />
-	    <Button variant="primary" onClick={onFileUpload}>Upload</Button>
+	     />
+	     <Button variant="primary" onClick={onFileUpload}>Upload</Button>
+		</div>
 		{fileData()}
 	    {showA.message !== null && (
 		  <div className={styles.fileMessage}>{showA.message}</div>

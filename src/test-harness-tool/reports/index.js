@@ -29,13 +29,24 @@ function ControlledTabs(props) {
   }
   let items = [];
   const total = Math.ceil(filteredData.length/10)
-  if (page[key] > 1) {
+  if (page[key] > 1 && total > 5) {
     let prev = page[key]
 	items.push(<Pagination.Item onClick={setPageItem(1)} className={common.paginationArrowStartEnd}>&lt;&lt;</Pagination.Item>)
 	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;</Pagination.Item>)
   }
   let start = page[key] > 5 ? page[key] - 4 : 1
   const totalItems = page[key] > 5 ? page[key] : 5
+  
+  for (let number = start; number <= totalItems; number++) {
+	if (number > total) {
+		continue;
+	}
+	items.push(
+      <Pagination.Item key={number} active={number === page[key]} onClick={setPageItem(number)}>
+        {number}
+      </Pagination.Item>
+    );
+  }
    
   if (total > 5 && page[key] < total) {
 	let next = page[key]

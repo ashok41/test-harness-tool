@@ -10,7 +10,219 @@ function ServiceRequest() {
   const [loading, setLoading] = useState(false)
   const history = useHistory();
   const location = useLocation();
-  const {state} = location;
+  //const {state} = location;
+  const state = [
+        {
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 10,
+			"expectetAir": 6.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 2,
+			"termFactor": 1,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 1,
+			"testTransactionNo": "TH_001_001",
+			"totalRecord": 2,
+			"xmlDifference": "",
+			"environment": "NFT"
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 20,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_002",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 40,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_003",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 70,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_004",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 90,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_005",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 20,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_006",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 90,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_007",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 70,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_004",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 90,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_005",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 20,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_006",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 100,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_007",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		}
+		]
   const testsetid = state[0].testSetId
   const createdby = state[0].createdBy
   const [sort, setSort] = useState({})
@@ -153,7 +365,7 @@ function ServiceRequest() {
   
   let items = [];
   const total = Math.ceil(state.length/10)
-  if (page > 1) {
+  if (page > 1 && total > 5) {
     let prev = page
 	items.push(<Pagination.Item onClick={setPageItem(1)} className={common.paginationArrowStartEnd}>&lt;&lt;</Pagination.Item>)
 	items.push(<Pagination.Item onClick={setPageItem(--prev)} className={common.paginationArrow}>&lt;</Pagination.Item>)
@@ -161,7 +373,9 @@ function ServiceRequest() {
   let start = page > 5 ? page - 4 : 1
   const totalItems = page > 5 ? page : 5
   for (let number = start; number <= totalItems; number++) {
-	
+	if (number > total) {
+		continue;
+	}
 	items.push(
       <Pagination.Item key={number} active={number === page} onClick={setPageItem(number)}>
         {number}
