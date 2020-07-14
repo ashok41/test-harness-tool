@@ -15,15 +15,16 @@ function BusinessParameters(props) {
   const { state: backFormData } = location
   const productMapDetails = { 3: [4], 7: [5,6] }
   const initial = {	
-	  borrowingAmount: {data: '', error: ''},
-	  riskBand:{data: '', error: ''},
-	  term: {data: '', error: ''},
-	  locationIdentity: {data: '', error: ''},
-	  bankDivision : {data: '', error: ''},
-	  productFamily: {data: '', error: ''},
-	  productName: {data: '', error: ''},
-	  environment: {data: '', error: ''},
-	  purpose: {data: '', error: ''}
+	  borrowingAmount: {data: '', error: '', valid: false},
+	  riskBand:{data: '', error: '', valid: false},
+	  term: {data: '', error: '', valid: false},
+	  locationIdentity: {data: '', error: '', valid: false},
+	  bankDivision : {data: '', error: '', valid: false},
+	  productFamily: {data: '', error: '', valid: false},
+	  productName: {data: '', error: '', valid: false},
+	  environment: {data: '', error: '', valid: false},
+	  purpose: {data: '', error: '', valid: (slug ? false : true)},
+	  url: {data: '', error: '', valid: false, loader: false}
   }
   const [state, setState] = useState(backFormData ? backFormData : initial)
   const [error, setError] = useState('')
@@ -171,6 +172,9 @@ function BusinessParameters(props) {
 	if (errors === '' && forms.environment.data === '') {
 		errors = 'Please select Environment';
 	}
+	if (errors === '' && forms.url.data === '') {
+		errors = 'Please enter URL';
+	}
 	return errors
   }
   
@@ -192,6 +196,7 @@ function BusinessParameters(props) {
 	  }
 	  lists['userId'] = localStorage.getItem('logged');
 	  lists['environment'] = forms.environment.data;
+	  lists['wsdlUrl'] = forms.environment.url;
 	  Service.post('/rbs/th/testdata', lists)
 	  .then((response) => {
 		  const { data } = response
@@ -811,6 +816,10 @@ function BusinessParameters(props) {
     }
   }
   
+  const onURLUpdated = (label) => (e) => {
+	  setState({...state, [label]: {data: e.target.value, error: '', valid: false}})
+  }
+  
   const onTextUpdated = (label) => (e) => {
 	  const data = e.target.value;
 	  const checkCommas = data.split(',')
@@ -819,18 +828,22 @@ function BusinessParameters(props) {
 	  const lastBeforeData = checkCommas[totCommas-2]
 	  const regex = /^[\d\,]+$/g
 	  let valid = ''
+	  let validFlag = true
 	  const {min, max, upto, errorMsg} = formFieldsInfo[state.productName.data][label]
 	  if (label === "borrowingAmount" && lastBeforeData && (Number(lastBeforeData) < min || Number(lastBeforeData) > max)) {
 		  valid = errorMsg
+		  validFlag = false
 	  }
 	  if (label === "term" && lastBeforeData && (Number(lastBeforeData) < min || Number(lastBeforeData) > max)) {
 		  valid = errorMsg
+		  validFlag = false
 	  }
 	  if (label === "riskBand" && lastBeforeData && (Number(lastBeforeData) < min || Number(lastBeforeData) > max)) {
 		  valid = errorMsg
+		  validFlag = false
 	  }
 	  if (data === '' || (data && regex.test(data) && totCommas <= upto && eachData !== "0" && checkCommas[0] !== "")) {
-		setState({...state, [label]: {data: data, error: valid}})
+		setState({...state, [label]: {data: data, error: valid, valid: validFlag}})
 	  }
   }
   
@@ -845,33 +858,38 @@ function BusinessParameters(props) {
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
 	  const eachData = Number(checkCommas[totCommas-1])
-	  const {min, max, upto, errorMsg} = formFieldsInfo[state[label].data][label]
+	  const {min, max, upto, errorMsg} = formFieldsInfo[state.productName.data][label]
 	  let valid = ''
+	  let validFlag = true
 	  if (label === "borrowingAmount" && eachData && (Number(eachData) < min || Number(eachData) > max)) {
 		  valid = errorMsg
+		  validFlag = false
 	  }
 	  if (label === "term" && eachData && (Number(eachData) < min || Number(eachData) > max)) {
 		  valid = errorMsg
+		  validFlag = false
 	  }
 	  if (label === "riskBand" && eachData && (Number(eachData) < min || Number(eachData) > max)) {
 		  valid = errorMsg
+		  validFlag = false
 	  }
 	  if (valid) {
-		  setState({...state, [label]: {data: data, error: valid}})
+		  setState({...state, [label]: {data: data, error: valid, valid: validFlag}})
 	  }
 	  if (isCommaLast && !valid) {
-		  setState({...state, [label]: {data: data, error: ''}})
+		  setState({...state, [label]: {data: data, error: '', valid: true}})
 	  }
   }
   
   const onSelectedSingleOptionChange = (label) => (e) => {
-	setState({...state, [label]: {data: e.target.value, error: ''}})
+	const data = e.target.value
+	setState({...state, [label]: {data: data, error: '', valid: true}})
   }
   
   function checkSubmitButton() {
 	  let valid = 0;
 	  Object.keys(state).forEach((item) => {
-		  if (state[item].error != "") {
+		  if (state[item].valid === false) {
 			  valid++
 		  }
 	  })
@@ -889,6 +907,26 @@ function BusinessParameters(props) {
 		})
 	}
 	return []
+  }
+  
+  function validate() {
+	  if (state.url.data === '') {
+		  setState({...state, 'url': {data: state.url.data, error: 'Please enter URL', valid: false}})
+	  } else {
+		  setState({...state, 'url': {data: state.url.data, error: '', valid: false, loader: true}})
+		  Service.post('/rbs/th/validateUrl', {url: state.url.data})
+		  .then((response) => {
+			const { data } = response
+			if (data.status === 200) {
+				setState({...state, 'url': {data: state.url.data, error: '', valid: true}})
+			} else {
+				setState({...state, 'url': {data: state.url.data, error: 'Please enter valid URL', valid: false, loader: false}})
+			}
+		  })
+		  .catch(() => {
+			  setState({...state, 'url': {data: state.url.data, error: 'Please enter valid URL', valid: false, loader: false}})
+		  })
+	  }
   }
   
   return (
@@ -1049,6 +1087,8 @@ function BusinessParameters(props) {
 			      </Form.Group>}
 			    </Col>
 			    {!slug && <Col sm="6">
+				<Row>
+				<Col sm="12">
 			     <Form.Group as={Row} controlId="environment">
 					<Form.Label column sm="3">Environment <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
@@ -1068,6 +1108,34 @@ function BusinessParameters(props) {
 					  </OverlayTrigger>
 					</Col>
 				  </Form.Group>
+				  </Col>
+				  <Col sm="12">
+			        <Form.Group as={Row} controlId="url">
+					<Form.Label column sm="3">URL <span className={styles.mandatory}>*</span></Form.Label>
+					<Col sm="6">
+					  <Form.Control type="text" isInvalid={state.url.error} value={state.url.data} autoComplete="off" onChange={onURLUpdated('url')} />
+					  <Form.Control.Feedback type="invalid" tooltip>
+					    {state.url.error}
+					  </Form.Control.Feedback>
+					  <div className={styles.urlForm}>
+					   {state.url.loader ? 
+						<Button variant="primary" disabled>
+						 <Spinner
+						  as="span"
+						  animation="grow"
+						  size="sm"
+						  role="status"
+						  aria-hidden="true"
+						/>
+						Inprogress...
+						</Button>
+						: <Button variant="primary" onClick={validate}>Validate</Button>
+					   }
+					  </div>
+					</Col>
+				    </Form.Group>
+				    </Col>
+				  </Row>
 				</Col>}
 			  </Row>
 			  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}

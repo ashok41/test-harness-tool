@@ -23,6 +23,7 @@ function ServiceRequest() {
   function handleSubmit() {
 	  const start = Date.now();
 	  setLoading(true)
+	  setConfirmDisabled(true)
 	  Service.get(`/rbs/th/testdata/result/${testsetid}`)
 	  .then((response) => {
 		  const seconds = Date.now() - start;
@@ -304,7 +305,7 @@ function ServiceRequest() {
 				    const rowSpan = item.rowSpan ? { rowSpan: item.rowSpan } : {}
 					const itemClassName = item.className ? ` ${item.className}`: ''
 					const className = styles.sortHeader.concat(itemClassName)
-					return <th {...rowSpan} {...colSpan} className={className} onClick={sortable(item.key, item.direction, item.sortable)}>
+					return <th {...rowSpan} {...colSpan} onClick={sortable(item.key, item.direction, item.sortable)}>
 					  <span>{item.name}</span>
 					  {item.sortable ? <span className={styles.arrow}><div className={getSortDirection(item.key)} /></span> : ''}
 					</th>
@@ -357,7 +358,7 @@ function ServiceRequest() {
 		    <Pagination>{items}</Pagination>
 	      </div>}
 		  <div>
-		   <Button variant="primary" disabled onClick={() => history.goBack()}>
+		   <Button variant="primary" disabled className={styles.handleConfirm} onClick={() => history.goBack()}>
 		   Back</Button>{' '}
 		   {loading ? 
 		    <Button variant="primary" disabled>
@@ -372,10 +373,10 @@ function ServiceRequest() {
 		    </Button>
 			: <Button variant="primary" onClick={handleSubmit} disabled={confirmDisabled} className={styles.handleConfirm}>Confirm & Execute</Button>
 		   }{' '}
-		   <Button variant="primary" href={`http://localhost:8081/rbs/th/testdata/generatescenarioexcel/${testsetid}/${createdby}`} onClick={downloadScenario} download target="_blank">
+		   <Button variant="primary" disabled={confirmDisabled} href={`http://localhost:8081/rbs/th/testdata/generatescenarioexcel/${testsetid}/${createdby}`} onClick={downloadScenario} download target="_blank">
 		    Download Test Scenarios
 		   </Button>
-		  </div>
+		  </div> 
 		</Col>
 	  </Row>
     </Card>

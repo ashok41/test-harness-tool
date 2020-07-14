@@ -352,7 +352,7 @@ function TestData() {
 			  <thead>
 				<tr>
 				{columns.map((item) => {
-					return <th className={styles.sortHeader} onClick={sortable(item.key, item.direction, item.sortable)}>
+					return <th onClick={sortable(item.key, item.direction, item.sortable)}>
 					  <span>{item.name}</span>
 					  {item.sortable ? <span className={styles.arrow}><div className={getSortDirection(item.key)} /></span> : ''}
 					</th>

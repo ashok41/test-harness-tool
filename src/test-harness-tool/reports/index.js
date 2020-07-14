@@ -10,8 +10,12 @@ import common from '../common/common.scss';
 
 function createLogData(data) {
 	const cases = []
-	cases.push({ "color": "#00c21e", "cases": "Passed", "status": "Y", "count": data.passed, percent: data.passedPercent});
 	cases.push({ "color": "#d81a36", "cases": "Failed", "status": "N", "count": data.failed, percent: data.failedPercent});
+	if (data.passed  <= 0) {
+		cases.push({ "color": "#00c21e", "cases": "Passed", "status": "Y", "count": data.passed, percent: data.passedPercent});
+	} else {
+		cases.unshift({ "color": "#00c21e", "cases": "Passed", "status": "Y", "count": data.passed, percent: data.passedPercent});
+	}
 	return cases;
 }
 
@@ -24,6 +28,7 @@ function ControlledTabs(props) {
   const filteredData = testDataList.filter(function (item) {
 	return item.testTransactionFlag === key
   })
+  
   const setPageItem = (number) => () => {
 	  setPage({...page, [key]: number})
   }
@@ -89,7 +94,7 @@ function ControlledTabs(props) {
 	  key: 'riskBand',
 	  rowSpan: 2,
   }]
-  if (paginationData[0].productName === 'Agri Facility') {
+  if (paginationData[0] && paginationData[0].productName === 'Agri Facility') {
 	Array.prototype.push.apply(firstColumns, [{
 	  name: 'Start Margin',
 	  key: 'startMargin',
@@ -112,7 +117,7 @@ function ControlledTabs(props) {
 	  colSpan: 2,
   }])
   const secondColumns = []
-  if (paginationData[0].productName === 'Small Business Loan (Fixed)') {
+  if (paginationData[0] && paginationData[0].productName === 'Small Business Loan (Fixed)') {
 	Array.prototype.push.apply(secondColumns, [{
 	  name: 'AIR(%)',
 	  key: 'air'
@@ -127,7 +132,7 @@ function ControlledTabs(props) {
 	  key: 'apr'
 	}])
   }
-  if (paginationData[0].productName === 'Overdraft' || paginationData[0].productName === 'Agri Facility') {
+  if (paginationData[0] && (paginationData[0].productName === 'Overdraft' || paginationData[0].productName === 'Agri Facility')) {
 	Array.prototype.push.apply(secondColumns, [{
 	  name: 'Margin Fee',
 	  key: 'marginFee'
@@ -152,7 +157,11 @@ function ControlledTabs(props) {
 	{data.map((item, index) => {
 	  const percent = item.percent ? ` (${item.percent}%)` : ''
       return (<Tab key={index} eventKey={item.status} title={`${item.cases}: ${item.count}${percent}`}>
-        <Table responsive striped bordered hover size="md">
+        {filteredData.length <= 0 &&
+			<div className={styles.noRecords}>No Records to Display</div>
+		}
+		{filteredData.length > 0 &&
+		<Table responsive striped bordered hover size="md">
 		  <thead>
 			<tr>
 			  {firstColumns.map((item) => {
@@ -183,17 +192,17 @@ function ControlledTabs(props) {
 				<td>{item.borrowingAmount}</td>
 				<td>{item.termFactor}</td>
 				<td>{item.riskBand}</td>
-				{paginationData[0].productName === 'Agri Facility' &&
+				{(paginationData[0] && paginationData[0].productName === 'Agri Facility') &&
 				  <>
 				   <td>{item.startMargin}</td>
 				   <td>{item.termMarginPremium}</td>
 				   <td>{item.expectetMarginFee}</td>
-				   <td>{item.expectetArrangementFee}</td>
+				   <td>{item.expectetArrangmentFee}</td>
 				   <td>{item.actualMarginFee}</td>
-				   <td>{item.actualArrangementFee}</td> 
+				   <td>{item.actualArrangmentFee}</td> 
 			  	  </>
 				}
-				{paginationData[0].productName === 'Small Business Loan (Fixed)' &&
+				{(paginationData[0] && paginationData[0].productName === 'Small Business Loan (Fixed)') &&
 				  <>
 				   <td>{item.expectetAir}</td>
 				   <td>{item.expectetApr}</td>
@@ -201,18 +210,18 @@ function ControlledTabs(props) {
 				   <td>{item.actualApr}</td>
 			  	  </>
 				}
-				{paginationData[0].productName === 'Overdraft' &&
+				{(paginationData[0] && paginationData[0].productName === 'Overdraft') &&
 				  <>
 				   <td>{item.expectetMarginFee}</td>
-				   <td>{item.expectetArrangementFee}</td>
+				   <td>{item.expectetArrangmentFee}</td>
 				   <td>{item.actualMarginFee}</td>
-				   <td>{item.actualArrangementFee}</td>
+				   <td>{item.actualArrangmentFee}</td>
 			  	  </>
 				}
 			  </tr>
 			))}
 		  </tbody>
-		  </Table>
+		</Table>}
 		  {filteredData.length > 10 && <div>
 		    <Pagination>{items}</Pagination>
 	      </div>}
@@ -260,8 +269,8 @@ function RoutingPage() {
 					"borrowingAmount": 100,
 					"expectetAir": 6,
 					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
+					"productFamily": "Loan",
+					"productName": "Small Business Loan (Fixed)",
 					"riskBand": 3,
 					"termFactor": 2,
 					"testSetId": 1,
