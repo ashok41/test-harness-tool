@@ -143,6 +143,15 @@ function BusinessParameters(props) {
 	 }
   }, [businessAttributes.data])
   
+  const errorFormFields = {
+	 'locationIdentity' : 'Please select Application Identity',
+	 'bankDivision' : 'Please select Bank Division',
+	 'purpose' : 'Please select Purpose',
+	 'productFamily' : 'Please select Product Family',
+	 'productName' : 'Please select Product Name',
+	 'environment' : 'Please select Environment'
+  }
+  
   function validation(forms) {
 	let errors = ''
 	if (forms.locationIdentity.data === '') {
@@ -152,7 +161,7 @@ function BusinessParameters(props) {
 		errors = 'Please select Bank Division';
 	}
 	if (errors === '' && slug && forms.purpose.data === '') {
-		errors = 'Please select Purpoose';
+		errors = 'Please select Purpose';
 	}
 	if (errors === '' && !slug && forms.productFamily.data === '') {
 		errors = 'Please select Product Family';
@@ -883,7 +892,11 @@ function BusinessParameters(props) {
   
   const onSelectedSingleOptionChange = (label) => (e) => {
 	const data = e.target.value
-	setState({...state, [label]: {data: data, error: '', valid: true}})
+	if (data === '') {
+		setState({...state, [label]: {data: '', error: errorFormFields[label], valid: false}})
+	} else {
+		setState({...state, [label]: {data: data, error: '', valid: true}})
+	}
   }
   
   function checkSubmitButton() {
@@ -950,12 +963,15 @@ function BusinessParameters(props) {
 			     <Form.Group as={Row} controlId="locationIdentity">
                    <Form.Label column sm="4">Application Identity <span className={styles.mandatory}>*</span></Form.Label>
                    <Col sm="6">
-				     <Form.Control as="select" value={state.locationIdentity.data} onChange={onSelectedSingleOptionChange('locationIdentity')}>
+				     <Form.Control as="select" isInvalid={state.locationIdentity.error} value={state.locationIdentity.data} onChange={onSelectedSingleOptionChange('locationIdentity')}>
                       <option value="">Please Select</option>
 					  {businessAttributes.data['AP001'] && businessAttributes.data['AP001'].map((item) => {
 						return (<option value={item.attributeId}>{item.refDataDesc}</option>)
 					  })}
                      </Form.Control>
+					 <Form.Control.Feedback type="invalid" tooltip>
+					   {state.locationIdentity.error}
+					  </Form.Control.Feedback>
 				   </Col>
                  </Form.Group>
 			    </Col>
@@ -963,12 +979,15 @@ function BusinessParameters(props) {
 				  <Form.Group as={Row} controlId="bankDivision">
                   <Form.Label column sm="3">Bank Division <span className={styles.mandatory}>*</span></Form.Label>
                   <Col sm="6">
-				    <Form.Control as="select" value={state.bankDivision.data} onChange={onSelectedSingleOptionChange('bankDivision')}>
+				    <Form.Control as="select" isInvalid={state.bankDivision.error} value={state.bankDivision.data} onChange={onSelectedSingleOptionChange('bankDivision')}>
                       <option value="">Please Select</option>
 					  {businessAttributes.data['BU001'] && businessAttributes.data['BU001'].map((item) => {
 						return (<option value={item.attributeId}>{item.refDataDesc}</option>)
 					  })}
                     </Form.Control>
+					<Form.Control.Feedback type="invalid" tooltip>
+					   {state.bankDivision.error}
+					</Form.Control.Feedback>
 				   </Col>
                   </Form.Group>
 				</Col>
@@ -978,23 +997,29 @@ function BusinessParameters(props) {
 				  {!slug && <Form.Group as={Row} controlId="productFamily">
 					<Form.Label column sm="4">Product Family <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" value={state.productFamily.data} onChange={onSelectedSingleOptionChange('productFamily')}>
+					  <Form.Control as="select" isInvalid={state.productFamily.error} value={state.productFamily.data} onChange={onSelectedSingleOptionChange('productFamily')}>
 						<option value="">Please Select</option>
 						{businessAttributes.data['PF001'] && businessAttributes.data['PF001'].map((item) => {
 						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
 						})}
 					  </Form.Control>
+					  <Form.Control.Feedback type="invalid" tooltip>
+					   {state.productFamily.error}
+					  </Form.Control.Feedback>
 					</Col>
 				  </Form.Group>}
 				  {slug && <Form.Group as={Row} controlId="purpose">
 					<Form.Label column sm="4">Purpose <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" value={state.productFamily.data} onChange={onSelectedSingleOptionChange('purpose')}>
+					  <Form.Control as="select" isInvalid={state.productFamily.error} value={state.productFamily.data} onChange={onSelectedSingleOptionChange('purpose')}>
 						<option value="">Please Select</option>
 						{businessAttributes.data['PP001'] && businessAttributes.data['PP001'].map((item) => {
 						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
 						})}
 					  </Form.Control>
+					  <Form.Control.Feedback type="invalid" tooltip>
+					   {state.productFamily.error}
+					  </Form.Control.Feedback>
 					</Col>
 				  </Form.Group>}
 				</Col>
@@ -1002,21 +1027,27 @@ function BusinessParameters(props) {
 				  {!slug && <Form.Group as={Row} controlId="productName">
 					<Form.Label column sm="3">Product Name <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" value={state.productName.data} onChange={onSelectedSingleOptionChange('productName')}>
+					  <Form.Control as="select" isInvalid={state.productName.error} value={state.productName.data} onChange={onSelectedSingleOptionChange('productName')}>
 						<option value="">Please Select</option>
 						{createProductName()}
 					  </Form.Control>
+					  <Form.Control.Feedback type="invalid" tooltip>
+					   {state.productName.error}
+					  </Form.Control.Feedback>
 					</Col>
 				  </Form.Group>}
 				  {slug && <Form.Group as={Row} controlId="environment">
 					<Form.Label column sm="3">Environment <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
+					  <Form.Control as="select" isInvalid={state.environment.error} value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
 						<option value="">Please Select</option>
 						<option value="NFT">NFT</option>
 						<option value="UAT">UAT</option>
 						<option value="Dev">Dev</option>
 					  </Form.Control>
+					  <Form.Control.Feedback type="invalid" tooltip>
+					   {state.environment.error}
+					  </Form.Control.Feedback>
 					  <OverlayTrigger
 						  placement="right"	
 						  overlay={
@@ -1092,12 +1123,15 @@ function BusinessParameters(props) {
 			     <Form.Group as={Row} controlId="environment">
 					<Form.Label column sm="3">Environment <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
+					  <Form.Control as="select" isInvalid={state.environment.error} value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
 						<option value="">Please Select</option>
 						<option value="NFT">NFT</option>
 						<option value="UAT">UAT</option>
 						<option value="Dev">Dev</option>
 					  </Form.Control>
+					  <Form.Control.Feedback type="invalid" tooltip>
+                       {state.environment.error}
+                      </Form.Control.Feedback>
 					  <OverlayTrigger
 						  placement="right"	
 						  overlay={
