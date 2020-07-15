@@ -304,8 +304,8 @@ function ServiceRequest() {
 					const colSpan = item.colSpan ? { colSpan: item.colSpan } : {}
 				    const rowSpan = item.rowSpan ? { rowSpan: item.rowSpan } : {}
 					const itemClassName = item.className ? ` ${item.className}`: ''
-					const className = styles.sortHeader.concat(itemClassName)
-					return <th {...rowSpan} {...colSpan} onClick={sortable(item.key, item.direction, item.sortable)}>
+					//const className = styles.sortHeader.concat(itemClassName)
+					return <th {...rowSpan} {...colSpan} className={itemClassName} onClick={sortable(item.key, item.direction, item.sortable)}>
 					  <span>{item.name}</span>
 					  {item.sortable ? <span className={styles.arrow}><div className={getSortDirection(item.key)} /></span> : ''}
 					</th>

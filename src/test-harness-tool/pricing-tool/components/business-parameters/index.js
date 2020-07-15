@@ -15,16 +15,16 @@ function BusinessParameters(props) {
   const { state: backFormData } = location
   const productMapDetails = { 3: [4], 7: [5,6] }
   const initial = {	
-	  borrowingAmount: {data: '', error: '', valid: false},
-	  riskBand:{data: '', error: '', valid: false},
-	  term: {data: '', error: '', valid: false},
+	  borrowingAmount: {data: '', error: '', valid: false, disabled: true},
+	  riskBand:{data: '', error: '', valid: false, disabled: true},
+	  term: {data: '', error: '', valid: false, disabled: true},
 	  locationIdentity: {data: '', error: '', valid: false},
 	  bankDivision : {data: '', error: '', valid: false},
 	  productFamily: {data: '', error: '', valid: false},
 	  productName: {data: '', error: '', valid: false},
 	  environment: {data: '', error: '', valid: false},
 	  purpose: {data: '', error: '', valid: (slug ? false : true)},
-	  url: {data: '', error: '', valid: false, loader: false}
+	  url: {data: '', error: '', valid: false, loader: false, disabled: true, message: ''}
   }
   const [state, setState] = useState(backFormData ? backFormData : initial)
   const [error, setError] = useState('')
@@ -205,7 +205,7 @@ function BusinessParameters(props) {
 	  }
 	  lists['userId'] = localStorage.getItem('logged');
 	  lists['environment'] = forms.environment.data;
-	  lists['wsdlUrl'] = forms.environment.url;
+	  lists['wsdlUrl'] = forms.url.data;
 	  Service.post('/rbs/th/testdata', lists)
 	  .then((response) => {
 		  const { data } = response
@@ -784,15 +784,15 @@ function BusinessParameters(props) {
     '4': { // small business loan (fixed)
 	  'borrowingAmount': {
 		min: 1000, max: 50000, upto: 15, errorMsg: 'Please check the value should be Min of 1000 and Max of 50000',
-		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]'
+		tooltip: 'Min: 1000, Max: 50000 Delimiter [0-9,]', emptyMsg: 'Please enter Borrowing Amount'
 	  },
 	  'term': {
 		min: 12, max: 120, upto: 10, errorMsg: 'Please check the value should be Min of 12 and Max of 120',
-		tooltip: 'Min: 12, Max: 120 Delimiter [0-9,]'
+		tooltip: 'Min: 12, Max: 120 Delimiter [0-9,]', emptyMsg: 'Please enter Term (Months)'
 	  },
 	  'riskBand': {
 		min: 1, max: 10, upto: 10, errorMsg: 'Please check the value should be Min of 1 and Max of 10',
-		tooltip: 'Min: 1, Max: 10 Delimiter [0-9,]'
+		tooltip: 'Min: 1, Max: 10 Delimiter [0-9,]', emptyMsg: 'Please enter Risk Band'
 	  }
     },
     '6': { // agri facility validation
@@ -838,7 +838,7 @@ function BusinessParameters(props) {
 	  const regex = /^[\d\,]+$/g
 	  let valid = ''
 	  let validFlag = true
-	  const {min, max, upto, errorMsg} = formFieldsInfo[state.productName.data][label]
+	  const {min, max, upto, errorMsg, emptyMsg} = formFieldsInfo[state.productName.data][label]
 	  if (label === "borrowingAmount" && lastBeforeData && (Number(lastBeforeData) < min || Number(lastBeforeData) > max)) {
 		  valid = errorMsg
 		  validFlag = false
@@ -852,6 +852,9 @@ function BusinessParameters(props) {
 		  validFlag = false
 	  }
 	  if (data === '' || (data && regex.test(data) && totCommas <= upto && eachData !== "0" && checkCommas[0] !== "")) {
+		if (data === '') {
+			valid = emptyMsg
+		}
 		setState({...state, [label]: {data: data, error: valid, valid: validFlag}})
 	  }
   }
@@ -893,9 +896,31 @@ function BusinessParameters(props) {
   const onSelectedSingleOptionChange = (label) => (e) => {
 	const data = e.target.value
 	if (data === '') {
-		setState({...state, [label]: {data: '', error: errorFormFields[label], valid: false}})
+		let formData = {
+		  [label]: {data: '', error: errorFormFields[label], valid: false}
+		}
+		if (label === 'environment') {
+		  formData['url'] = initial.url
+		}
+		if (label === 'productName') {
+		  formData['borrowingAmount'] = initial.borrowingAmount
+		  formData['riskBand'] = initial.riskBand
+		  formData['term'] = initial.term
+		}
+		setState({...state, ...formData})
 	} else {
-		setState({...state, [label]: {data: data, error: '', valid: true}})
+		let formData = {
+		  [label]: {data: data, error: '', valid: true}
+		}
+		if (label === 'environment') {
+		  formData['url'] = {...initial.url, disabled: false}
+		}
+		if (label === 'productName') {
+		  formData['borrowingAmount'] = {...initial.borrowingAmount, disabled: false}
+		  formData['riskBand'] = {...initial.riskBand, disabled: false}
+		  formData['term'] = {...initial.term, disabled: false}
+		}
+		setState({...state, ...formData})
 	}
   }
   
@@ -923,21 +948,28 @@ function BusinessParameters(props) {
   }
   
   function validate() {
-	  if (state.url.data === '') {
-		  setState({...state, 'url': {data: state.url.data, error: 'Please enter URL', valid: false}})
-	  } else {
+	let formData = {}
+	if (state.environment.data && state.url.data === '') {
+	  formData['url'] = {data: state.url.data, error: 'Please enter URL', valid: false}
+	}
+	if (state.environment.data === '') {
+	  formData['environment'] = {data: state.environment.data, error: 'Please select Environment', valid: false }
+	}
+	if (Object.keys(formData).length > 0) {
+	  setState({...state, ...formData})
+	} else {
 		  setState({...state, 'url': {data: state.url.data, error: '', valid: false, loader: true}})
-		  Service.post('/rbs/th/validateUrl', {url: state.url.data})
+		  Service.post(`/rbs/th/validateUrl/?url=${state.url.data}`)
 		  .then((response) => {
 			const { data } = response
-			if (data.status === 200) {
-				setState({...state, 'url': {data: state.url.data, error: '', valid: true}})
+			if (data === 'OK') {
+				setState({...state, 'url': {data: state.url.data, error: '', valid: true, loader: false, message: 'ok'}})
 			} else {
-				setState({...state, 'url': {data: state.url.data, error: 'Please enter valid URL', valid: false, loader: false}})
+				setState({...state, 'url': {data: state.url.data, error: 'Please enter valid URL', valid: false, loader: false, message: ''}})
 			}
 		  })
 		  .catch(() => {
-			  setState({...state, 'url': {data: state.url.data, error: 'Please enter valid URL', valid: false, loader: false}})
+			  setState({...state, 'url': {data: state.url.data, error: 'Please enter valid URL', valid: false, loader: false, message: ''}})
 		  })
 	  }
   }
@@ -1065,7 +1097,7 @@ function BusinessParameters(props) {
 			      <Form.Group as={Row} controlId="borrowingAmount">
 					<Form.Label column sm="4">Borrowing Amount <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6" className={styles.textform}>
-					  <Form.Control type="text" isInvalid={state.borrowingAmount.error} value={state.borrowingAmount.data} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
+					  <Form.Control type="text" isInvalid={state.borrowingAmount.error} disabled={state.borrowingAmount.disabled} value={state.borrowingAmount.data} autoComplete="off" onChange={onTextUpdated('borrowingAmount')} onBlur={removeUnwantedComma('borrowingAmount')} />
 					  <Form.Control.Feedback type="invalid" tooltip>
 					   {state.borrowingAmount.error}
 					  </Form.Control.Feedback>
@@ -1083,7 +1115,7 @@ function BusinessParameters(props) {
 				  <Form.Group as={Row} controlId="term">
 				    <Form.Label column sm="4">Term (Months) <span className={styles.mandatory}>*</span></Form.Label>
 				    <Col sm="6" className={styles.textform}>
-				     <Form.Control type="text" isInvalid={state.term.error} value={state.term.data} autoComplete="off" onChange={onTextUpdated('term')} onBlur={removeUnwantedComma('term')} />
+				     <Form.Control type="text" isInvalid={state.term.error} disabled={state.term.disabled} value={state.term.data} autoComplete="off" onChange={onTextUpdated('term')} onBlur={removeUnwantedComma('term')} />
 				     <Form.Control.Feedback type="invalid" tooltip>
                       {state.term.error}
                      </Form.Control.Feedback>
@@ -1101,7 +1133,7 @@ function BusinessParameters(props) {
 			      {!slug && <Form.Group as={Row} controlId="riskBand">
 				   <Form.Label column sm="4">Risk Band <span className={styles.mandatory}>*</span></Form.Label>
 				   <Col sm="6" className={styles.textform}>
-				     <Form.Control type="text" isInvalid={state.riskBand.error} value={state.riskBand.data} autoComplete="off" onChange={onTextUpdated('riskBand')} onBlur={removeUnwantedComma('riskBand')} />
+				     <Form.Control type="text" isInvalid={state.riskBand.error} disabled={state.riskBand.disabled} value={state.riskBand.data} autoComplete="off" onChange={onTextUpdated('riskBand')} onBlur={removeUnwantedComma('riskBand')} />
 				     <Form.Control.Feedback type="invalid" tooltip>
                       {state.riskBand.error}
                      </Form.Control.Feedback>
@@ -1146,11 +1178,13 @@ function BusinessParameters(props) {
 				  <Col sm="12">
 			        <Form.Group as={Row} controlId="url">
 					<Form.Label column sm="3">URL <span className={styles.mandatory}>*</span></Form.Label>
-					<Col sm="6">
-					  <Form.Control type="text" isInvalid={state.url.error} value={state.url.data} autoComplete="off" onChange={onURLUpdated('url')} />
+					<Col sm="6" className={styles.urlBox}>
+					  <Form.Control as="textarea" isInvalid={state.url.error} disabled={state.url.disabled} value={state.url.data} autoComplete="off" onChange={onURLUpdated('url')} rows="2" />
+					  {state.url.message && <div className={styles.tickIcon} />}
 					  <Form.Control.Feedback type="invalid" tooltip>
 					    {state.url.error}
 					  </Form.Control.Feedback>
+					  <div className={styles.mandatory}>Please enter URL appropriate to the selected Environment</div>
 					  <div className={styles.urlForm}>
 					   {state.url.loader ? 
 						<Button variant="primary" disabled>

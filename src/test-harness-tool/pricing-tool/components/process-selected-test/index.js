@@ -6,7 +6,7 @@ import styles from './process-selected-test.scss'
 import common from '../../../common/common.scss'
 
 function processSelectedTest(props) {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState({loader: false, message: ''})
   const history = useHistory();
   const [showA, setShowA] = useState({ selectedFile: '', message: '', error: '', refresh: false });
   const fileInput = useRef()
@@ -30,15 +30,20 @@ function processSelectedTest(props) {
           'content-type': 'multipart/form-data'
         }
       }
-	  setLoading(true)
+	  setLoading({loader: true, message: ''})
       Service.post("/rbs/th/uploadProcessSelectedTestCaseFile", formData, config).then((response) => {
 		const seconds = Date.now() - start;
 		const executionTime = toTimeString(seconds/1000)
-		const { data } = response
-		  history.push({
-			pathname: '/reports',
-			state: {data: data, executionTime: executionTime}
-		})
+		const { data, status } = response
+		  if (status === 200) {
+		    history.push({
+			  pathname: '/reports',
+			  state: {data: data, executionTime: executionTime}
+		    })
+		  } else {
+			setLoading({loader: false, message: 'Please upload file with valid URL appropriate to the provided Environment'})
+			setShowA({selectedFile: '', message: '', error: '', refresh: false})
+		  }
 	  }).catch((error) => {
 		const seconds = Date.now() - start;
 		const executionTime = toTimeString(seconds/1000)
@@ -145,10 +150,13 @@ function processSelectedTest(props) {
 				}
 			]
 		  }
-		  history.push({
+		  setLoading({loader: false, message: 'Please upload file with valid URL appropriate to the provided Environment'})
+		  setShowA({selectedFile: '', message: '', error: '', refresh: false})
+		  fileInput.current.value = '';
+		  /*history.push({
 			pathname: '/reports',
 			state: {data: data, executionTime: executionTime}
-		})
+		})*/
 	  }); 
   }
   
@@ -191,7 +199,7 @@ function processSelectedTest(props) {
 		  type="file"
 		  ref={fileInput}
 	     />
-		 {loading ? 
+		 {loading.loader ? 
 		    <Button variant="primary" disabled>
 			 <Spinner
 			  as="span"
@@ -202,10 +210,11 @@ function processSelectedTest(props) {
 			/>
 			Inprogress...
 		    </Button>
-			: <Button variant="primary" onClick={onFileUpload}>Confirm & Execute</Button>
+			: <Button variant="primary" onClick={onFileUpload}>Scenarios Execution</Button>
 	     }
 		</div>
 		{fileData()}
+		{loading.message && <div className={styles.fileErrorMessage}>{loading.message}</div>}
 	  </Card.Body>
 	  </Card>
       </Row>

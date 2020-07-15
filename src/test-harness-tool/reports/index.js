@@ -10,11 +10,11 @@ import common from '../common/common.scss';
 
 function createLogData(data) {
 	const cases = []
-	cases.push({ "color": "#d81a36", "cases": "Failed", "status": "N", "count": data.failed, percent: data.failedPercent});
+	cases.push({ "color": "#d81a36", "cases": "Failed", "status": "N", "count": data.failed, "className": styles.failed, percent: data.failedPercent});
 	if (data.passed  <= 0) {
-		cases.push({ "color": "#00c21e", "cases": "Passed", "status": "Y", "count": data.passed, percent: data.passedPercent});
+		cases.push({ "color": "#00c21e", "cases": "Passed", "status": "Y", "count": data.passed, "className": styles.passed, percent: data.passedPercent});
 	} else {
-		cases.unshift({ "color": "#00c21e", "cases": "Passed", "status": "Y", "count": data.passed, percent: data.passedPercent});
+		cases.unshift({ "color": "#00c21e", "cases": "Passed", "status": "Y", "count": data.passed, "className": styles.passed, percent: data.passedPercent});
 	}
 	return cases;
 }
@@ -156,7 +156,7 @@ function ControlledTabs(props) {
     >
 	{data.map((item, index) => {
 	  const percent = item.percent ? ` (${item.percent}%)` : ''
-      return (<Tab key={index} eventKey={item.status} title={`${item.cases}: ${item.count}${percent}`}>
+      return (<Tab key={index} eventKey={item.status} tabClassName={item.className} title={`${item.cases}: ${item.count}${percent}`}>
         {filteredData.length <= 0 &&
 			<div className={styles.noRecords}>No Records to Display</div>
 		}

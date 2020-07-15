@@ -42,12 +42,11 @@
 	}
 }
 
-.report-tabs :global(.nav-link:nth-child(1)) {
+.report-tabs .passed:global(.nav-link) {
 	border-color: #00c21e #00c21e #fff !important;
 	background-color: #00c21e !important;
-
 }
-.report-tabs :global(.nav-link:nth-child(2)) {
+.report-tabs .failed:global(.nav-link) {
 	border-color: #d81a36 #d81a36 #fff !important;
 	background-color: #d81a36 !important;
 
