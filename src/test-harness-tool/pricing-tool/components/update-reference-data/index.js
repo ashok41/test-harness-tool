@@ -6,7 +6,6 @@ import styles from './update-reference-data.scss'
 import common from '../../../common/common.scss'
 
 function UpdateReferenceData(props) {
- 
   const [showA, setShowA] = useState({ selectedFile: '', message: '', error: '', refresh: false });
   const fileInput = useRef()
   const onFileUpload = () => { 
@@ -42,7 +41,7 @@ function UpdateReferenceData(props) {
 	  fileInput.current.value = '';
 	  return false;
 	}*/
-	setShowA({...showA, ...{ error: '', selectedFile: event.target.files[0], refresh: true }})
+	setShowA({...showA, ...{ error: '', selectedFile: event.target.files[0], refresh: true, message: '' }})
   };
   
   const fileData = () => { 

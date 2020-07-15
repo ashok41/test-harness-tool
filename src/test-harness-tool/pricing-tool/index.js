@@ -37,13 +37,13 @@ function PricingTool() {
 			onSelect={(k) => setKey(k)}
 			>
 			<Tab eventKey="business-parameters" title="Business Parameters">
-			 <BusinessParameters clear={true} />
+			 <BusinessParameters clear="business-parameters" />
 			</Tab>
 			<Tab eventKey="update-reference-data" title="Update Reference Data">
-			 <UpdateReferenceData clear={true} />
+			 <UpdateReferenceData clear="update-reference-data" />
 			</Tab>
 			<Tab eventKey="process-selected-test" title="Process Selective Scenarios">
-			 <ProcessSelectedTest clear={true} />
+			 <ProcessSelectedTest clear="process-selected-test" />
 			</Tab>
 		  </Tabs>
         </Col>

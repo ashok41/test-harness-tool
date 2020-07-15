@@ -168,7 +168,8 @@ function processSelectedTest(props) {
 	  fileInput.current.value = '';
 	  return false;
 	}*/
-	setShowA({...showA, ...{ error: '', selectedFile: event.target.files[0], refresh: true }})
+	setShowA({...showA, ...{ error: '', selectedFile: event.target.files[0], refresh: true, message: '' }})
+	setLoading({loader: false, message: ''})
   };
   
   const fileData = () => { 
