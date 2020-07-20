@@ -1,7 +1,9 @@
 import React from 'react';
 import axios from 'axios'
 
-const { environment: { API_URL } } = window
+//const { environment: { API_URL } } = window
+
+export const API_URL = 'http://localhost:8080/'
 
 class Service {
   get(url) {
@@ -12,6 +14,10 @@ class Service {
   post(url, params) {
 	 const api = API_URL + url
 	 return axios.post(api, params)
+ }
+ 
+ getApiRoot() {
+	 return API_URL
  }
 }
 

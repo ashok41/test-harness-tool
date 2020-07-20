@@ -277,7 +277,8 @@ function ServiceRequest() {
 	  return !sort[key] ? '' : (sort[key] === 'desc' ? styles.arrowDown : styles.arrowUp);
   }
   
-  const downloadScenario = () => {
+  const downloadScenario = (link) => () => {
+	  window.open(link,'_blank');
 	  setConfirmDisabled(true)
   }
   return (
@@ -373,7 +374,7 @@ function ServiceRequest() {
 		    </Button>
 			: <Button variant="primary" onClick={handleSubmit} disabled={confirmDisabled} className={styles.handleConfirm}>Confirm & Execute</Button>
 		   }{' '}
-		   <Button variant="primary" disabled={confirmDisabled} href={`http://localhost:8081/rbs/th/testdata/generatescenarioexcel/${testsetid}/${createdby}`} onClick={downloadScenario} download target="_blank">
+		   <Button variant="primary" disabled={confirmDisabled} onClick={downloadScenario(`${Service.getApiRoot()}rbs/th/testdata/generatescenarioexcel/${testsetid}/${createdby}`)}>
 		    Download Test Scenarios
 		   </Button>
 		  </div> 

@@ -2576,8 +2576,8 @@ function RoutingPage() {
 		  <div className={styles.relative}>
 		   <div className={styles.download}>
 		    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
-			  <Dropdown.Item onClick={toDownloadLink(`http://localhost:8081/rbs/th/testdata/generatepdf/${reports.data.testcasesResultList[0].testSetId}`)}>PDF</Dropdown.Item>
-			  <Dropdown.Item onClick={toDownloadLink(`http://localhost:8081/rbs/th/testdata/generateexcel/${reports.data.testcasesResultList[0].testSetId}/${reports.data.testcasesResultList[0].createdBy}`)} >Excel</Dropdown.Item>
+			  <Dropdown.Item onClick={toDownloadLink(`${Service.getApiRoot()}rbs/th/testdata/generatepdf/${reports.data.testcasesResultList[0].testSetId}`)}>PDF</Dropdown.Item>
+			  <Dropdown.Item onClick={toDownloadLink(`${Service.getApiRoot()}rbs/th/testdata/generateexcel/${reports.data.testcasesResultList[0].testSetId}/${reports.data.testcasesResultList[0].createdBy}`)} >Excel</Dropdown.Item>
 			 </DropdownButton>
 		    <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
 		    <Button variant="primary" disabled>Print</Button>
