@@ -31,19 +31,23 @@ body, html {
 	color: #1e808f !important;
 }
 :global(.table) {
-	max-height: 400px;
-    overflow: auto;
-    display: block;
+	
 	
 	thead th {
 	  background: none #002d64;
 	  color: #fff;
 	  font-weight: 400;
-	  position: sticky;
 	  top: 0px;
 	}
 	td, th {
 		padding: 0.1rem 0.65rem !important;
+	}
+	
+	tbody {
+		max-height: 400px;
+		overflow: auto;
+		display: block;
+		width: 100%;
 	}
 	
 }

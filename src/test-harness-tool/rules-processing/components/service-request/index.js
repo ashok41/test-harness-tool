@@ -374,7 +374,7 @@ function ServiceRequest() {
 		    </Button>
 			: <Button variant="primary" onClick={handleSubmit} disabled={confirmDisabled} className={styles.handleConfirm}>Confirm & Execute</Button>
 		   }{' '}
-		   <Button variant="primary" disabled={confirmDisabled} onClick={downloadScenario(`${Service.getApiRoot()}rbs/th/testdata/generatescenarioexcel/${testsetid}/${createdby}`)}>
+		   <Button variant="primary" disabled={confirmDisabled} onClick={downloadScenario(`${Service.getApiRoot()}/rbs/th/testdata/generatescenarioexcel/${testsetid}/${createdby}`)}>
 		    Download Test Scenarios
 		   </Button>
 		  </div> 

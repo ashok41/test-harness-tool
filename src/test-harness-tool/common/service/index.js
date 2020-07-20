@@ -3,7 +3,7 @@ import axios from 'axios'
 
 //const { environment: { API_URL } } = window
 
-export const API_URL = 'http://localhost:8080/'
+export const API_URL = 'http://localhost:8080'
 
 class Service {
   get(url) {
