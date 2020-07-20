@@ -1179,7 +1179,7 @@ function BusinessParameters(props) {
 			        <Form.Group as={Row} controlId="url">
 					<Form.Label column sm="3">URL <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6" className={styles.urlBox}>
-					  <Form.Control as="textarea" isInvalid={state.url.error} disabled={state.url.disabled} value={state.url.data} autoComplete="off" onChange={onURLUpdated('url')} rows="2" />
+					  <Form.Control as="textarea" isInvalid={state.url.error} disabled={state.url.disabled} value={state.url.data} autoComplete="off" onChange={onURLUpdated('url')} rows="3" />
 					  {state.url.message && <div className={styles.tickIcon} />}
 					  <Form.Control.Feedback type="invalid" tooltip>
 					    {state.url.error}

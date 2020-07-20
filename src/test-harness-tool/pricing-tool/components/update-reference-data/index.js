@@ -6,14 +6,14 @@ import styles from './update-reference-data.scss'
 import common from '../../../common/common.scss'
 
 function UpdateReferenceData(props) {
-  const [showA, setShowA] = useState({ selectedFile: '', message: '', error: '', refresh: false });
+  const [showA, setShowA] = useState({ selectedFile: '', message: '', error: '', refresh: false, info: '' });
   const fileInput = useRef()
   const onFileUpload = () => { 
 	  if (!fileInput.current.value) {
-		  setShowA({...showA, error: 'Please choose file to upload', refresh: true})
+		  setShowA({...showA, error: 'Please choose file to upload', info: '', refresh: true})
 		  return false;
 	  }
-      const formData = new FormData(); 
+      const formData = new FormData();
       formData.append(
         "uploadfile",
         showA.selectedFile,
@@ -26,10 +26,14 @@ function UpdateReferenceData(props) {
       }
       Service.post("/rbs/th/uploadFile", formData, config).then((res) => {
 		fileInput.current.value = ''
-		setShowA({...showA, message: 'Upload successfully', error: '', selectedFile: '', refresh: true})
+		setShowA({...showA, message: 'Upload successfully', error: '', info: '', selectedFile: '', refresh: true})
 	  }).catch((error) => {
+		if (error.message.indexOf('304')) {
+		  setShowA({...showA, info: 'Unable to Save Uploaded Reference Data', message: '', error: '', selectedFile: '', refresh: true})
+		} else {
+		  setShowA({...showA, info: 'Unable to read the uploaded file due to Invalid Input', message: '', error: '', selectedFile: '', refresh: true})
+		}
 		fileInput.current.value = ''
-		setShowA({...showA, message: 'Upload successfully', error: '', selectedFile: '', refresh: true})
 	  }); 
   }
   
@@ -41,7 +45,7 @@ function UpdateReferenceData(props) {
 	  fileInput.current.value = '';
 	  return false;
 	}*/
-	setShowA({...showA, ...{ error: '', selectedFile: event.target.files[0], refresh: true, message: '' }})
+	setShowA({...showA, ...{ error: '', info: '', selectedFile: event.target.files[0], refresh: true, message: '' }})
   };
   
   const fileData = () => { 
@@ -77,6 +81,9 @@ function UpdateReferenceData(props) {
 		{fileData()}
 	    {showA.message !== null && (
 		  <div className={styles.fileMessage}>{showA.message}</div>
+	    )}
+		{showA.info !== '' && (
+		  <div className={styles.fileErrorMessage}>{showA.info}</div>
 	    )}
 	  </Card.Body>
 	  </Card>

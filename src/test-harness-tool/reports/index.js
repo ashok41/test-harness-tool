@@ -2548,6 +2548,10 @@ function RoutingPage() {
 	}
   }, slug)
   
+  const toDownloadLink = (link) => () => {
+    window.open(link,'_blank');
+  }
+  
   return (
 	<Row className={styles.container}>
 	{Object.keys(reports.data).length > 0 &&
@@ -2572,8 +2576,8 @@ function RoutingPage() {
 		  <div className={styles.relative}>
 		   <div className={styles.download}>
 		    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
-			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generatepdf/${reports.data.testcasesResultList[0].testSetId}`} download target="_blank">PDF</Dropdown.Item>
-			  <Dropdown.Item href={`http://localhost:8081/rbs/th/testdata/generateexcel/${reports.data.testcasesResultList[0].testSetId}/${reports.data.testcasesResultList[0].createdBy}`} download target="_blank">Excel</Dropdown.Item>
+			  <Dropdown.Item onClick={toDownloadLink(`http://localhost:8081/rbs/th/testdata/generatepdf/${reports.data.testcasesResultList[0].testSetId}`)}>PDF</Dropdown.Item>
+			  <Dropdown.Item onClick={toDownloadLink(`http://localhost:8081/rbs/th/testdata/generateexcel/${reports.data.testcasesResultList[0].testSetId}/${reports.data.testcasesResultList[0].createdBy}`)} >Excel</Dropdown.Item>
 			 </DropdownButton>
 		    <Button variant="primary" disabled className={styles.dropdown}>Email Report</Button>
 		    <Button variant="primary" disabled>Print</Button>

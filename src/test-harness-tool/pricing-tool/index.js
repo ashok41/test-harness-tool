@@ -17,8 +17,7 @@ function PricingTool() {
 	  history.push('/#')
   }
   const [key, setKey] = useState('business-parameters');
-
- return (
+  return (
    <div className={common.overlayContainer}>
       <Row className={styles.section}>
         <Col md="12" className={styles.pricingTabs}>
@@ -37,13 +36,13 @@ function PricingTool() {
 			onSelect={(k) => setKey(k)}
 			>
 			<Tab eventKey="business-parameters" title="Business Parameters">
-			 <BusinessParameters clear="business-parameters" />
+			 <BusinessParameters clear={key} />
 			</Tab>
 			<Tab eventKey="update-reference-data" title="Update Reference Data">
-			 <UpdateReferenceData clear="update-reference-data" />
+			 <UpdateReferenceData clear={key} />
 			</Tab>
 			<Tab eventKey="process-selected-test" title="Process Selective Scenarios">
-			 <ProcessSelectedTest clear="process-selected-test" />
+			 <ProcessSelectedTest clear={key} />
 			</Tab>
 		  </Tabs>
         </Col>

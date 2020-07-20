@@ -43,120 +43,16 @@ function processSelectedTest(props) {
 		  } else {
 			setLoading({loader: false, message: 'Please upload file with valid URL appropriate to the provided Environment'})
 			setShowA({selectedFile: '', message: '', error: '', refresh: false})
+			fileInput.current.value = '';
 		  }
 	  }).catch((error) => {
-		const seconds = Date.now() - start;
-		const executionTime = toTimeString(seconds/1000)
-		const data = {
-			"totalTestCases": 27,
-			"passed": 24,
-			"failed": 3,
-			"environment": "NFT",
-			"testcasesResultList": [
-			{
-					"actualAir": 7.6,
-					"actualApr": 0.6,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 6,
-		  			"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_001",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 7.2,
-					"actualApr": 0.2,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 7,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_002",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 1.3,
-					"actualApr": 2,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 12.69,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_003",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 0,
-					"actualApr": 0,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 12.69,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_004",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 0,
-					"actualApr": 0,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 12.69,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_005",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				}
-			]
+		  if (error.message.indexOf('404') !== -1) {
+		    setLoading({loader: false, message: 'Please upload file with valid URL appropriate to the provided Environment'})
+		  } else {
+			setLoading({loader: false, message: 'Unable to read the uploaded file due to Invalid Input'})
 		  }
-		  setLoading({loader: false, message: 'Please upload file with valid URL appropriate to the provided Environment'})
 		  setShowA({selectedFile: '', message: '', error: '', refresh: false})
 		  fileInput.current.value = '';
-		  /*history.push({
-			pathname: '/reports',
-			state: {data: data, executionTime: executionTime}
-		})*/
 	  }); 
   }
   

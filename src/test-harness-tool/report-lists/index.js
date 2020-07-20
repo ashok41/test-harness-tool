@@ -799,7 +799,7 @@ function ReportLists() {
 
     return [year, month, day].join('-');
   }
-  
+  console.log('state.from', state.from)
    return (
     <div className={common.overlayContainer}>
 	{businessAttributes.loader && <Row className={common.overlayInner}>
@@ -865,7 +865,9 @@ function ReportLists() {
 				     <Col sm="5">
 				      <DatePicker
 					  onChange={onTextUpdated('from')}
+					  locale='en-US'
 					  value={state.from}
+					  className={styles.dateRangePicker}
 					  maxDate={date}
 					  minDate={minDate}
 					 />
@@ -878,6 +880,7 @@ function ReportLists() {
 				     <Col sm="5">
 				      <DatePicker
 					  onChange={onTextUpdated('to')}
+					  locale='en-US'
 					  value={state.to}
 					  maxDate={date}
 				      minDate={minDate}
