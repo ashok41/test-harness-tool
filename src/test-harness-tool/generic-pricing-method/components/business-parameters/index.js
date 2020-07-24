@@ -215,7 +215,8 @@ function BusinessParameters(props) {
   
   useEffect(() => {
 	  if (state.customerDealSegement.data && state.pricingMethod.data) {
-		Service.get(`/rbs/th/gb/marginmethod/${state.customerDealSegement.data}`)
+		const method = state.pricingMethod.text.replace(/\s/gi, '').toLowerCase()
+		Service.get(`/rbs/th/gb/${method}/${state.customerDealSegement.data}`)
 	    .then((response) => {
 		  const { data } = response
 		  createDynamicMethod(data)
@@ -997,6 +998,19 @@ function BusinessParameters(props) {
   
   const onSelectedMethodChange = (label) => (e) => {
 	const data = e.target.value
+	Service.get(`/rbs/th/gb/marginmethod/${state.customerDealSegement.data}`)
+	    .then((response) => {
+		  const { data } = response
+		  createDynamicMethod(data)
+	    })
+	    .catch((error) => {
+		  const data = [
+		   {methodId: 'MM1', methodName: 'CPB Trad Busi PPFL Margin'},
+		   {methodId: 'MM2', methodName: 'CPB Trad Small Comm PPFL Margin'},
+		   {methodId: 'MM3', methodName: 'CPB Trad Busi Loans Margin'}
+		  ]
+		  createDynamicMethod(data)
+	})
 	if (data === '') {
 		let formData = {
 		  [label]: {...state[label], data: '', error: state[label].errorMessage, valid: false}

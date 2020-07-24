@@ -9,6 +9,7 @@ import ReportLists from '../test-harness-tool/report-lists'
 import Dashboard from '../test-harness-tool/dashboard'
 import Login from '../test-harness-tool/login'
 import PricingTool from '../test-harness-tool/pricing-tool'
+import GenericPricingMethod from '../test-harness-tool/generic-pricing-method'
 import RulesProcessing from '../test-harness-tool/rules-processing'
 import styles from '../test-harness-tool/common/common.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -44,6 +45,7 @@ render((
 	     <PrivateRoute path="/reports/:slug?/:slug1?" component={Reports}/>
 		 <PrivateRoute exact path="/" component={Dashboard}/>
 	     <PrivateRoute path="/pricing-tool/:slug?" component={PricingTool}/>
+		 <PrivateRoute path="/generic-pricing-method" component={GenericPricingMethod}/>
 	     <PrivateRoute path="/rules-processing/:slug" component={RulesProcessing}/>
 	    </Switch>
 	   </div>
