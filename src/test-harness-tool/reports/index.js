@@ -161,7 +161,8 @@ function ControlledTabs(props) {
 			<div className={styles.noRecords}>No Records to Display</div>
 		}
 		{filteredData.length > 0 &&
-		<Table responsive striped bordered hover size="md">
+		<div className={common.tableContainer}>
+		<table className={common.tableConatiner}>
 		  <thead>
 			<tr>
 			  {firstColumns.map((item) => {
@@ -169,7 +170,7 @@ function ControlledTabs(props) {
 				const rowSpan = item.rowSpan ? { rowSpan: item.rowSpan } : {}
 				const className = item.className ? { className: item.className } : {}
 				return <th {...rowSpan} {...colSpan} {...className}>
-				  {item.name}
+				  <div>{item.name}</div>
 				</th>
 		      })}
 			</tr>
@@ -221,7 +222,7 @@ function ControlledTabs(props) {
 			  </tr>
 			))}
 		  </tbody>
-		</Table>}
+		</table></div>}
 		  {filteredData.length > 10 && <div>
 		    <Pagination>{items}</Pagination>
 	      </div>}

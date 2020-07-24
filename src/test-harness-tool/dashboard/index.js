@@ -105,8 +105,16 @@ function Dashboard() {
 			</div>
             <div className={styles.listWrapper}>
 			 <ul className={styles.listGroup}>
-			  <li>
-			    <i /><span><a href="#pricing-tool">Pricing Tool</a></span>
+			   <li>
+			    <i />
+				<span>
+				 <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Pricing Tool">
+			      <Dropdown.Item href="#generic-pricing-method">Generic Pricing Method</Dropdown.Item>
+			      <Dropdown.Item href="#pricing-tool">Ulster</Dropdown.Item>
+				  <Dropdown.Item href="#civil">Civil</Dropdown.Item>
+				  <Dropdown.Item href="#/">Lombard</Dropdown.Item>
+			     </DropdownButton>
+			    </span>
 			  </li>
 			  <li>
 			    <i /><span><a href="#pricing-tool/product-finder">Lending Finder</a></span>
