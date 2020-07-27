@@ -58,6 +58,11 @@
 	color:#d81a36;
 	font-weight: 500;
 }
+.mandatoryContainer {
+	position: absolute;
+	top: -25px;
+	right: 0px;
+}
 .header-container {
 	div {
 		display: inline-block
@@ -67,6 +72,8 @@
 		font-size: 14px;
 		float: right;
 	}
+	border-bottom: none !important;
+	padding: 0.8rem 1.25rem 0.5rem 0rem !important;
 }
 .url-form {
 	margin-top: 5px;
@@ -80,5 +87,5 @@
   height: 18px; 
   position: absolute;
   right: -8px;
-  top: 8px;
+  top: 50px;
 }

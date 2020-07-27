@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Row, Col, Button, Table, Pagination, Card, Breadcrumb } from 'react-bootstrap'
+import { Row, Col, Button, Table, Pagination, Card, Breadcrumb, Spinner } from 'react-bootstrap'
 import { useHistory, useLocation } from 'react-router-dom'
 import Service from '../../../common/service'
 import ProfileList from '../../../common/profile-list'
@@ -8,6 +8,7 @@ import styles from './test-data.scss'
 import common from '../../../common/common.scss'
 
 function TestData() {
+  const [loading, setLoading] = useState(false)
   const history = useHistory()
   const location = useLocation()
   const {state: {postData, formData}} = location;
@@ -18,8 +19,10 @@ function TestData() {
   const [page, setPage] = useState(1)
   
   function handleSubmit() {
+	  setLoading(true)
 	  Service.get(`/rbs/th/testdata/airapr/${testsetid}`)
 	  .then((response) => {
+		  setLoading(false)
 		  const { data } = response
 		  history.push({
 			pathname: '/rules-processing/service-request',
@@ -27,6 +30,7 @@ function TestData() {
 		})
 	 })
 	 .catch(() => {
+		 setLoading(false)
 		 const data = [
         {
 			"actualAir": 0,
@@ -373,7 +377,19 @@ function TestData() {
 			pathname: '/pricing-tool',
 			state: formData
 		})}>Back</Button>{' '}
-		    <Button variant="primary" onClick={handleSubmit}>Next</Button>
+		    {loading ? 
+		    <Button variant="primary" disabled>
+			 <Spinner
+			  as="span"
+			  animation="grow"
+			  size="sm"
+			  role="status"
+			  aria-hidden="true"
+			/>
+			Inprogress...
+		    </Button>
+			: <Button variant="primary" onClick={handleSubmit}>Next</Button>
+		   }
 		  </div>
 		</Col>
 	  </Row>

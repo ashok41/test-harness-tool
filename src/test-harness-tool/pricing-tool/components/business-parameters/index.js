@@ -61,7 +61,7 @@ function BusinessParameters(props) {
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": {},
-			"refDataDesc": "Ulster",
+			 "refDataDesc": "Ulster",
 			"refDataKey": "AP001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
@@ -969,7 +969,7 @@ function BusinessParameters(props) {
 			}
 		  })
 		  .catch(() => {
-			  setState({...state, 'url': {data: state.url.data, error: 'Please enter valid URL', valid: false, loader: false, message: ''}})
+			  setState({...state, 'url': {data: state.url.data, error: '', valid: true, loader: false, message: 'ok'}})
 		  })
 	  }
   }
@@ -984,10 +984,7 @@ function BusinessParameters(props) {
 				  {error}
 				</Alert>
 			}
-            <Card.Header className={styles.headerContainer}>
-			 <div>{slug ? 'Lending Finder': 'Pricing'} Business Parameters</div>
-			 <div><span className={styles.mandatory}>*</span> Mandatory Fields</div>
-			</Card.Header>
+		    <div className={styles.mandatoryContainer}><span className={styles.mandatory}>*</span> Mandatory Fields</div>
             <Card.Body>
             <Form>
 			  <Row>
@@ -1184,6 +1181,18 @@ function BusinessParameters(props) {
 					  <Form.Control.Feedback type="invalid" tooltip>
 					    {state.url.error}
 					  </Form.Control.Feedback>
+					  <OverlayTrigger
+						  placement="right"	
+						  overlay={
+							<Tooltip>
+							  <div>NFT 11.158.4.85 9143</div>
+							  <div>UAT 11.158.4.156 9543</div>
+							  <div>DEV2 11.158.0.186 9443</div>
+							</Tooltip>
+						  }
+						>
+						<div className={styles.tooltip}><div className={styles.qicon} /></div>
+					  </OverlayTrigger>
 					  <div className={styles.mandatory}>Please enter URL appropriate to the selected Environment</div>
 					  <div className={styles.urlForm}>
 					   {state.url.loader ? 
