@@ -28,6 +28,7 @@ function BusinessParameters(props) {
   }
   const [state, setState] = useState(backFormData ? backFormData : initial)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const [businessAttributes, setBusinessAttributes] = useState({data: {}, loader: false})
   function handleSubmit(e) {
 	  e.preventDefault();
@@ -188,6 +189,7 @@ function BusinessParameters(props) {
   }
   
   function buildJSON(forms) {
+	  setLoading(true)
 	  const borrowingAmount = forms.borrowingAmount.data.split(',').map(Number);
 	  const riskBand = forms.riskBand.data.split(',').map(Number);
 	  const term = forms.term.data.split(',').map(Number);
@@ -1216,7 +1218,19 @@ function BusinessParameters(props) {
 				</Col>}
 			  </Row>
 			  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
-              <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
+			  {loading ? 
+		       <Button variant="primary" disabled>
+			    <Spinner
+			     as="span"
+			     animation="grow"
+			     size="sm"
+			     role="status"
+			     aria-hidden="true"
+			   />
+			   Inprogress...
+		      </Button>
+			  : <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
+		      }
             </Form>
             </Card.Body>
           </Card>
