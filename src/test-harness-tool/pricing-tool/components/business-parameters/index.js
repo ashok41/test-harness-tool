@@ -936,6 +936,14 @@ function BusinessParameters(props) {
 	  return valid
   }
   
+  function checkReferenceData() {
+	 if (state.productName.data !== '') {
+		return false
+	 } else {
+		return true
+	 }
+  }
+  
   function createProductName() {
 	if (state.productFamily.data) {
 		return productMapDetails[state.productFamily.data].map((familyItem) => {
@@ -974,6 +982,10 @@ function BusinessParameters(props) {
 			  setState({...state, 'url': {data: state.url.data, error: '', valid: true, loader: false, message: 'ok'}})
 		  })
 	  }
+  }
+  
+  const viewReferenceData = (link) => () => {
+	window.open(link,'_blank');
   }
   
   return (
@@ -1231,6 +1243,7 @@ function BusinessParameters(props) {
 		      </Button>
 			  : <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
 		      }
+			  {' '}<Button variant="primary" disabled={checkReferenceData()} onClick={viewReferenceData(`${Service.getApiRoot()}/rbs/th/generatelookup/${state.productName.data}`)}>View Reference Data</Button>
             </Form>
             </Card.Body>
           </Card>
