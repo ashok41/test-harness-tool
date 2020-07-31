@@ -25,7 +25,7 @@ function PricingTool() {
 		   <Col md="9">
 		    <Breadcrumb>
 		     <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
-		     <Breadcrumb.Item active>{slug ? 'Lending Finder': 'Pricing'} Tool</Breadcrumb.Item>
+		     <Breadcrumb.Item active>{slug ? 'Lending Finder Tool': 'Ulster'}</Breadcrumb.Item>
 		    </Breadcrumb>
 		   </Col>
 		   <Col md="3">
