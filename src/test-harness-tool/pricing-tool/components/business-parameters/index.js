@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb, OverlayTrigger, Tooltip, Spinner, Overlay  } from 'react-bootstrap'
+import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb, OverlayTrigger, Tooltip, Spinner } from 'react-bootstrap'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import Service from '../../../common/service'
 import axios from 'axios'
@@ -1114,14 +1114,6 @@ function BusinessParameters(props) {
 					  <Form.Control.Feedback type="invalid" tooltip>
 					   {state.productName.error}
 					  </Form.Control.Feedback>
-					  {lookup && <Overlay target={target.current} show={lookup} placement="right">
-						{(props) => (
-						  <Tooltip {...props}>
-
-						   {lookup}
-						  </Tooltip>
-						)}
-					  </Overlay>}
 					</Col>
 				  </Form.Group>}
 				  {slug && <Form.Group as={Row} controlId="environment">
@@ -1289,6 +1281,7 @@ function BusinessParameters(props) {
 			  : <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
 		      }
 			  <Button className={styles.referenceButton} variant="primary" disabled={checkReferenceData()} onClick={viewReferenceData(`${Service.getApiRoot()}/rbs/th/generatelookup/${state.productName.data}`)}>View Reference Data</Button>
+			  {lookup && <div className={styles.referenceMessage}>{lookup}</div>}
             </Form>
             </Card.Body>
           </Card>
