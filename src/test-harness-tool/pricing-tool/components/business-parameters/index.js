@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb, OverlayTrigger, Tooltip, Spinner } from 'react-bootstrap'
+import React, {useState, useEffect, useRef} from 'react';
+import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb, OverlayTrigger, Tooltip, Spinner, Overlay  } from 'react-bootstrap'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import Service from '../../../common/service'
 import axios from 'axios'
@@ -11,6 +11,7 @@ function BusinessParameters(props) {
   const history = useHistory()
   const location = useLocation()
   const params = useParams()
+  const target = useRef(null)
   const { slug }  = params
   const { state: backFormData } = location
   const productMapDetails = { 3: [4], 7: [5,6] }
@@ -29,6 +30,7 @@ function BusinessParameters(props) {
   const [state, setState] = useState(backFormData ? backFormData : initial)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [lookup, setLookup] = useState('')
   const [businessAttributes, setBusinessAttributes] = useState({data: {}, loader: false})
   function handleSubmit(e) {
 	  e.preventDefault();
@@ -895,6 +897,40 @@ function BusinessParameters(props) {
 	  }
   }
   
+  const onSelectedProductNameOptionChange = (label) => (e) => {
+	const data = e.target.value
+	if (data === '') {
+		let formData = {
+		  [label]: {data: '', error: errorFormFields[label], valid: false}
+		}
+   	    formData['borrowingAmount'] = initial.borrowingAmount
+		formData['riskBand'] = initial.riskBand
+		formData['term'] = initial.term
+		setState({...state, ...formData})
+		setLookup('')
+	} else {
+		let formData = {
+		  [label]: {data: data, error: '', valid: true}
+		}
+		formData['borrowingAmount'] = {...initial.borrowingAmount, disabled: false}
+		formData['riskBand'] = {...initial.riskBand, disabled: false}
+		formData['term'] = {...initial.term, disabled: false}
+		setState({...state, ...formData})
+		Service.get(`/rbs/th/generatelookup/onproduct/${data}`)
+		.then((response) => {
+			const {data} = response
+			if (data !== 'OK') {
+				setLookup(data)
+			} else {
+				setLookup('')
+			}
+		})
+		.catch(() => {
+			setLookup('Please Upload Reference data to get the Expected value')
+		})
+	}
+  }
+  
   const onSelectedSingleOptionChange = (label) => (e) => {
 	const data = e.target.value
 	if (data === '') {
@@ -1070,13 +1106,20 @@ function BusinessParameters(props) {
 				  {!slug && <Form.Group as={Row} controlId="productName">
 					<Form.Label column sm="3">Product Name <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" isInvalid={state.productName.error} value={state.productName.data} onChange={onSelectedSingleOptionChange('productName')}>
+					  <Form.Control as="select" ref={target} isInvalid={state.productName.error} value={state.productName.data} onChange={onSelectedProductNameOptionChange('productName')}>
 						<option value="">Please Select</option>
 						{createProductName()}
 					  </Form.Control>
 					  <Form.Control.Feedback type="invalid" tooltip>
 					   {state.productName.error}
 					  </Form.Control.Feedback>
+					  {lookup && <Overlay target={target.current} show={lookup} placement="right">
+						{(props) => (
+						  <Tooltip {...props}>
+						   {lookup}
+						  </Tooltip>
+						)}
+					  </Overlay>}
 					</Col>
 				  </Form.Group>}
 				  {slug && <Form.Group as={Row} controlId="environment">
