@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb, OverlayTrigger, Tooltip, Spinner } from 'react-bootstrap'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import Service from '../../../common/service'
@@ -11,7 +11,6 @@ function BusinessParameters(props) {
   const history = useHistory()
   const location = useLocation()
   const params = useParams()
-  const target = useRef(null)
   const { slug }  = params
   const { state: backFormData } = location
   const productMapDetails = { 3: [4], 7: [5,6] }
@@ -1107,7 +1106,7 @@ function BusinessParameters(props) {
 				  {!slug && <Form.Group as={Row} controlId="productName">
 					<Form.Label column sm="3">Product Name <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" ref={target} isInvalid={state.productName.error} value={state.productName.data} onChange={onSelectedProductNameOptionChange('productName')}>
+					  <Form.Control as="select" isInvalid={state.productName.error} value={state.productName.data} onChange={onSelectedProductNameOptionChange('productName')}>
 						<option value="">Please Select</option>
 						{createProductName()}
 					  </Form.Control>
