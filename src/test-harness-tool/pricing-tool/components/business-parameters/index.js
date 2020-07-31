@@ -890,7 +890,8 @@ function BusinessParameters(props) {
 		  validFlag = false
 	  }
 	  if (valid) {
-		  setState({...state, [label]: {data: data, error: valid, valid: validFlag}})
+		  setState({...state, [label]: {
+			  data: data, error: valid, valid: validFlag}})
 	  }
 	  if (isCommaLast && !valid) {
 		  setState({...state, [label]: {data: data, error: '', valid: true}})
@@ -1116,6 +1117,7 @@ function BusinessParameters(props) {
 					  {lookup && <Overlay target={target.current} show={lookup} placement="right">
 						{(props) => (
 						  <Tooltip {...props}>
+
 						   {lookup}
 						  </Tooltip>
 						)}
@@ -1286,7 +1288,7 @@ function BusinessParameters(props) {
 		      </Button>
 			  : <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
 		      }
-			  {' '}<Button variant="primary" disabled={checkReferenceData()} onClick={viewReferenceData(`${Service.getApiRoot()}/rbs/th/generatelookup/${state.productName.data}`)}>View Reference Data</Button>
+			  <Button className={styles.referenceButton} variant="primary" disabled={checkReferenceData()} onClick={viewReferenceData(`${Service.getApiRoot()}/rbs/th/generatelookup/${state.productName.data}`)}>View Reference Data</Button>
             </Form>
             </Card.Body>
           </Card>
