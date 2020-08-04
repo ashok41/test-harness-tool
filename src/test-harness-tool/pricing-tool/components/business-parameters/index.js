@@ -940,6 +940,9 @@ function BusinessParameters(props) {
 		if (label === 'environment') {
 		  formData['url'] = initial.url
 		}
+		if (label === 'productFamily') {
+			formData['productName'] = initial.productName
+		}
 		if (label === 'productName') {
 		  formData['borrowingAmount'] = initial.borrowingAmount
 		  formData['riskBand'] = initial.riskBand
@@ -952,6 +955,9 @@ function BusinessParameters(props) {
 		}
 		if (label === 'environment') {
 		  formData['url'] = {...initial.url, disabled: false}
+		}
+		if (label === 'productFamily'  && state.productFamily.data !== data) {
+			formData['productName'] = initial.productName
 		}
 		if (label === 'productName') {
 		  formData['borrowingAmount'] = {...initial.borrowingAmount, disabled: false}
@@ -973,7 +979,7 @@ function BusinessParameters(props) {
   }
   
   function checkReferenceData() {
-	 if (state.productName.data !== '') {
+	 if (state.productName.data !== '' && state.productFamily.data != '' && !lookup) {
 		return false
 	 } else {
 		return true
