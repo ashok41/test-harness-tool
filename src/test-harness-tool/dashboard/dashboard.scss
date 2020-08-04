@@ -130,3 +130,7 @@ ul.list-group > li {
 .popover-container {
 	left: 35px !important;
 }
+:global(.dropdown-menu) {
+	left: 50px !important;
+	top: -11px !important;
+}
