@@ -111,7 +111,7 @@ function Dashboard() {
 				 <DropdownButton id="dropdown-basic-button" drop="right" className={styles.dropdown} title="Pricing Tool">
 			      <Dropdown.Item href="#generic-pricing-method">Generic Pricing Method</Dropdown.Item>
 			      <Dropdown.Item href="#pricing-tool">Ulster</Dropdown.Item>
-				  <Dropdown.Item href="#/">Cibil</Dropdown.Item>
+				  <Dropdown.Item href="#/">CBIL</Dropdown.Item>
 				  <Dropdown.Item href="#/">Lombard</Dropdown.Item>
 			     </DropdownButton>
 			    </span>
