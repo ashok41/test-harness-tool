@@ -16,7 +16,7 @@ function BusinessParameters(props) {
   const productMapDetails = { 3: [4], 7: [5,6] }
 
   const initial = {	
-	locationIdentity: {data: '', error: '', valid: false, errorMessage: 'Please select Application Identity'},
+	locationIdentity: {data: '', error: '', valid: true, errorMessage: 'Please select Application Identity'},
 	bankDivision : {data: '', error: '', valid: false, errorMessage: 'Please select Bank Division'},
 	pricingMethod: {data: '', error: '', valid: false, errorMessage: 'Please select Pricing Method'},
 	environment: {data: '', error: '', valid: false, errorMessage: 'Please enter Environment'},
@@ -216,7 +216,7 @@ function BusinessParameters(props) {
   useEffect(() => {
 	  if (state.customerDealSegement.data && state.pricingMethod.data) {
 		const method = state.pricingMethod.text.replace(/\s/gi, '').toLowerCase()
-		Service.get(`/rbs/th/gb/${method}/${state.customerDealSegement.data}`)
+		Service.get(`/rbs/th/gp/${method}/${state.customerDealSegement.data}`)
 	    .then((response) => {
 		  const { data } = response
 		  createDynamicMethod(data)
@@ -888,8 +888,22 @@ function BusinessParameters(props) {
   const onURLUpdated = (label) => (e) => {
 	  setState({...state, [label]: {data: e.target.value, error: '', valid: false}})
   }
-  
   const onTextUpdated = (label) => (e) => {
+	const data = e.target.value
+	if (data === '') {
+		let formData = {
+		  [label]: {...state[label], data: '', error: state[label].errorMessage, valid: false}
+		}
+		setState({...state, ...formData})
+	} else {
+		let formData = {
+		  [label]: {...state[label], data: data, error: '', valid: true}
+		}
+		setState({...state, ...formData})
+	}
+  }
+  
+  const donTextUpdated = (label) => (e) => {
 	  const data = e.target.value;
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
@@ -961,14 +975,6 @@ function BusinessParameters(props) {
 		formData[label] = {...state[label], data: '', error: state[label].errorMessage, valid: false}
 		dynamicFormFields.current = {methods: {}}
 	}
-	if (state.customerDealSegement.data === '') {
-		formData['customerDealSegement'] = {...state['customerDealSegement'], data: '', error: state['customerDealSegement'].errorMessage, valid: false}
-		dynamicFormFields.current = {methods: {}}
-	}
-	if (state.pricingMethod.data === '') {
-		formData['pricingMethod'] = {...state['pricingMethod'], data: '', error: state['pricingMethod'].errorMessage, valid: false}
-		dynamicFormFields.current = {methods: {}}
-	}
 	if (data) {
 		formData[label] = {...state[label], data: data, error: '', valid: true, text: text}
 	}
@@ -997,36 +1003,58 @@ function BusinessParameters(props) {
   }
   
   const onSelectedMethodChange = (label) => (e) => {
-	const data = e.target.value
-	Service.get(`/rbs/th/gb/marginmethod/${state.customerDealSegement.data}`)
+	const selectedData = e.target.value
+	if (selectedData === '') {
+	  let formData = {
+		[label]: {...state[label], data: '', error: state[label].errorMessage, valid: false}
+	  }
+	  dynamicFormFields.current = {...dynamicFormFields.current, formfields: ''}
+	  setState({...state, ...formData})
+	} else {
+	  Service.get(`/rbs/th/gb/parameters/${state.customerDealSegement.data}/${state.pricingMethod.data}/${selectedData}`)
 	    .then((response) => {
 		  const { data } = response
-		  createDynamicMethod(data)
+		  let attrs = {}
+		  data.map((item) => {
+		    if (attrs[item.paramRefId] === undefined) {
+			  attrs[item.paramRefId] = []
+		    }
+		    attrs[item.paramRefId].push(item)
+		  })
+		  dynamicFormFields.current = { ...dynamicFormFields.current, formfields: attrs }
+		  let formData = {
+			[label]: {...state[label], data: selectedData, error: '', valid: true}
+		  }
+		  setState({...state, ...formData})
 	    })
 	    .catch((error) => {
 		  const data = [
-		   {methodId: 'MM1', methodName: 'CPB Trad Busi PPFL Margin'},
-		   {methodId: 'MM2', methodName: 'CPB Trad Small Comm PPFL Margin'},
-		   {methodId: 'MM3', methodName: 'CPB Trad Busi Loans Margin'}
+		   {paramId: 'P1', paramRefId: null, paramName: 'Term', paramFlag: null},
+		   {paramId: 'P2', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null},
+		   {paramId: 'P3', paramRefId: null, paramName: 'Security Coverage', paramFlag: null},
+		   {paramId: 'P4', paramRefId: null, paramName: 'Master Grading Scale', paramFlag: null},
+		   {paramId: 'P5', paramRefId: null, paramName: 'Sector', paramFlag: 'Y'},
+		   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
+		   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
+		   {paramId: 'P8', paramRefId: null, paramName: 'Sector1', paramFlag: 'Y'},
+		   {paramId: 'P9', paramRefId: 'P8', paramName: 'Health', paramFlag: null},
+		   {paramId: 'P10', paramRefId: 'P8', paramName: 'Agriculture', paramFlag: null},
 		  ]
-		  createDynamicMethod(data)
-	})
-	if (data === '') {
-		let formData = {
-		  [label]: {...state[label], data: '', error: state[label].errorMessage, valid: false}
-		}
-		if (label === 'environment') {
-		  formData['url'] = state.url
-		}
-		setState({...state, ...formData})
-	} else {
-		let formData = {
-		  [label]: {...state[label], data: data, error: '', valid: true}
-		}
-		if (label === 'environment') {
-		  formData['url'] = {...state.url, disabled: false}
-		}
-		setState({...state, ...formData})
+		  let attrs = {}
+		  let formData = {}
+		  data.map((item) => {
+		    if (attrs[item.paramRefId] === undefined) {
+			  attrs[item.paramRefId] = []
+		    }
+			if (item.paramRefId === null) {
+				formData[item.paramName] = {data: '', error: '', valid: false, errorMessage: `Please select ${item.paramName}`}
+			}
+		    attrs[item.paramRefId].push(item)
+		  })
+		  dynamicFormFields.current = { ...dynamicFormFields.current, formfields: attrs }
+		  formData[label] = {...state[label], data: selectedData, error: '', valid: true}
+		  setState({...state, ...formData})
+	  })
 	}
   }
   
@@ -1080,6 +1108,55 @@ function BusinessParameters(props) {
 	  }
   }
   
+  const renderDynamicFormFields = () => {
+    let a = dynamicFormFields.current.formfields && dynamicFormFields.current.formfields['null'].reduce((acc, item, idx) => {
+      let group = acc.pop();
+      if (group.length == 2) {
+        acc.push(group);
+        group = [];
+      }
+      group.push(item);
+      acc.push(group);
+      return acc;
+    }, [[]]);
+    
+    return a && a.map((item) => {
+      return (
+	    <Row>
+		 {item.map((field) => {
+		   const fieldData = state[field.paramName]
+		   return (<Col md="6">
+			{field.paramRefId === null && field.paramFlag === null ? 
+			   <Form.Group as={Row} controlId={field.paramName}>
+				<Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
+				 <Col sm="6">
+				  <Form.Control type="text" isInvalid={fieldData.error} value={fieldData.data} autoComplete="off" onChange={onTextUpdated(field.paramName)} />
+				  <Form.Control.Feedback type="invalid" tooltip>
+                   {fieldData.error}
+                  </Form.Control.Feedback>
+				 </Col>
+				</Form.Group>
+				:
+		       <Form.Group as={Row} controlId={field.paramName}>
+			    <Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
+			     <Col sm="6">
+			      <Form.Control as="select" isInvalid={fieldData.error} value={fieldData.data} onChange={onSelectedSingleOptionChange(field.paramName)}>
+				   <option value="">Please Select</option>
+				   {dynamicFormFields.current.formfields[field.paramId].map((item) => {
+				    return (<option value={item.paramId}>{item.paramName}</option>)
+				   })}
+			      </Form.Control>
+				  <Form.Control.Feedback type="invalid" tooltip>
+                    {fieldData.error}
+                   </Form.Control.Feedback>
+			     </Col>
+			   </Form.Group>
+			}
+		 </Col>)})}
+       </Row>)
+    });
+  }
+ 
   return (
    <div className={common.overlayContainer}>
       <Row>
@@ -1090,32 +1167,13 @@ function BusinessParameters(props) {
 				  {error}
 				</Alert>
 			}
-            <Card.Header className={styles.headerContainer}>
-			 <div></div>
-			 <div><span className={styles.mandatory}>*</span> Mandatory Fields</div>
-			</Card.Header>
-            <Card.Body className={styles.bodyContainer}>
+			<div className={styles.mandatoryContainer}><span className={styles.mandatory}>*</span> Mandatory Fields</div>
+            <Card.Body>
             <Form>
 			  <Row>
 			    <Col md="6">
-			     <Form.Group as={Row} controlId="locationIdentity">
-                   <Form.Label column sm="5">Application Identity <span className={styles.mandatory}>*</span></Form.Label>
-                   <Col sm="6">
-				     <Form.Control as="select" isInvalid={state.locationIdentity.error} value={state.locationIdentity.data} onChange={onSelectedSingleOptionChange('locationIdentity')}>
-                      <option value="">Please Select</option>
-					  {businessAttributes.data['AP001'] && businessAttributes.data['AP001'].map((item) => {
-						return (<option value={item.attributeId}>{item.refDataDesc}</option>)
-					  })}
-                     </Form.Control>
-					 <Form.Control.Feedback type="invalid" tooltip>
-					   {state.locationIdentity.error}
-					  </Form.Control.Feedback>
-				   </Col>
-                 </Form.Group>
-			    </Col>
-				<Col md="6">
-				  <Form.Group as={Row} controlId="bankDivision">
-                  <Form.Label column sm="4">Bank Division <span className={styles.mandatory}>*</span></Form.Label>
+			     <Form.Group as={Row} controlId="bankDivision">
+                  <Form.Label column sm="5">Bank Division <span className={styles.mandatory}>*</span></Form.Label>
                   <Col sm="6">
 				    <Form.Control as="select" isInvalid={state.bankDivision.error} value={state.bankDivision.data} onChange={onSelectedSingleOptionChange('bankDivision')}>
                       <option value="">Please Select</option>
@@ -1128,12 +1186,10 @@ function BusinessParameters(props) {
 					</Form.Control.Feedback>
 				   </Col>
                   </Form.Group>
-				</Col>
-			  </Row>
-			  <Row>
-			    <Col md="6">
-				  <Form.Group as={Row} controlId="customerDealSegement">
-					<Form.Label column sm="5">Customer Deal Segement <span className={styles.mandatory}>*</span></Form.Label>
+			    </Col>
+				<Col md="6">
+				  <Form.Group as={Row} controlId="customerDealSegment">
+					<Form.Label column sm="5">Customer Deal Segment <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
 					  <Form.Control as="select" isInvalid={state.customerDealSegement.error} value={state.customerDealSegement.data} onChange={customerDealSegementOptionChange('customerDealSegement')}>
 						<option value="">Please Select</option>
@@ -1147,9 +1203,11 @@ function BusinessParameters(props) {
 					</Col>
 				  </Form.Group>
 				</Col>
-				<Col md="6">
+			  </Row>
+			  <Row>
+			    <Col md="6">
 				  <Form.Group as={Row} controlId="pricingMethod">
-					<Form.Label column sm="4">Pricing Method <span className={styles.mandatory}>*</span></Form.Label>
+					<Form.Label column sm="5">Pricing Method <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
 					  <Form.Control as="select" isInvalid={state.pricingMethod.error} value={state.pricingMethod.data} onChange={customerDealSegementOptionChange('pricingMethod')}>
 						<option value="">Please Select</option>
@@ -1163,10 +1221,8 @@ function BusinessParameters(props) {
 					</Col>
 				  </Form.Group>
 				</Col>
-			  </Row>
-			  <Row>
-			    <Col md="6">
-				 {Object.keys(dynamicFormFields.current.methods).map((method) => {
+				<Col md="6">
+				  {Object.keys(dynamicFormFields.current.methods).map((method) => {
 				   return (<Form.Group as={Row} controlId={method}>
 					<Form.Label column sm="5">{method} <span className={styles.mandatory}>*</span></Form.Label>
 					 <Col sm="6">
@@ -1182,66 +1238,67 @@ function BusinessParameters(props) {
 					 </Col>
 				    </Form.Group>)
 				 })}
-			    </Col>
-			    <Col sm="6">
-				  <Row>  
-				    <Col sm="12">
-			          <Form.Group as={Row} controlId="environment">
-					   <Form.Label column sm="4">Environment <span className={styles.mandatory}>*</span></Form.Label>
-					   <Col sm="6">
-					    <Form.Control as="select" isInvalid={state.environment.error} value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
-						 <option value="">Please Select</option>
-						 <option value="NFT">NFT</option>
-						 <option value="UAT">UAT</option>
-						 <option value="Dev">Dev</option>
-					    </Form.Control>
-					    <Form.Control.Feedback type="invalid" tooltip>
-                         {state.environment.error}
-                        </Form.Control.Feedback>
-					    <OverlayTrigger
-						  placement="right"	
-						  overlay={
-							<Tooltip>Choose environment to run test cases</Tooltip>
-						  }
-						>
-						 <div className={styles.tooltip}><div className={styles.qicon} /></div>
-					    </OverlayTrigger>
-					   </Col>
-				      </Form.Group>
-				    </Col>
-				    <Col sm="12">
-			          <Form.Group as={Row} controlId="url">
-					   <Form.Label column sm="4">URL <span className={styles.mandatory}>*</span></Form.Label>
-					   <Col sm="6" className={styles.urlBox}>
-					    <Form.Control as="textarea" isInvalid={state.url.error} disabled={state.url.disabled} value={state.url.data} autoComplete="off" onChange={onURLUpdated('url')} rows="3" />
-					     {state.url.message && <div className={styles.tickIcon} />}
-					     <Form.Control.Feedback type="invalid" tooltip>
-					    {state.url.error}
-					    </Form.Control.Feedback>
-					    <div className={styles.mandatory}>Please enter URL appropriate to the selected Environment</div>
-					    <div className={styles.urlForm}>
-					     {state.url.loader ? 
-						 <Button variant="primary" disabled>
-						  <Spinner
-						   as="span"
-						   animation="grow"
-						   size="sm"
-						   role="status"
-						   aria-hidden="true"
-						  />
-						   Inprogress...
-						 </Button>
-						 : <Button variant="primary" onClick={validate}>Validate</Button>
-					     }
-					    </div>
-					   </Col>
-				      </Form.Group>
-				    </Col>
-				  </Row>
 				</Col>
 			  </Row>
+		      {renderDynamicFormFields()}
+			  <div>
+			  <div className={styles.bottomBox}>
 			  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
               <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
+			  </div>
+			  <div className={styles.bottomBox}>
+			  <Form.Group  controlId="environment">
+			   <Form.Label column sm="12">Environment <span className={styles.mandatory}>*</span></Form.Label>
+			   <Col sm="12">
+				<Form.Control as="select" isInvalid={state.environment.error} value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
+				 <option value="">Please Select</option>
+				 <option value="NFT">NFT</option>
+				 <option value="UAT">UAT</option>
+				 <option value="Dev">Dev</option>
+				</Form.Control>
+				<Form.Control.Feedback type="invalid" tooltip>
+				 {state.environment.error}
+				</Form.Control.Feedback>
+				<OverlayTrigger
+				  placement="right"	
+				  overlay={
+					<Tooltip>Choose environment to run test cases</Tooltip>
+				  }
+				>
+				 <div className={styles.tooltip}><div className={styles.qicon} /></div>
+				</OverlayTrigger>
+			   </Col>
+		  </Form.Group>
+		  </div>
+		  <div className={styles.bottomBox}>
+			  <Form.Group controlId="url">
+			   <Form.Label column sm="12">URL <span className={styles.mandatory}>*</span></Form.Label>
+			   <Col sm="12" className={styles.urlBox}>
+				<Form.Control as="textarea" isInvalid={state.url.error} disabled={state.url.disabled} value={state.url.data} autoComplete="off" onChange={onURLUpdated('url')} rows="3" />
+				 {state.url.message && <div className={styles.tickIcon} />}
+				 <Form.Control.Feedback type="invalid" tooltip>
+				{state.url.error}
+				</Form.Control.Feedback>
+				<div className={styles.mandatory}>Please enter URL appropriate to the selected Environment</div>
+				<div className={styles.urlForm}>
+				 {state.url.loader ? 
+				 <Button variant="primary" disabled>
+				  <Spinner
+				   as="span"
+				   animation="grow"
+				   size="sm"
+				   role="status"
+				   aria-hidden="true"
+				  />
+				   Inprogress...
+				 </Button>
+				 : <Button variant="primary" onClick={validate}>Validate</Button>
+				 }
+				</div>
+				</Col>
+			   </Form.Group>
+			   </div>
+		   </div>
             </Form>
             </Card.Body>
           </Card>
