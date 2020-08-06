@@ -76,7 +76,8 @@
 	padding: 0.8rem 1.25rem 0.5rem 0rem !important;
 }
 .url-form {
-	margin-top: 5px;
+	margin-left: 237px;
+	display: inline-block;
 }
 .url-box {
 	position: relative;
@@ -100,4 +101,7 @@
 }
 .bottom-box:nth-child(1) {
 	margin-top: 20px;
+}
+.reference-button {
+	margin-left: 105px !important;
 }

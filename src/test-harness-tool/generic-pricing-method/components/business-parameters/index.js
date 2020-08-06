@@ -16,22 +16,22 @@ function BusinessParameters(props) {
   const productMapDetails = { 3: [4], 7: [5,6] }
 
   const initial = {	
-	locationIdentity: {data: '', error: '', valid: true, errorMessage: 'Please select Application Identity'},
+	applicationIdentity: {data: 1, error: '', valid: true, errorMessage: 'Please select Application Identity'},
 	productFamily: {data: '', error: '', valid: false, errorMessage: 'Please select Product Family'},
 	productName: {data: '', error: '', valid: false, errorMessage: 'Please select Product Name'},
 	bankDivision : {data: '', error: '', valid: false, errorMessage: 'Please select Bank Division'},
 	totalCustomerLimit: {data: '', error: '', valid: false, errorMessage: 'Please enter Total Customer Limit'},
-	turnover: {data: '', error: '', valid: false, errorMessage: 'Please enter Turnover'},
-	balanceSheetNetAssets: {data: '', error: '', valid: false, errorMessage: 'Please enter Balance Sheet Net Assets'},
-	pricingMethod: {data: '', error: '', valid: false, errorMessage: 'Please select Pricing Method'},
+	turnOver: {data: '', error: '', valid: false, errorMessage: 'Please enter Turnover'},
+	balanceSheetNetAsset: {data: '', error: '', valid: false, errorMessage: 'Please enter Balance Sheet Net Assets'},
+	pricingMethodId: {data: '', error: '', valid: false, errorMessage: 'Please select Pricing Method'},
 	environment: {data: '', error: '', valid: false, errorMessage: 'Please enter Environment'},
-	customerDealSegement: {data: '', error: '', valid: false, errorMessage: 'Please select Customer Deal Segement'},
-    url: {data: '', error: '', valid: false, loader: false, disabled: true, message: '', errorMessage: 'Please enter URL'}
+	customerDealSegmentId: {data: '', error: '', valid: false, errorMessage: 'Please select Customer Deal Segment'},
+    wsdlUrl: {data: '', error: '', valid: false, loader: false, disabled: true, message: '', errorMessage: 'Please enter URL'}
   }
   const [state, setState] = useState(backFormData ? backFormData : initial)
   const [error, setError] = useState('')
   const [businessAttributes, setBusinessAttributes] = useState({data: {}, loader: false})
-  const [customerDealSegement, setCustomerDealSegement] = useState({data: []})
+  const [customerDealSegmentId, setCustomerDealSegement] = useState({data: []})
   function handleSubmit(e) {
 	  e.preventDefault();
 	  const error = validation(state)
@@ -199,29 +199,31 @@ function BusinessParameters(props) {
   }
   
   useEffect(() => {
-	 if (customerDealSegement.data.length === 0) {
+	 if (customerDealSegmentId.data.length === 0) {
 		getCustomerDealSegement()
 	 }
-  }, [customerDealSegement.data])
+  }, [customerDealSegmentId.data])
   
   function createDynamicMethod(data) {
 	let formData = {}
-	if (!tempMethod.current || (tempMethod.current && state.pricingMethod.text !== tempMethod.current)) {
+	let fieldName = state.pricingMethodId.text.replace(/\s/, '')
+    fieldName = `${fieldName[0].toLowerCase() + fieldName.slice(1)}Id`
+	if (!tempMethod.current || (tempMethod.current && fieldName !== tempMethod.current)) {
 	  if (tempMethod.current) {
 		delete state[tempMethod.current]
 	  }
-	  tempMethod.current = state.pricingMethod.text
+	  tempMethod.current = fieldName
     }
-    formData[state.pricingMethod.text] = {data: '', error: '', valid: false, errorMessage: `Please select ${state.pricingMethod.text}`}
+    formData[fieldName] = {data: '', error: '', valid: false, errorMessage: `Please select ${state.pricingMethodId.text}`}
    
-    dynamicFormFields.current = { methods: {[state.pricingMethod.text]: data} }
+    dynamicFormFields.current = { methods: {[fieldName]: data} }
     setState({...state, ...formData})
   }
   
   useEffect(() => {
-	  if (state.customerDealSegement.data && state.pricingMethod.data) {
-		const method = state.pricingMethod.text.replace(/\s/gi, '').toLowerCase()
-		Service.get(`/rbs/th/gp/${method}/${state.customerDealSegement.data}`)
+	  if (state.customerDealSegmentId.data && state.pricingMethodId.data) {
+		const method = state.pricingMethodId.text.replace(/\s/gi, '').toLowerCase()
+		Service.get(`/rbs/th/gp/${method}/${state.customerDealSegmentId.data}`)
 	    .then((response) => {
 		  const { data } = response
 		  createDynamicMethod(data)
@@ -235,43 +237,43 @@ function BusinessParameters(props) {
 		  createDynamicMethod(data)
 	    })
 	  }
-  }, [state.customerDealSegement.data, state.pricingMethod.data])
+  }, [state.customerDealSegmentId.data, state.pricingMethodId.data])
   
   function validation(forms) {
 	let errors = ''
-	if (forms.locationIdentity.data === '') {
-		errors = initial.locationIdentity.errorMessage;
+	if (forms.applicationIdentity.data === '') {
+		errors = initial.applicationIdentity.errorMessage;
 	} 
 	if (errors === '' && forms.bankDivision.data === '') {
 		errors = initial.bankDivision.errorMessage;
 	}
-	if (errors === '' && forms.customerDealSegement.data === '') {
-		errors = initial.customerDealSegement.errorMessage;
+	if (errors === '' && forms.customerDealSegmentId.data === '') {
+		errors = initial.customerDealSegmentId.errorMessage;
 	}
-	if (errors === '' && forms.pricingMethod.data === '') {
-		errors = initial.pricingMethod.errorMessage;
+	if (errors === '' && forms.pricingMethodId.data === '') {
+		errors = initial.pricingMethodId.errorMessage;
 	}
 	if (errors === '' && forms.environment.data === '') {
 		errors = initial.environment.errorMessage;
 	}
-	if (errors === '' && forms.url.data === '') {
-		errors = initial.url.errorMessage;
+	if (errors === '' && forms.wsdlUrl.data === '') {
+		errors = initial.wsdlUrl.errorMessage;
 	}
 	return errors
   }
   
   function buildJSON(forms) {
-	  const borrowingAmount = forms.borrowingAmount.data.split(',').map(Number);
-	  const riskBand = forms.riskBand.data.split(',').map(Number);
-	  const term = forms.term.data.split(',').map(Number);
 	  const lists = {}
-	  lists['customerDealSegement'] = forms.customerDealSegement.data;
-	  lists['applicationIdentity'] = Number(forms.locationIdentity.data);
-	  lists['bankDivision'] = Number(forms.bankDivision.data);
+	  Object.keys(forms).map((item) => {
+		const formData = forms[item].data
+	    if(formData % 1 === 0){
+			lists[item] = Number(forms[item].data)
+		} else {
+			lists[item] = forms[item].data
+		}
+	  })
 	  lists['userId'] = localStorage.getItem('logged');
-	  lists['environment'] = forms.environment.data;
-	  lists['wsdlUrl'] = forms.url.data;
-	  Service.post('/rbs/th/testdata', lists)
+	  Service.post('/rbs/th/gp/testdata', lists)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
@@ -282,557 +284,22 @@ function BusinessParameters(props) {
 	 .catch(() => {
 		 const data = [
         {
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 10,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 2,
-			"termFactor": 1,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 1,
+			"testTransactionId": 22846,
+			"testSetId": 1169,
 			"testTransactionNo": "TH_001_001",
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Commercial",
+			"productFamily": "Loan",
+			"productName": "Small Business Loan",
+			"totalCustomerLimit": 100,
+			"turnOver": 1200,
+			"balanceSheetNetAsset": 1000,
+			"marginMethodId": "MM5",
+			"testTransactionFlag": {},
 			"totalRecord": 2,
 			"xmlDifference": "",
 			"environment": "NFT"
 	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    },
-		{
-			"actualAir": 0,
-			"actualApr": 0,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Business",
-			"borrowingAmount": 20,
-			"expectetAir": 0,
-			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
-			"riskBand": 3,
-			"termFactor": 2,
-			"testSetId": 1,
-			"testTransactionFlag": {},
-			"testTransactionId": 2,
-			"testTransactionNo": "TH_001_002",
-			"totalRecord": 2,
-			"xmlDifference": ""
-	    }	
 		]
 		  history.push({
 			pathname: '/rules-processing/test-data',
@@ -993,7 +460,7 @@ function BusinessParameters(props) {
 		  [label]: {...state[label], data: '', error: state[label].errorMessage, valid: false}
 		}
 		if (label === 'environment') {
-		  formData['url'] = state.url
+		  formData['wsdlUrl'] = state.wsdlUrl
 		}
 		setState({...state, ...formData})
 	} else {
@@ -1001,7 +468,7 @@ function BusinessParameters(props) {
 		  [label]: {...state[label], data: data, error: '', valid: true}
 		}
 		if (label === 'environment') {
-		  formData['url'] = {...state.url, disabled: false}
+		  formData['wsdlUrl'] = {...state.wsdlUrl, disabled: false}
 		}
 		setState({...state, ...formData})
 	}
@@ -1016,26 +483,39 @@ function BusinessParameters(props) {
 	  dynamicFormFields.current = {...dynamicFormFields.current, formfields: ''}
 	  setState({...state, ...formData})
 	} else {
-	  Service.get(`/rbs/th/gp/parameters/${state.customerDealSegement.data}/${state.pricingMethod.data}/${selectedData}`)
+	  Service.get(`/rbs/th/gp/parameters/${state.customerDealSegmentId.data}/${state.pricingMethodId.data}/${selectedData}`)
 	    .then((response) => {
 		  const { data } = response
 		  let attrs = {}
+		  let formData = {}
 		  data.map((item) => {
 		    if (attrs[item.paramRefId] === undefined) {
 			  attrs[item.paramRefId] = []
 		    }
+			if (item.paramRefId === null) {
+				let field = item.paramName.replace(/\s/, '')
+				field = field[0].toLowerCase() + field.slice(1)
+				formData[field] = {data: '', error: '', valid: false, errorMessage: `Please select ${item.paramName}`}
+			}
 		    attrs[item.paramRefId].push(item)
 		  })
 		  dynamicFormFields.current = { ...dynamicFormFields.current, formfields: attrs }
-		  let formData = {
-			[label]: {...state[label], data: selectedData, error: '', valid: true}
-		  }
+		  formData[label] = {...state[label], data: selectedData, error: '', valid: true}
 		  setState({...state, ...formData})
 	    })
-	    .catch((error) => {
+	    .catch((error) => {  
 		  const data = [
 		   {paramId: 'P1', paramRefId: null, paramName: 'Term', paramFlag: null},
-		   {paramId: 'P1', paramRefId: null, paramName: 'Risk Factor', paramFlag: null},
+		   {paramId: 'P2', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null},
+		   {paramId: 'P3', paramRefId: null, paramName: 'Risk Factor', paramFlag: null},
+		   {paramId: 'P4', paramRefId: null, paramName: 'Risk Factor', paramFlag: null},
+		   {paramId: 'P5', paramRefId: null, paramName: 'Risk Factor', paramFlag: 'Y'},
+		   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
+		   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
+		   {paramId: 'P8', paramRefId: 'P5', paramName: 'Media', paramFlag: null},
+		   {paramId: 'P9', paramRefId: 'P5', paramName: 'Risk Factor', paramFlag: null},
+		   {paramId: 'P10', paramRefId: 'P5', paramName: 'Risk Factor', paramFlag: null},
+		   {paramId: 'P11', paramRefId: 'P5', paramName: 'Risk Factor', paramFlag: null}
 			  ]
 		  let attrs = {}
 		  let formData = {}
@@ -1044,7 +524,9 @@ function BusinessParameters(props) {
 			  attrs[item.paramRefId] = []
 		    }
 			if (item.paramRefId === null) {
-				formData[item.paramName] = {data: '', error: '', valid: false, errorMessage: `Please select ${item.paramName}`}
+				let field = item.paramName.replace(/\s/, '')
+				field = field[0].toLowerCase() + field.slice(1)
+				formData[field] = {data: '', error: '', valid: false, errorMessage: `Please select ${item.paramName}`}
 			}
 		    attrs[item.paramRefId].push(item)
 		  })
@@ -1080,8 +562,8 @@ function BusinessParameters(props) {
   
   function validate() {
 	let formData = {}
-	if (state.environment.data && state.url.data === '') {
-	  formData['url'] = {data: state.url.data, error: 'Please enter URL', valid: false}
+	if (state.environment.data && state.wsdlUrl.data === '') {
+	  formData['wsdlUrl'] = {data: state.wsdlUrl.data, error: 'Please enter URL', valid: false}
 	}
 	if (state.environment.data === '') {
 	  formData['environment'] = {data: state.environment.data, error: 'Please select Environment', valid: false }
@@ -1089,18 +571,18 @@ function BusinessParameters(props) {
 	if (Object.keys(formData).length > 0) {
 	  setState({...state, ...formData})
 	} else {
-		  setState({...state, 'url': {data: state.url.data, error: '', valid: false, loader: true}})
-		  Service.post(`/rbs/th/validateUrl/?url=${state.url.data}`)
+		  setState({...state, 'wsdlUrl': {data: state.wsdlUrl.data, error: '', valid: false, loader: true}})
+		  Service.post(`/rbs/th/validateUrl/?url=${state.wsdlUrl.data}`)
 		  .then((response) => {
 			const { data } = response
 			if (data === 'OK') {
-				setState({...state, 'url': {data: state.url.data, error: '', valid: true, loader: false, message: 'ok'}})
+				setState({...state, 'wsdlUrl': {data: state.wsdlUrl.data, error: '', valid: true, loader: false, message: 'ok'}})
 			} else {
-				setState({...state, 'url': {data: state.url.data, error: 'Please enter valid URL', valid: false, loader: false, message: ''}})
+				setState({...state, 'wsdlUrl': {data: state.wsdlUrl.data, error: 'Please enter valid URL', valid: false, loader: false, message: ''}})
 			}
 		  })
 		  .catch(() => {
-			  setState({...state, 'url': {data: state.url.data, error: '', valid: true, loader: false, message: 'ok'}})
+			  setState({...state, 'wsdlUrl': {data: state.wsdlUrl.data, error: '', valid: true, loader: false, message: 'ok'}})
 		  })
 	  }
   }
@@ -1121,13 +603,15 @@ function BusinessParameters(props) {
       return (
 	    <>
 		 {item.map((field) => {
-		   const fieldData = state[field.paramName]
+		   let fieldName = field.paramName.replace(/\s/, '')
+		   fieldName = fieldName[0].toLowerCase() + fieldName.slice(1)
+		   const fieldData = state[fieldName]
 		   return (<Col md="6">
 			{field.paramRefId === null && field.paramFlag === null ? 
 			   <Form.Group as={Row} controlId={field.paramName}>
 				<Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
 				 <Col sm="6">
-				  <Form.Control type="text" isInvalid={fieldData.error} value={fieldData.data} autoComplete="off" onChange={onTextUpdated(field.paramName)} />
+				  <Form.Control type="text" isInvalid={fieldData.error} value={fieldData.data} autoComplete="off" onChange={onTextUpdated(fieldName)} />
 				  <Form.Control.Feedback type="invalid" tooltip>
                    {fieldData.error}
                   </Form.Control.Feedback>
@@ -1137,7 +621,7 @@ function BusinessParameters(props) {
 		       <Form.Group as={Row} controlId={field.paramName}>
 			    <Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
 			     <Col sm="6">
-			      <Form.Control as="select" isInvalid={fieldData.error} value={fieldData.data} onChange={onSelectedSingleOptionChange(field.paramName)}>
+			      <Form.Control as="select" isInvalid={fieldData.error} value={fieldData.data} onChange={onSelectedSingleOptionChange(fieldName)}>
 				   <option value="">Please Select</option>
 				   {dynamicFormFields.current.formfields[field.paramId].map((item) => {
 				    return (<option value={item.paramId}>{item.paramName}</option>)
@@ -1253,23 +737,23 @@ function BusinessParameters(props) {
 			  </Row>
 			  <Row>
 			    <Col md="6">
-				  <Form.Group as={Row} controlId="turnover">
+				  <Form.Group as={Row} controlId="turnOver">
 					<Form.Label column sm="5">Turnover <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control type="text" isInvalid={state.turnover.error} value={state.turnover.data} autoComplete="off" onChange={onTextUpdated('turnover')} />
+					  <Form.Control type="text" isInvalid={state.turnOver.error} value={state.turnOver.data} autoComplete="off" onChange={onTextUpdated('turnOver')} />
 					  <Form.Control.Feedback type="invalid" tooltip>
-					   {state.turnover.error}
+					   {state.turnOver.error}
 					  </Form.Control.Feedback>
 					</Col>
 				  </Form.Group>
 			    </Col>
 				<Col md="6">
-				  <Form.Group as={Row} controlId="balanceSheetNetAssets">
+				  <Form.Group as={Row} controlId="balanceSheetNetAsset">
 					<Form.Label column sm="5">Balance Sheet Net Assets <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control type="text" isInvalid={state.balanceSheetNetAssets.error} value={state.balanceSheetNetAssets.data} autoComplete="off" onChange={onTextUpdated('balanceSheetNetAssets')} />
+					  <Form.Control type="text" isInvalid={state.balanceSheetNetAsset.error} value={state.balanceSheetNetAsset.data} autoComplete="off" onChange={onTextUpdated('balanceSheetNetAsset')} />
 					  <Form.Control.Feedback type="invalid" tooltip>
-					   {state.balanceSheetNetAssets.error}
+					   {state.balanceSheetNetAsset.error}
 					  </Form.Control.Feedback>
 					</Col>
 				  </Form.Group>
@@ -1277,48 +761,44 @@ function BusinessParameters(props) {
 			  </Row>
 			  <Row>
 			    <Col md="6">
-				  <Form.Group as={Row} controlId="pricingMethod">
+				  <Form.Group as={Row} controlId="pricingMethodId">
 					<Form.Label column sm="5">Pricing Method <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" isInvalid={state.pricingMethod.error} value={state.pricingMethod.data} onChange={customerDealSegementOptionChange('pricingMethod')}>
+					  <Form.Control as="select" isInvalid={state.pricingMethodId.error} value={state.pricingMethodId.data} onChange={customerDealSegementOptionChange('pricingMethodId')}>
 						<option value="">Please Select</option>
 						{businessAttributes.data['MN001'] && businessAttributes.data['MN001'].map((item) => {
 						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
 					    })}
 					  </Form.Control>
 					  <Form.Control.Feedback type="invalid" tooltip>
-					   {state.pricingMethod.error}
+					   {state.pricingMethodId.error}
 					  </Form.Control.Feedback>
 					</Col>
 				  </Form.Group>
 				</Col>
 				<Col md="6">
-				  <Form.Group as={Row} controlId="customerDealSegment">
+				  <Form.Group as={Row} controlId="customerDealSegmentId">
 					<Form.Label column sm="5">Customer Deal Segment <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" isInvalid={state.customerDealSegement.error} value={state.customerDealSegement.data} onChange={customerDealSegementOptionChange('customerDealSegement')}>
+					  <Form.Control as="select" isInvalid={state.customerDealSegmentId.error} value={state.customerDealSegmentId.data} onChange={customerDealSegementOptionChange('customerDealSegmentId')}>
 						<option value="">Please Select</option>
-						{customerDealSegement.data.map((item) => {
+						{customerDealSegmentId.data.map((item) => {
 						  return (<option value={item.customerDealSegmentId}>{item.customerDealSegmentName}</option>)
 					    })}
 					  </Form.Control>
 					  <Form.Control.Feedback type="invalid" tooltip>
-					   {state.customerDealSegement.error}
+					   {state.customerDealSegmentId.error}
 					  </Form.Control.Feedback>
 					</Col>
 				  </Form.Group>
 				</Col>
 			  </Row>
 		      {renderDynamicFormFields()}
-			  <div>
-			  <div className={styles.bottomBox}>
-			  <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
-              <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
-			  </div>
-			  <div className={styles.bottomBox}>
-			  <Form.Group  controlId="environment">
-			   <Form.Label column sm="12">Environment <span className={styles.mandatory}>*</span></Form.Label>
-			   <Col sm="12">
+			  <Row>
+			  <Col md="6">
+			  <Form.Group as={Row} controlId="environment">
+			   <Form.Label column sm="5">Environment <span className={styles.mandatory}>*</span></Form.Label>
+			   <Col sm="6">
 				<Form.Control as="select" isInvalid={state.environment.error} value={state.environment.data} onChange={onSelectedSingleOptionChange('environment')}>
 				 <option value="">Please Select</option>
 				 <option value="NFT">NFT</option>
@@ -1337,20 +817,28 @@ function BusinessParameters(props) {
 				 <div className={styles.tooltip}><div className={styles.qicon} /></div>
 				</OverlayTrigger>
 			   </Col>
-		  </Form.Group>
-		  </div>
-		  <div className={styles.bottomBox}>
-			  <Form.Group controlId="url">
-			   <Form.Label column sm="12">URL <span className={styles.mandatory}>*</span></Form.Label>
-			   <Col sm="12" className={styles.urlBox}>
-				<Form.Control as="textarea" isInvalid={state.url.error} disabled={state.url.disabled} value={state.url.data} autoComplete="off" onChange={onURLUpdated('url')} rows="3" />
-				 {state.url.message && <div className={styles.tickIcon} />}
+				</Form.Group>
+				</Col>
+			  <Col md="6">
+			  <Form.Group as={Row} controlId="wsdlUrl">
+			   <Form.Label column sm="2">URL <span className={styles.mandatory}>*</span></Form.Label>
+			   <Col sm="9" className={styles.urlBox}>
+				<Form.Control as="textarea" isInvalid={state.wsdlUrl.error} disabled={state.wsdlUrl.disabled} value={state.wsdlUrl.data} autoComplete="off" onChange={onURLUpdated('wsdlUrl')} rows="1" />
+				 {state.wsdlUrl.message && <div className={styles.tickIcon} />}
 				 <Form.Control.Feedback type="invalid" tooltip>
-				{state.url.error}
+				{state.wsdlUrl.error}
 				</Form.Control.Feedback>
 				<div className={styles.mandatory}>Please enter URL appropriate to the selected Environment</div>
-				<div className={styles.urlForm}>
-				 {state.url.loader ? 
+				</Col>
+			   </Form.Group>
+			   </Col>
+			  </Row>
+			  <div>
+			   <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
+               <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
+			   <Button className={styles.referenceButton} variant="primary" disabled="true">View Reference Data</Button>
+			   <div className={styles.urlForm}>
+				 {state.wsdlUrl.loader ? 
 				 <Button variant="primary" disabled>
 				  <Spinner
 				   as="span"
@@ -1364,10 +852,7 @@ function BusinessParameters(props) {
 				 : <Button variant="primary" onClick={validate}>Validate</Button>
 				 }
 				</div>
-				</Col>
-			   </Form.Group>
-			   </div>
-		   </div>
+			  </div>
             </Form>
             </Card.Body>
           </Card>
