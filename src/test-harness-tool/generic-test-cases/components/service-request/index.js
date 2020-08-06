@@ -10,63 +10,7 @@ function ServiceRequest() {
   const [loading, setLoading] = useState(false)
   const history = useHistory();
   const location = useLocation();
-  //const {state} = location;
-  const state = {
-		"testSetId": 1169,
-		"applicationIdentity": "Ulster",
-		"bankDivision": "Commercial",
-		"productFamily": "Loans",
-		"productName": "Fixed Rate Loan",
-		"totalRecord": 2,
-		"environment": "NFT",
-		"marginMethodId": "MM5",
-		"marginMethodName": "CPB Trad Busi Loans",
-		"customerDealSegmentId": "CDS6",
-		"customerDealSegmentName": "CPB Trading Busi",
-		"pricingMethodId": 8,
-		"pricingMethodName": "Margin Method",
-     	"genericPricingTestCaseList": [
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4
-			},
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 3.1,
-				"actualMarginRate": 33.4
-			},
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 2.1,
-				"actualMarginRate": 33.4
-			}
-		]
-		}
+  const {state} = location;
   const testsetid = state.testSetId
   const createdby = state.createdBy
   const [sort, setSort] = useState({})
