@@ -11,6 +11,7 @@ import Login from '../test-harness-tool/login'
 import PricingTool from '../test-harness-tool/pricing-tool'
 import GenericPricingMethod from '../test-harness-tool/generic-pricing-method'
 import RulesProcessing from '../test-harness-tool/rules-processing'
+import GenericTestCases from '../test-harness-tool/generic-test-cases'
 import styles from '../test-harness-tool/common/common.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -47,6 +48,7 @@ render((
 	     <PrivateRoute path="/pricing-tool/:slug?" component={PricingTool}/>
 		 <PrivateRoute path="/generic-pricing-method" component={GenericPricingMethod}/>
 	     <PrivateRoute path="/rules-processing/:slug" component={RulesProcessing}/>
+		 <PrivateRoute path="/generic-test-cases/:slug?" component={GenericTestCases}/>
 	    </Switch>
 	   </div>
 	   <Footer />

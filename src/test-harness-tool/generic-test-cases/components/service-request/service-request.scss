@@ -1,0 +1,44 @@
+.wrapper {
+  background-color: #fff;
+  padding: 20px 10px;
+}
+.section {
+  padding: 20px 0;
+}
+.box {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px;
+}
+.button-alignment {
+	display: block !important;
+	margin-bottom: 5px;
+}
+.pad-bottom {
+	padding-bottom: 10px;
+}
+th.rate {
+	text-align: center;
+}
+.sort-header {
+	position: relative;
+}
+.arrow {
+	position: absolute;
+	right: 9px;
+	top: 36%;
+}
+.arrow-up {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAQAAACR313BAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfkBgUGKBcjnKF5AAABEElEQVQY04WRsUrDABCGvyaF6uBgJHRy0LVTKARBRTRLHsMhurhEh7yG6JrNyV10y5wHkEqjpE5CpZMBq200v4uttYPejd8Pd98dI0RAbkehnzpFq3IKP43C3A4QIxANYtdLrLImhFBNVuklsdtAEBC77cz4RpM21M5iN4Dc9pIfuDQT8JLcNhcObw6GBgBsc06fRwDEy6r6+Olk5qa6knLtTnfwU5xiAjO96Uqv6k0DTkGrQmhLmcaKtKhjvaunPSHUqnAKtKZbjRWpLmTqRCPdaV3IKerNDhsDrrnglA/gkzMqlulTo9khCq0S1WX+sjaFrDIK57yZ9x4O/e7TzvOKmC0D537/6PLhv5v//bEvosTaTzF8az8AAAAldEVYdGRhdGU6Y3JlYXRlADIwMjAtMDYtMDVUMDY6Mzk6NTYrMDA6MDAFOxm/AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIwLTA2LTA1VDA2OjM5OjU2KzAwOjAwdGahAwAAAABJRU5ErkJggg==');
+	width: 15px;
+	height: 15px;
+}
+
+.arrow-down {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAQAAACR313BAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfkBgUGMCFuPay5AAABIElEQVQY04WRv0rDYBTFT76vUBUCEombgq4Z5KOQRUFqHCI4+QQO0cWldsjiQ/QB8gLugls2IYKj/xolxUXQsQFTk2qPQxKHDHrveM6F8zsXOQgPien33Eil1kylbuT3EtMDkQNEG4HthMZUIwiCGo2pEwZ2GwQ8BHYnFpVUr2AnDmwPSEwnbIqlwQkTU84dXx5lQkIDUY+ExDfGK3yT+uBudQFn2MBNZWihj31cYyz0RagUXOcDc/YpCbbos+At1wiqFNYMBHc44idPOU+fBWNuEQStGVRaRulyxA9ecMKYm1U8lcKNat4uE5LDX1GjG8kD/XF3IgDgBfdYho+rKr/xtTdocOtN7ixzh6/b70slVFFdCqinw5Pz5/86//tjP26nz3adz1uMAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIwLTA2LTA1VDA2OjQ4OjE4KzAwOjAwF7cSpQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMC0wNi0wNVQwNjo0ODoxOCswMDowMGbqqhkAAAAASUVORK5CYII=');
+	width: 15px;
+	height: 15px;
+}
+.handle-confirm:disabled {
+	cursor: default;
+}
