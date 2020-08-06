@@ -18,7 +18,7 @@ function TestData() {
   
   function handleSubmit() {
 	  setLoading(true)
-	  Service.get(`/rbs/th/testdata/airapr/${testsetid}`)
+	  Service.get(`/rbs/th/gp/testdata/airapr/${testsetid}`)
 	  .then((response) => {
 		  setLoading(false)
 		  const { data } = response

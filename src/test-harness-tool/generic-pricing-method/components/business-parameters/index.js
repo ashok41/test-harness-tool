@@ -277,32 +277,69 @@ function BusinessParameters(props) {
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
-			pathname: '/rules-processing/test-data',
+			pathname: '/generic-test-cases/test-data',
 			state: {postData: data, formData: forms}
 		})
 	 })
 	 .catch(() => {
-		 const data = [
-        {
-			"testTransactionId": 22846,
+		 const data = {
 			"testSetId": 1169,
-			"testTransactionNo": "TH_001_001",
 			"applicationIdentity": "Ulster",
 			"bankDivision": "Commercial",
-			"productFamily": "Loan",
-			"productName": "Small Business Loan",
-			"totalCustomerLimit": 100,
-			"turnOver": 1200,
-			"balanceSheetNetAsset": 1000,
-			"marginMethodId": "MM5",
-			"testTransactionFlag": {},
+			"productFamily": "Loans",
+			"productName": "Fixed Rate Loan",
 			"totalRecord": 2,
-			"xmlDifference": "",
-			"environment": "NFT"
-	    },
-		]
+			"environment": "NFT",
+			"marginMethodId": "MM5",
+			"marginMethodName": "CPB Trad Busi Loans",
+			"customerDealSegmentId": "CDS6",
+			"customerDealSegmentName": "CPB Trading Busi",
+			"pricingMethodId": 8,
+			"pricingMethodName": "Margin Method",
+			"genericPricingTestCaseList": [
+			{
+				"testTransactionId": 22846,
+				"testTransactionNo": "TH_001_001",
+				"totalCustomerLimit": 100,
+				"turnOver": 1200,
+				"balanceSheetNetAsset": 1000,
+				"termFactor": 11,
+				"masterGradingScale": 10,
+				"sector": "Agriculture",
+				"securityCoverage": 55,
+				"expectedMarginRate": 55.1,
+					"actualMarginRate": 33.4
+			},
+			{
+				"testTransactionId": 22846,
+				"testTransactionNo": "TH_001_001",
+				"totalCustomerLimit": 100,
+				"turnOver": 1200,
+				"balanceSheetNetAsset": 1000,
+				"termFactor": 11,
+				"masterGradingScale": 10,
+				"sector": "Agriculture",
+				"securityCoverage": 55,
+				"expectedMarginRate": 55.1,
+				"actualMarginRate": 33.4
+			},
+			{
+				"testTransactionId": 22846,
+				"testTransactionNo": "TH_001_001",
+				"totalCustomerLimit": 100,
+				"turnOver": 1200,
+				"balanceSheetNetAsset": 1000,
+				"termFactor": 11,
+				"masterGradingScale": 10,
+				"sector": "Agriculture",
+				"securityCoverage": 55,
+				"expectedMarginRate": 55.1,
+				"actualMarginRate": 33.4
+			}
+			]
+		  }
 		  history.push({
-			pathname: '/rules-processing/test-data',
+			pathname: '/generic-test-cases/test-data',
 			state: {postData: data, formData: forms}
 		})
 	 })
@@ -400,8 +437,6 @@ function BusinessParameters(props) {
 		  const data = [
 		   {paramId: 'P1', paramRefId: null, paramName: 'Term', paramFlag: null},
 		   {paramId: 'P2', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null},
-		   {paramId: 'P3', paramRefId: null, paramName: 'Risk Factor', paramFlag: null},
-		   {paramId: 'P4', paramRefId: null, paramName: 'Risk Factor', paramFlag: null},
 		   {paramId: 'P5', paramRefId: null, paramName: 'Risk Factor', paramFlag: 'Y'},
 		   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
 		   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
