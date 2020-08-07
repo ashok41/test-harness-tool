@@ -4,7 +4,6 @@ import { useLocation, useParams } from 'react-router-dom'
 import ProfileList from '../common/profile-list'
 import TestLog from '../common/testlog';
 import Service from '../common/service'
-import datas from './reports.json'
 import styles from './reports.scss';
 import common from '../common/common.scss';
 
@@ -127,6 +126,12 @@ function RoutingPage() {
   const params = useParams();
   const { slug, slug1 } = params;
   let reportsData = {data: {}, executionTime: ''}
+  if (!slug) { 
+	const location = useLocation();
+	const {state: {data, executionTime}} = location
+	reportsData.data = data
+	reportsData.executionTime = executionTime
+  }
   const [reports, setReports] = useState(reportsData)
   if (Object.keys(reports.data).length > 0) {
 	reports.data['passedPercent'] = Math.round((reports.data.passed/reports.data.totalTestCases) * 100);
@@ -157,8 +162,8 @@ function RoutingPage() {
 		 <div>Test Execution Summary</div>
 		 <div className={styles.download}>
 		    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
-			  <Dropdown.Item onClick={toDownloadLink(`${Service.getApiRoot()}/rbs/th/testdata/generatepdf/${resultsData.testSetId}`)}>PDF</Dropdown.Item>
-			  <Dropdown.Item onClick={toDownloadLink(`${Service.getApiRoot()}/rbs/th/testdata/generateexcel/${resultsData.testSetId}/${resultsData.createdBy}`)} >Excel</Dropdown.Item>
+			  <Dropdown.Item onClick={toDownloadLink(`${Service.getApiRoot()}/rbs/th/testdata/generatepdf/${reports.data.testSetId}`)}>PDF</Dropdown.Item>
+			  <Dropdown.Item onClick={toDownloadLink(`${Service.getApiRoot()}/rbs/th/testdata/generateexcel/${reports.data.testSetId}/${reports.data.createdBy}`)} >Excel</Dropdown.Item>
 			</DropdownButton>
 	     </div>
 		</Card.Header>
