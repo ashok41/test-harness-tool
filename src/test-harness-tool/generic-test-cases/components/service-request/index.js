@@ -30,7 +30,7 @@ function ServiceRequest() {
 		  const executionTime = toTimeString(seconds/1000)
 		  const { data } = response
 		  history.push({
-			pathname: '/reports',
+			pathname: '/generic-reports',
 			state: {data: data, executionTime: executionTime}
 		})
 	  })
@@ -41,107 +41,64 @@ function ServiceRequest() {
 			"totalTestCases": 27,
 			"passed": 24,
 			"failed": 3,
+			"testSetId": 1169,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Commercial",
+			"productFamily": "Loans",
+			"productName": "Fixed Rate Loan",
+			"totalRecord": 2,
 			"environment": "NFT",
-			"testcasesResultList": [
+			"marginMethodId": "MM5",
+			"marginMethodName": "CPB Trad Busi Loans",
+			"customerDealSegmentId": "CDS6",
+			"customerDealSegmentName": "CPB Trading Busi",
+			"pricingMethodId": 8,
+			"pricingMethodName": "Margin Method",
+			"genericPricingTestCaseList": [
 			{
-					"actualAir": 7.6,
-					"actualApr": 0.6,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 6,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_001",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 7.2,
-					"actualApr": 0.2,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 7,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_002",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 1.3,
-					"actualApr": 2,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 12.69,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_003",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 0,
-					"actualApr": 0,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 12.69,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_004",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 0,
-					"actualApr": 0,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 12.69,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_005",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				}
-			]
+				"testTransactionId": 22846,
+				"testSetId": 1169,
+				"testTransactionNo": "TH_001_001",
+				"totalCustomerLimit": 100,
+				"turnOver": 1200,
+				"balanceSheetNetAsset": 1000,
+				"termFactor": 11,
+				"masterGradingScale": 10,
+				"sector": "Agriculture",
+				"securityCoverage": 55,
+				"expectedMarginRate": 55.1,
+				"actualMarginRate": 33.4
+			},
+			{
+				"testTransactionId": 22846,
+				"testTransactionNo": "TH_001_001",
+				"totalCustomerLimit": 100,
+				"turnOver": 1200,
+				"balanceSheetNetAsset": 1000,
+				"termFactor": 11,
+				"masterGradingScale": 10,
+				"sector": "Agriculture",
+				"securityCoverage": 55,
+				"expectedMarginRate": 55.1,
+				"actualMarginRate": 33.4
+			},
+			{
+				"testTransactionId": 22846,
+				"testTransactionNo": "TH_001_001",
+				"totalCustomerLimit": 100,
+				"turnOver": 1200,
+				"balanceSheetNetAsset": 1000,
+				"termFactor": 11,
+				"masterGradingScale": 10,
+				"sector": "Agriculture",
+				"securityCoverage": 55,
+				"expectedMarginRate": 55.1,
+				"actualMarginRate": 33.4
+			}
+		]
 		  }
 		  history.push({
-			pathname: '/reports',
+			pathname: '/generic-reports',
 			state: {data: data, executionTime: executionTime}
 		})
 	  }
@@ -188,7 +145,7 @@ function ServiceRequest() {
 		if (item === 'testTransactionNo') {
 			name = 'ID'
 		}
-		columns.push({
+		firstColumns.push({
 		  name: name,
 		  key: item
 		})

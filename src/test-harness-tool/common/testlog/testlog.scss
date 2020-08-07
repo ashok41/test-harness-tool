@@ -1,0 +1,15 @@
+.log-wrapper svg {
+  display:inherit;
+}
+.log-container {
+	display: flex;
+}
+.log-lables {
+	padding: 15px 0px 0 10px;
+	span {
+		font-weight: bold;
+	}
+	.pad-bottom {
+		padding-bottom: 5px !important;
+	}
+}

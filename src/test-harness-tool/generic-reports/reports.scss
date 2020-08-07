@@ -1,0 +1,70 @@
+.container {
+	padding: 20px 0px;
+}
+.card-body {
+	padding: 20px 0px !important;
+}
+.tab-wrapper {
+	margin-top: 10px;
+}
+.headTitle {
+	font-size: 1.5rem;
+	color: #002d64;
+	padding-bottom: 20px;
+}
+
+.rate-head, .actual-head {
+	text-align: center;
+}
+
+.relative {
+	position: relative;
+	margin-right: 20px;
+}
+.download {
+   float: right;
+   padding: 5px 0px;
+}
+.dropdown {
+	display: inline-block;
+	margin-right: 10px;
+}
+.header-container {
+	div {
+		display: inline-block
+	}
+	:nth-child(2) {
+		margin: 0px !important;
+		font-size: 14px;
+		float: right;
+	}
+}
+
+.report-tabs .passed:global(.nav-link) {
+	border-color: #00c21e #00c21e #fff !important;
+	background-color: #00c21e !important;
+}
+.report-tabs .failed:global(.nav-link) {
+	border-color: #d81a36 #d81a36 #fff !important;
+	background-color: #d81a36 !important;
+
+}
+.report-tabs :global(.nav-link) {
+	color: #000 !important;
+	font-weight: 500;
+	background-color: #d81a36 !important;
+	border-color: #d81a36 #d81a36 #fff !important;
+	color: #fff !important;
+}
+.no-records {
+	padding: 5px 0px;
+	text-align: center;
+	border: 1px solid #dee2e6;
+	font-weight: 500;
+}
+.total-record {
+	float: right;
+	margin-right: 20px !important;
+	background-color: #1e808f  !important; 
+	color: #fff;
+}
