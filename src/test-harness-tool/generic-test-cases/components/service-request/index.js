@@ -184,11 +184,13 @@ function ServiceRequest() {
   Object.keys(paginationData[0]).forEach((item) => {
 	let name = item.replace(/([A-Z])/g, ' $1')
 	name = name[0].toUpperCase() + name.slice(1)
-    if (item !== 'actualMarginRate') {
-		firstColumns.push({
+    if (item !== 'actualMarginRate' && item !== 'testTransactionId') {
+		if (item === 'testTransactionNo') {
+			name = 'ID'
+		}
+		columns.push({
 		  name: name,
-		  key: item,
-		  rowSpan: 2
+		  key: item
 		})
 	}
   })
