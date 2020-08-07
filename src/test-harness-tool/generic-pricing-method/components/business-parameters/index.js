@@ -13,7 +13,7 @@ function BusinessParameters(props) {
   const dynamicFormFields = useRef({methods: {}})
   const tempMethod = useRef('')
   const { state: backFormData } = location
-  const productMapDetails = { 3: [4], 7: [5,6] }
+  const productMapDetails = { 3: [4, 5], 7: [5,6] }
 
   const initial = {	
 	applicationIdentity: {data: 1, error: '', valid: true, errorMessage: 'Please select Application Identity'},
@@ -63,8 +63,8 @@ function BusinessParameters(props) {
 			"attributeId": 1,
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
-			"isActive": {},
-			"refDataDesc": "Ulster",
+			"isActive": 'Y',
+			"refDataDesc": "Generic Pricing Method",
 			"refDataKey": "AP001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
@@ -73,7 +73,7 @@ function BusinessParameters(props) {
 			"attributeId": 2,
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
-			"isActive": {},
+			"isActive": 'Y',
 			"refDataDesc": "Business",
 			"refDataKey": "BU001",
 			"updatedBy": "R123",
@@ -90,31 +90,11 @@ function BusinessParameters(props) {
 			"updatedTs": "2020-06-09T04:38:41.688Z"
 		},
 		{
-			"attributeId": 6,
-			"createdBy": "R123",
-			"createdTs": "2020-06-09T04:38:41.688Z",
-			"isActive": {},
-			"refDataDesc": "Agri Facility",
-			"refDataKey": "PR001",
-			"updatedBy": "R123",
-			"updatedTs": "2020-06-09T04:38:41.688Z"
-		},
-		{
-			"attributeId": 7,
-			"createdBy": "R123",
-			"createdTs": "2020-06-09T04:38:41.688Z",
-			"isActive": {},
-			"refDataDesc": "Overdraft",
-			"refDataKey": "PF001",
-			"updatedBy": "R123",
-			"updatedTs": "2020-06-09T04:38:41.688Z"
-		},
-		{
 			"attributeId": 4,
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": {},
-			"refDataDesc": "Small Business Loan (Fixed)",
+			"refDataDesc": "Fixed Rate Loan",
 			"refDataKey": "PR001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
@@ -123,7 +103,7 @@ function BusinessParameters(props) {
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": {},
-			"refDataDesc": "Overdraft",
+			"refDataDesc": "Variable Rate Loan",
 			"refDataKey": "PR001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
@@ -206,7 +186,7 @@ function BusinessParameters(props) {
   
   function createDynamicMethod(data) {
 	let formData = {}
-	let fieldName = state.pricingMethodId.text.replace(/\s/, '')
+	let fieldName = state.pricingMethodId.text.replace(/\s/g, '')
     fieldName = `${fieldName[0].toLowerCase() + fieldName.slice(1)}Id`
 	if (!tempMethod.current || (tempMethod.current && fieldName !== tempMethod.current)) {
 	  if (tempMethod.current) {
@@ -266,7 +246,10 @@ function BusinessParameters(props) {
 	  const lists = {}
 	  Object.keys(forms).map((item) => {
 		const formData = forms[item].data
-	    if(formData % 1 === 0){
+	    if (forms[item].type === 'commaSeperated') {
+			lists[item] = forms[item].data.split(',').map(Number)
+		}
+		else if(!forms[item].type && formData % 1 === 0){
 			lists[item] = Number(forms[item].data)
 		} else {
 			lists[item] = forms[item].data
@@ -357,13 +340,12 @@ function BusinessParameters(props) {
 	const data = e.target.value
 	if (data === '') {
 		let formData = {
-		  [label]: {...state[label], data: '', error: state[label].errorMessage, valid: false}
+		  [label]: {...state[label], data: '', error: state[label].errorMessage, valid: false, type: 'commaSeperated'}
 		}
 		setState({...state, ...formData})
 	} else {
-		const arrayData = data.split(',').map(Number);
 		let formData = {
-		  [label]: {...state[label], data: arrayData, error: '', valid: true}
+		  [label]: {...state[label], data: data, error: '', valid: true, type: 'commaSeperated'}
 		}
 		setState({...state, ...formData})
 	}
@@ -423,7 +405,7 @@ function BusinessParameters(props) {
 			  attrs[item.paramRefId] = []
 		    }
 			if (item.paramRefId === null) {
-				let field = item.paramName.replace(/\s/, '')
+				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
 				formData[field] = {data: '', error: '', valid: false, errorMessage: `Please select ${item.paramName}`}
 			}
@@ -437,7 +419,7 @@ function BusinessParameters(props) {
 		  const data = [
 		   {paramId: 'P1', paramRefId: null, paramName: 'Term', paramFlag: null},
 		   {paramId: 'P2', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null},
-		   {paramId: 'P5', paramRefId: null, paramName: 'Risk Factor', paramFlag: 'Y'},
+		   {paramId: 'P5', paramRefId: null, paramName: 'Master Grading Scale', paramFlag: 'Y'},
 		   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
 		   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
 		   {paramId: 'P8', paramRefId: 'P5', paramName: 'Media', paramFlag: null},
@@ -452,7 +434,7 @@ function BusinessParameters(props) {
 			  attrs[item.paramRefId] = []
 		    }
 			if (item.paramRefId === null) {
-				let field = item.paramName.replace(/\s/, '')
+				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
 				formData[field] = {data: '', error: '', valid: false, errorMessage: `Please select ${item.paramName}`}
 			}
@@ -531,7 +513,7 @@ function BusinessParameters(props) {
       return (
 	    <>
 		 {item.map((field) => {
-		   let fieldName = field.paramName.replace(/\s/, '')
+		   let fieldName = field.paramName.replace(/\s/g, '')
 		   fieldName = fieldName[0].toLowerCase() + fieldName.slice(1)
 		   const fieldData = state[fieldName]
 		   return (<Col md="6">
@@ -552,7 +534,7 @@ function BusinessParameters(props) {
 			      <Form.Control as="select" isInvalid={fieldData.error} value={fieldData.data} onChange={onSelectedSingleOptionChange(fieldName)}>
 				   <option value="">Please Select</option>
 				   {dynamicFormFields.current.formfields[field.paramId].map((item) => {
-				    return (<option value={item.paramId}>{item.paramName}</option>)
+				    return (<option value={item.paramName}>{item.paramName}</option>)
 				   })}
 			      </Form.Control>
 				  <Form.Control.Feedback type="invalid" tooltip>
