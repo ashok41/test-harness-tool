@@ -67,7 +67,8 @@ function ServiceRequest() {
 				"sector": "Agriculture",
 				"securityCoverage": 55,
 				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4
+				"actualMarginRate": 33.4,
+				"testTransactionFlag": "Y"
 			},
 			{
 				"testTransactionId": 22846,
@@ -80,7 +81,8 @@ function ServiceRequest() {
 				"sector": "Agriculture",
 				"securityCoverage": 55,
 				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4
+				"actualMarginRate": 33.4,
+				"testTransactionFlag": "Y"
 			},
 			{
 				"testTransactionId": 22846,
@@ -93,7 +95,8 @@ function ServiceRequest() {
 				"sector": "Agriculture",
 				"securityCoverage": 55,
 				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4
+				"actualMarginRate": 33.4,
+				"testTransactionFlag": "N"
 			}
 		]
 		  }
@@ -141,7 +144,7 @@ function ServiceRequest() {
   Object.keys(paginationData[0]).forEach((item) => {
 	let name = item.replace(/([A-Z])/g, ' $1')
 	name = name[0].toUpperCase() + name.slice(1)
-    if (item !== 'actualMarginRate' && item !== 'testTransactionId') {
+    if (item !== 'actualMarginRate' && item !== 'testTransactionId' && item !== 'testTransactionFlag') {
 		if (item === 'testTransactionNo') {
 			name = 'ID'
 		}

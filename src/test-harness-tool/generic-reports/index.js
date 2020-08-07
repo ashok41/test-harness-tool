@@ -64,7 +64,7 @@ function ControlledTabs(props) {
   Object.keys(paginationData[0]).forEach((item) => {
 	let name = item.replace(/([A-Z])/g, ' $1')
 	name = name[0].toUpperCase() + name.slice(1)
-    if (item !== 'actualMarginRate' && item !== 'testTransactionId' && item !== 'testTransactionFlag') {
+    if (item !== 'testTransactionId' && item !== 'testTransactionFlag') {
 		if (item === 'testTransactionNo') {
 			name = 'ID'
 		}
