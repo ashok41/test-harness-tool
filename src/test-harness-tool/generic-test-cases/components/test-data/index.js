@@ -18,7 +18,7 @@ function TestData() {
   
   function handleSubmit() {
 	  setLoading(true)
-	  Service.get(`/rbs/th/gp/testdata/airapr/${testsetid}`)
+	  Service.get(`/rbs/th/gp/testdata/testsetidRate/${testsetid}`)
 	  .then((response) => {
 		  setLoading(false)
 		  const { data } = response
@@ -128,7 +128,10 @@ function TestData() {
   Object.keys(paginationData[0]).forEach((item) => {
 	let name = item.replace(/([A-Z])/g, ' $1')
 	name = name[0].toUpperCase() + name.slice(1)
-	if (item !== 'expectedMarginRate' && item !== 'actualMarginRate') {
+	if (item !== 'expectedMarginRate' && item !== 'actualMarginRate' && item !== 'testTransactionId') {
+		if (item === 'testTransactionNo') {
+			name = 'ID'
+		}
 		columns.push({
 		  name: name,
 		  key: item
