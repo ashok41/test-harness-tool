@@ -38,7 +38,6 @@ function ServiceRequest() {
 		  const seconds = Date.now() - start;
 		  const executionTime = toTimeString(seconds/1000)
 		  const data = {
-			"totalTestCases": 27,
 			"passed": 24,
 			"failed": 3,
 			"testSetId": 1169,
@@ -144,7 +143,7 @@ function ServiceRequest() {
   Object.keys(paginationData[0]).forEach((item) => {
 	let name = item.replace(/([A-Z])/g, ' $1')
 	name = name[0].toUpperCase() + name.slice(1)
-    if (item !== 'actualMarginRate' && item !== 'testTransactionId' && item !== 'testTransactionFlag') {
+    if (paginationData[0][item] !== null && item !== 'actualMarginRate' && item !== 'testTransactionId' && item !== 'testTransactionFlag') {
 		if (item === 'testTransactionNo') {
 			name = 'ID'
 		}

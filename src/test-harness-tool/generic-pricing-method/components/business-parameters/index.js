@@ -13,20 +13,20 @@ function BusinessParameters(props) {
   const dynamicFormFields = useRef({methods: {}})
   const tempMethod = useRef('')
   const { state: backFormData } = location
-  const productMapDetails = { 3: [4, 5], 7: [5,6] }
+  const productMapDetails = { 3: [4, 5, 6], 7: [5,6] }
 
   const initial = {	
-	applicationIdentity: {data: 1, error: '', valid: true, errorMessage: 'Please select Application Identity'},
-	productFamily: {data: '', error: '', valid: false, errorMessage: 'Please select Product Family'},
-	productName: {data: '', error: '', valid: false, errorMessage: 'Please select Product Name'},
-	bankDivision : {data: '', error: '', valid: false, errorMessage: 'Please select Bank Division'},
-	totalCustomerLimit: {data: '', error: '', valid: false, errorMessage: 'Please enter Total Customer Limit'},
-	turnOver: {data: '', error: '', valid: false, errorMessage: 'Please enter Turnover'},
-	balanceSheetNetAsset: {data: '', error: '', valid: false, errorMessage: 'Please enter Balance Sheet Net Assets'},
-	pricingMethodId: {data: '', error: '', valid: false, errorMessage: 'Please select Pricing Method'},
-	environment: {data: '', error: '', valid: false, errorMessage: 'Please enter Environment'},
-	customerDealSegmentId: {data: '', error: '', valid: false, errorMessage: 'Please select Customer Deal Segment'},
-    wsdlUrl: {data: '', error: '', valid: false, loader: false, disabled: true, message: '', errorMessage: 'Please enter URL'}
+	applicationIdentity: {data: 1, error: '', valid: true, errorMessage: 'Please select Application Identity', key: null},
+	productFamily: {data: '', error: '', valid: false, errorMessage: 'Please select Product Family', key: null},
+	productName: {data: '', error: '', valid: false, errorMessage: 'Please select Product Name', key: null},
+	bankDivision : {data: '', error: '', valid: false, errorMessage: 'Please select Bank Division', key: null},
+	totalCustomerLimit: {data: '', error: '', valid: false, errorMessage: 'Please enter Total Customer Limit', key: null},
+	turnOver: {data: '', error: '', valid: false, errorMessage: 'Please enter Turnover', key: null},
+	balanceSheetNetAsset: {data: '', error: '', valid: false, errorMessage: 'Please enter Balance Sheet Net Assets', key: null},
+	pricingMethodId: {data: '', error: '', valid: false, errorMessage: 'Please select Pricing Method', key: null},
+	environment: {data: '', error: '', valid: false, errorMessage: 'Please enter Environment', key: null},
+	customerDealSegmentId: {data: '', error: '', valid: false, errorMessage: 'Please select Customer Deal Segment', key: null},
+    wsdlUrl: {data: '', error: '', valid: false, loader: false, disabled: true, message: '', errorMessage: 'Please enter URL', key: null}
   }
   const [state, setState] = useState(backFormData ? backFormData : initial)
   const [error, setError] = useState('')
@@ -108,6 +108,24 @@ function BusinessParameters(props) {
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
 		}, {
+			"attributeId": 6,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Overdraft",
+			"refDataKey": "PF002",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		}, {
+			"attributeId": 7,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Overdraft Rate Loan",
+			"refDataKey": "PR002",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		}, {
 			"attributeId": 8,
 			"refDataDesc": "Margin Method",
 			"refDataKey": "MN001",
@@ -130,10 +148,11 @@ function BusinessParameters(props) {
 		}]
 		let attrs = {}
 		data.map((item) => {
-		  if (attrs[item.refDataKey] === undefined) {
-			attrs[item.refDataKey] = []
+		  const key = item.refDataKey.slice(0,2)
+		  if (attrs[key] === undefined) {
+			attrs[key] = []
 		  }
-		  attrs[item.refDataKey].push(item)
+		  attrs[key].push(item)
 		})
 		setBusinessAttributes({data: attrs, loader: false})
 	  })
@@ -255,6 +274,22 @@ function BusinessParameters(props) {
 			lists[item] = forms[item].data
 		}
 	  })
+	  if (lists['sICCode']) {
+		lists['sicCode'] = lists['sICCode']
+		delete lists['sICCode']
+	  }
+	  if (lists['facilityREFAssetClass']) {
+		lists['facilityRefAssetClass'] = lists['facilityREFAssetClass']
+		delete lists['facilityREFAssetClass']
+	  }
+	  if (lists['ballon%']) {
+		lists['ballonPercentage'] = lists['ballon%']
+		delete lists['ballon%']
+	  }
+	  if (lists['deposit%']) {
+		lists['depositPercentage'] = lists['deposit%']
+		delete lists['deposit%']
+	  }
 	  lists['userId'] = localStorage.getItem('logged');
 	  Service.post('/rbs/th/gp/testdata', lists)
 	  .then((response) => {
@@ -284,14 +319,14 @@ function BusinessParameters(props) {
 				"testTransactionId": 22846,
 				"testTransactionNo": "TH_001_001",
 				"totalCustomerLimit": 100,
-				"turnOver": 1200,
+				"turnOver": null,
 				"balanceSheetNetAsset": 1000,
 				"termFactor": 11,
 				"masterGradingScale": 10,
 				"sector": "Agriculture",
 				"securityCoverage": 55,
 				"expectedMarginRate": 55.1,
-					"actualMarginRate": 33.4
+				"actualMarginRate": 33.4
 			},
 			{
 				"testTransactionId": 22846,
@@ -365,11 +400,11 @@ function BusinessParameters(props) {
 	setState({...state, ...formData})
   }
   
-  const onSelectedSingleOptionChange = (label) => (e) => {
+  const onSelectedSingleOptionChange = (label, key = null) => (e) => {
 	const data = e.target.value
 	if (data === '') {
 		let formData = {
-		  [label]: {...state[label], data: '', error: state[label].errorMessage, valid: false}
+		  [label]: {...state[label], data: '', error: state[label].errorMessage, valid: false, key: key}
 		}
 		if (label === 'environment') {
 		  formData['wsdlUrl'] = state.wsdlUrl
@@ -377,10 +412,14 @@ function BusinessParameters(props) {
 		setState({...state, ...formData})
 	} else {
 		let formData = {
-		  [label]: {...state[label], data: data, error: '', valid: true}
+		  [label]: {...state[label], data: data, error: '', valid: true, key: key}
 		}
 		if (label === 'environment') {
-		  formData['wsdlUrl'] = {...state.wsdlUrl, disabled: false}
+		  formData['wsdlUrl'] = {...state.wsdlUrl, disabled: false, key: key}
+		}
+		if (label === 'productFamily') {
+		  let refKey = data.split('|')
+		  formData['productFamily'] = {...state[label], data: refKey[0], error: '', valid: true, key: refKey[1]}
 		}
 		setState({...state, ...formData})
 	}
@@ -418,7 +457,11 @@ function BusinessParameters(props) {
 	    .catch((error) => {  
 		  const data = [
 		   {paramId: 'P1', paramRefId: null, paramName: 'Term', paramFlag: null},
-		   {paramId: 'P2', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null},
+		   {paramId: 'P2', paramRefId: null, paramName: 'SIC Code', paramFlag: null},
+		   {paramId: 'P3', paramRefId: null, paramName: 'Facility REF Asset Class', paramFlag: null},
+		   {paramId: 'P4', paramRefId: null, paramName: 'Ballon %', paramFlag: null},
+		   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null},
+		   {paramId: 'P13', paramRefId: null, paramName: 'Facility REF Asset Class', paramFlag: null},
 		   {paramId: 'P5', paramRefId: null, paramName: 'Master Grading Scale', paramFlag: 'Y'},
 		   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
 		   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
@@ -459,12 +502,11 @@ function BusinessParameters(props) {
   
   function createProductName() {
 	if (state.productFamily.data) {
-		return productMapDetails[state.productFamily.data].map((familyItem) => {
-			return businessAttributes.data['PR001'] && businessAttributes.data['PR001'].map((item) => {
-			  if (familyItem === item.attributeId) {
-				return (<option value={item.attributeId}>{item.refDataDesc}</option>)
-			  }
-			})
+		const refKey = state.productFamily.key.slice(2)
+		return businessAttributes.data['PR'] && businessAttributes.data['PR'].map((item) => {
+		  if (item.refDataKey === `PR${refKey}`) {
+			return (<option value={item.attributeId}>{item.refDataDesc}</option>)
+		  }
 		})
 	}
 	return []
@@ -583,7 +625,7 @@ function BusinessParameters(props) {
 			}
 			<div className={styles.mandatoryContainer}><span className={styles.mandatory}>*</span> Mandatory Fields</div>
             <Card.Body>
-			            <Form>
+			 <Form>
 			  <Row>
 			    <Col md="6">
 			     <Form.Group as={Row} controlId="bankDivision">
@@ -591,7 +633,7 @@ function BusinessParameters(props) {
                   <Col sm="6">
 				    <Form.Control as="select" isInvalid={state.bankDivision.error} value={state.bankDivision.data} onChange={onSelectedSingleOptionChange('bankDivision')}>
                       <option value="">Please Select</option>
-					  {businessAttributes.data['BU001'] && businessAttributes.data['BU001'].map((item) => {
+					  {businessAttributes.data['BU'] && businessAttributes.data['BU'].map((item) => {
 						return (<option value={item.attributeId}>{item.refDataDesc}</option>)
 					  })}
                     </Form.Control>
@@ -605,10 +647,10 @@ function BusinessParameters(props) {
 				  <Form.Group as={Row} controlId="productFamily">
 					<Form.Label column sm="5">Product Family <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" isInvalid={state.productFamily.error} value={state.productFamily.data} onChange={onSelectedSingleOptionChange('productFamily')}>
+					  <Form.Control as="select" isInvalid={state.productFamily.error} value={`${state.productFamily.data}|${state.productFamily.key}`} onChange={onSelectedSingleOptionChange('productFamily')}>
 						<option value="">Please Select</option>
-						{businessAttributes.data['PF001'] && businessAttributes.data['PF001'].map((item) => {
-						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
+						{businessAttributes.data['PF'] && businessAttributes.data['PF'].map((item) => {
+						  return (<option value={`${item.attributeId}|${item.refDataKey}`}>{item.refDataDesc}</option>)
 						})}
 					  </Form.Control>
 					  <Form.Control.Feedback type="invalid" tooltip>
@@ -676,7 +718,7 @@ function BusinessParameters(props) {
 					<Col sm="6">
 					  <Form.Control as="select" isInvalid={state.pricingMethodId.error} value={state.pricingMethodId.data} onChange={customerDealSegementOptionChange('pricingMethodId')}>
 						<option value="">Please Select</option>
-						{businessAttributes.data['MN001'] && businessAttributes.data['MN001'].map((item) => {
+						{businessAttributes.data['MN'] && businessAttributes.data['MN'].map((item) => {
 						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
 					    })}
 					  </Form.Control>

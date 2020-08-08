@@ -128,7 +128,7 @@ function TestData() {
   Object.keys(paginationData[0]).forEach((item) => {
 	let name = item.replace(/([A-Z])/g, ' $1')
 	name = name[0].toUpperCase() + name.slice(1)
-	if (item !== 'expectedMarginRate' && item !== 'actualMarginRate' && item !== 'testTransactionId' && item !== 'testTransactionFlag') {
+	if (paginationData[0][item] !== null && item !== 'expectedMarginRate' && item !== 'actualMarginRate' && item !== 'testTransactionId' && item !== 'testTransactionFlag') {
 		if (item === 'testTransactionNo') {
 			name = 'ID'
 		}
