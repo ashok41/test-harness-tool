@@ -20,10 +20,7 @@ function BusinessParameters(props) {
 	productFamily: {data: '', error: '', valid: false, errorMessage: 'Please select Product Family', key: null},
 	productName: {data: '', error: '', valid: false, errorMessage: 'Please select Product Name', key: null},
 	bankDivision : {data: '', error: '', valid: false, errorMessage: 'Please select Bank Division', key: null},
-	totalCustomerLimit: {data: '', error: '', valid: false, errorMessage: 'Please enter Total Customer Limit', key: null},
-	turnOver: {data: '', error: '', valid: false, errorMessage: 'Please enter Turnover', key: null},
-	balanceSheetNetAsset: {data: '', error: '', valid: false, errorMessage: 'Please enter Balance Sheet Net Assets', key: null},
-	pricingMethodId: {data: '', error: '', valid: false, errorMessage: 'Please select Pricing Method', key: null},
+ 	pricingMethodId: {data: '', error: '', valid: false, errorMessage: 'Please select Pricing Method', key: null},
 	environment: {data: '', error: '', valid: false, errorMessage: 'Please enter Environment', key: null},
 	customerDealSegmentId: {data: '', error: '', valid: false, errorMessage: 'Please select Customer Deal Segment', key: null},
     wsdlUrl: {data: '', error: '', valid: false, loader: false, disabled: true, message: '', errorMessage: 'Please enter URL', key: null}
@@ -50,10 +47,11 @@ function BusinessParameters(props) {
 		const { data } = response
 		let attrs = {}
 		data.map((item) => {
-		  if (attrs[item.refDataKey] === undefined) {
-			attrs[item.refDataKey] = []
+		  const key = item.refDataKey.slice(0,2)
+		  if (attrs[key] === undefined) {
+			attrs[key] = []
 		  }
-		  attrs[item.refDataKey].push(item)
+		  attrs[key].push(item)
 		})
 		setBusinessAttributes({data: attrs, loader: false})
 	  })
@@ -415,9 +413,11 @@ function BusinessParameters(props) {
 		if (label === 'productFamily') {
 		  let refKey = data.split('|')
 		  const text = e.target.options[e.target.selectedIndex].text
-		  formData['productFamily'] = {...state[label], data: refKey[0], error: '', valid: true, key: refKey[1], disabled: (text === 'Overdraft' ? true: false)}
-		  formData['productName'] = {...state['productName'], valid: (text === 'Overdraft' ? true: false)}
+		  const required = text === 'Overdraft' ? true: false
+		  formData['productFamily'] = {...state[label], data: refKey[0], error: '', valid: true, key: refKey[1], disabled: required}
+		  formData['productName'] = {...state['productName'], valid: required}
 		}
+		console.log('formData', formData)
 		setState({...state, ...formData})
 	}
   }
@@ -453,13 +453,6 @@ function BusinessParameters(props) {
 	    })
 	    .catch((error) => {  
 		  const data = [
-		   {paramId: 'P74', paramRefId: null, paramName: 'Total Customer Limit', paramFlag: null, paramPropertyName: 'totalCustomerLimit'},
-		   {paramId: 'P75', paramRefId: null, paramName: 'Turn Over', paramFlag: null, paramPropertyName: 'turnOver'},
-		   {paramId: 'P76', paramRefId: null, paramName: 'Balance Sheet Net Asset', paramFlag: null, paramPropertyName: 'balanceSheetNetAsset'},
-		   {paramId: 'P1', paramRefId: null, paramName: 'Term', paramFlag: null, paramPropertyName: 'term'},
-		   {paramId: 'P2', paramRefId: null, paramName: 'SIC Code', paramFlag: null, paramPropertyName: 'sicCode'},
-		   {paramId: 'P3', paramRefId: null, paramName: 'Facility REF Asset Class', paramFlag: null, paramPropertyName: 'facilityRefAssetClass'},
-		   {paramId: 'P4', paramRefId: null, paramName: 'Ballon %', paramFlag: null, paramPropertyName: 'ballonPercentange'},
 		   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage'},
 		   {paramId: 'P5', paramRefId: null, paramName: 'Master Grading Scale', paramFlag: 'Y', paramPropertyName: 'masterGradingScale'},
 		   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
