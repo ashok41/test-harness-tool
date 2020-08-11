@@ -360,7 +360,54 @@ function BusinessParameters(props) {
 	  setState({...state, [label]: {data: e.target.value, error: '', valid: false}})
   }
   
-  const onTextUpdated = (label) => (e) => {
+  const onTextUpdated = (label, min, max) => (e) => {
+	  const data = e.target.value;
+	  const checkCommas = data.split(',')
+	  const totCommas = checkCommas.length
+	  const eachData = checkCommas[totCommas-1]
+	  const lastBeforeData = checkCommas[totCommas-2]
+	  const regex = /^[\d\,]+$/g
+	  let valid = ''
+	  let validFlag = true
+	  if (lastBeforeData && (Number(lastBeforeData) < min || Number(lastBeforeData) > max)) {
+		  valid = errorMsg
+		  validFlag = false
+	  }
+	  if (data === '' || (data && regex.test(data) && eachData !== "0" && checkCommas[0] !== "")) {
+		if (data === '') {
+			valid = `Please check the value should be Min of ${min} and Max of ${max}`
+		}
+		setState({...state, [label]: {data: data, error: valid, valid: validFlag, type: 'commaSeperated'}})
+	  }
+  }
+  
+  const removeUnwantedComma = (label, min, max) => (e) => {
+	  let data = e.target.value;
+	  const regex = /,\s*$/
+	  let isCommaLast = 0
+	  if (regex.test(data)) {
+		  isCommaLast = 1
+		  data = data.replace(regex, "")
+	  }
+	  const checkCommas = data.split(',')
+	  const totCommas = checkCommas.length
+	  const eachData = Number(checkCommas[totCommas-1])
+	  let valid = ''
+	  let validFlag = true
+	  if (eachData && (Number(eachData) < min || Number(eachData) > max)) {
+		  valid = `Please check the value should be Min of ${min} and Max of ${max}`
+		  validFlag = false
+	  }
+	  if (valid) {
+		  setState({...state, [label]: {
+			  data: data, error: valid, valid: validFlag, type: 'commaSeperated'}})
+	  }
+	  if (isCommaLast && !valid) {
+		  setState({...state, [label]: {data: data, error: '', valid: true, type: 'commaSeperated'}})
+	  }
+  }
+    
+  const onTextUpdatedx = (label, minValue, maxValue) => (e) => {
 	const data = e.target.value
 	const regex = /^[\d\,]+$/g
 	if (data === '') {
@@ -402,6 +449,9 @@ function BusinessParameters(props) {
 		if (label === 'environment') {
 		  formData['wsdlUrl'] = state.wsdlUrl
 		}
+		if (label === 'sector') {
+			formData['sICCode'] = {...state['sICCode'], data: ''}
+		}
 		setState({...state, ...formData})
 	} else {
 		let formData = {
@@ -415,9 +465,13 @@ function BusinessParameters(props) {
 		  const text = e.target.options[e.target.selectedIndex].text
 		  const required = text === 'Overdraft' ? true: false
 		  formData['productFamily'] = {...state[label], data: refKey[0], error: '', valid: true, key: refKey[1], disabled: required}
-		  formData['productName'] = {...state['productName'], valid: required}
+		  const productData = state.productFamily.data !== data ? '' : state['productName']
+		  formData['productName'] = {...state['productName'], valid: required, data: productData}
 		}
-		console.log('formData', formData)
+		if (label === 'sector') {
+		    const required = (data === 'Health' || data === 'Others') ? false: true
+			formData['sICCode'] = {...state['sICCode'], valid: required, disabled: required, data: (required ? '' : state['sICCode'].data)}
+		}
 		setState({...state, ...formData})
 	}
   }
@@ -453,14 +507,14 @@ function BusinessParameters(props) {
 	    })
 	    .catch((error) => {  
 		  const data = [
-		   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage'},
-		   {paramId: 'P5', paramRefId: null, paramName: 'Master Grading Scale', paramFlag: 'Y', paramPropertyName: 'masterGradingScale'},
+		   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: 50000, minValue: 500, tooltipDescription: 'Please enter the value min of 500'},
+		   {paramId: 'P5', paramRefId: null, paramName: 'Sector', paramFlag: 'Y', paramPropertyName: 'sector'},
 		   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
 		   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
 		   {paramId: 'P8', paramRefId: 'P5', paramName: 'Media', paramFlag: null},
-		   {paramId: 'P9', paramRefId: 'P5', paramName: 'Risk Factor', paramFlag: null},
-		   {paramId: 'P10', paramRefId: 'P5', paramName: 'Risk Factor', paramFlag: null},
-		   {paramId: 'P11', paramRefId: 'P5', paramName: 'Risk Factor', paramFlag: null}
+		   {paramId: 'P9', paramRefId: 'P5', paramName: 'Others', paramFlag: null},
+		   {paramId: 'P10', paramRefId: null, paramName: 'SIC Code', paramFlag: 'Y', paramPropertyName: 'sicCode'},
+		   {paramId: 'P11', paramRefId: 'P10', paramName: 'Code', paramFlag: null},
 			  ]
 		  let attrs = {}
 		  let formData = {}
@@ -471,7 +525,8 @@ function BusinessParameters(props) {
 			if (item.paramRefId === null) {
 				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
-				formData[field] = {data: '', error: '', valid: false, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
+				const disabled = item.paramPropertyName === 'sicCode' ? true: false
+				formData[field] = {data: '', error: '', valid: false, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
 			}
 		    attrs[item.paramRefId].push(item)
 		  })
@@ -555,17 +610,25 @@ function BusinessParameters(props) {
 			   <Form.Group as={Row} controlId={field.paramName}>
 				<Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
 				 <Col sm="6">
-				  <Form.Control type="text" isInvalid={fieldData.error} value={fieldData.data} autoComplete="off" onChange={onTextUpdated(fieldName)} />
+				  <Form.Control type="text" isInvalid={fieldData.error} value={fieldData.data} autoComplete="off" onChange={onTextUpdated(fieldName, field.minValue, field.maxValue)} onBlur={removeUnwantedComma(fieldName, field.minValue, field.maxValue)} />
 				  <Form.Control.Feedback type="invalid" tooltip>
                    {fieldData.error}
                   </Form.Control.Feedback>
+				  <OverlayTrigger
+					  placement="right"	
+					  overlay={
+						<Tooltip>{field.tooltipDescription}</Tooltip>
+					  }
+					>
+					<div className={styles.tooltip}><div className={styles.qicon} /></div>
+				  </OverlayTrigger>
 				 </Col>
 				</Form.Group>
 				:
 		       <Form.Group as={Row} controlId={field.paramName}>
-			    <Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
+			    <Form.Label column sm="5">{field.paramName} {!fieldData.disabled ? <span className={styles.mandatory}>*</span>: ''}</Form.Label>
 			     <Col sm="6">
-			      <Form.Control as="select" isInvalid={fieldData.error} value={fieldData.data} onChange={onSelectedSingleOptionChange(fieldName)}>
+			      <Form.Control as="select" isInvalid={fieldData.error} disabled={fieldData.disabled} value={fieldData.data} onChange={onSelectedSingleOptionChange(fieldName)}>
 				   <option value="">Please Select</option>
 				   {dynamicFormFields.current.formfields[field.paramId].map((item) => {
 				    return (<option value={item.paramName}>{item.paramName}</option>)
