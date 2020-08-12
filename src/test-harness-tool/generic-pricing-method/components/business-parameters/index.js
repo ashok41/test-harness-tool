@@ -469,7 +469,7 @@ function BusinessParameters(props) {
 		  formData['productName'] = {...state['productName'], valid: required, data: productData}
 		}
 		if (label === 'sector') {
-		    const required = (data === 'Health' || data === 'Others') ? false: true
+		    const required = (data === 'Health' || data === 'Other') ? false: true
 			formData['sICCode'] = {...state['sICCode'], valid: required, disabled: required, data: (required ? '' : state['sICCode'].data)}
 		}
 		setState({...state, ...formData})
@@ -497,25 +497,40 @@ function BusinessParameters(props) {
 			if (item.paramRefId === null) {
 				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
-				formData[field] = {data: '', error: '', valid: false, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
+				const disabled = item.paramPropertyName === 'sicCode' ? true: false
+				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
 			}
 		    attrs[item.paramRefId].push(item)
 		  })
 		  dynamicFormFields.current = { ...dynamicFormFields.current, formfields: attrs }
 		  formData[label] = {...state[label], data: selectedData, error: '', valid: true}
-		  setState({...state, ...formData})
+		  let newState = {}
+		  for (const item in state) {
+			if (!state[item].dynamicFields) {
+			  newState[item] = state[item]
+			}
+		  }
+		  setState({...newState, ...formData})
 	    })
 	    .catch((error) => {  
-		  const data = [
-		   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: 50000, minValue: 500, tooltipDescription: 'Please enter the value min of 500'},
-		   {paramId: 'P5', paramRefId: null, paramName: 'Sector', paramFlag: 'Y', paramPropertyName: 'sector'},
-		   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
-		   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
-		   {paramId: 'P8', paramRefId: 'P5', paramName: 'Media', paramFlag: null},
-		   {paramId: 'P9', paramRefId: 'P5', paramName: 'Others', paramFlag: null},
-		   {paramId: 'P10', paramRefId: null, paramName: 'SIC Code', paramFlag: 'Y', paramPropertyName: 'sicCode'},
-		   {paramId: 'P11', paramRefId: 'P10', paramName: 'Code', paramFlag: null},
+		  let data = []
+		  if (state.marginMethodId.data === 'MM1') {
+			  data = [
+			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: 50000, minValue: 500, tooltipDescription: 'Please enter the value min of 500'},
+			   {paramId: 'P5', paramRefId: null, paramName: 'Sector', paramFlag: 'Y', paramPropertyName: 'sector'},
+			   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
+			   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
+			   {paramId: 'P8', paramRefId: 'P5', paramName: 'Media', paramFlag: null},
+			   {paramId: 'P9', paramRefId: 'P5', paramName: 'Other', paramFlag: null},
+			   {paramId: 'P10', paramRefId: null, paramName: 'SIC Code', paramFlag: 'Y', paramPropertyName: 'sicCode'},
+			   {paramId: 'P11', paramRefId: 'P10', paramName: 'Code', paramFlag: null},
 			  ]
+		  } else {
+			  data = [
+			   {paramId: 'P1', paramRefId: null, paramName: 'Ballon %', paramFlag: null, paramPropertyName: 'ballonPercentage', maxValue: 50000, minValue: 500, tooltipDescription: 'Please enter the value min of 500'},
+			   {paramId: 'P2', paramRefId: null, paramName: 'Term', paramFlag: null, paramPropertyName: 'term', maxValue: 50000, minValue: 500, tooltipDescription: 'Please enter the value min of 500'},
+			  ]
+		  }
 		  let attrs = {}
 		  let formData = {}
 		  data.map((item) => {
@@ -526,13 +541,19 @@ function BusinessParameters(props) {
 				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
 				const disabled = item.paramPropertyName === 'sicCode' ? true: false
-				formData[field] = {data: '', error: '', valid: false, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
+				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
 			}
 		    attrs[item.paramRefId].push(item)
 		  })
 		  dynamicFormFields.current = { ...dynamicFormFields.current, formfields: attrs }
 		  formData[label] = {...state[label], data: selectedData, error: '', valid: true}
-		  setState({...state, ...formData})
+		  let newState = {}
+		  for (const item in state) {
+			if (!state[item].dynamicFields) {
+			  newState[item] = state[item]
+			}
+		  }
+		  setState({...newState, ...formData})
 	  })
 	}
   }
