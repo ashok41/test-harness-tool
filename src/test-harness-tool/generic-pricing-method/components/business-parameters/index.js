@@ -360,7 +360,7 @@ function BusinessParameters(props) {
 	  setState({...state, [label]: {data: e.target.value, error: '', valid: false}})
   }
   
-  const onTextUpdated = (label, min, max) => (e) => {
+  const xonTextUpdated = (label, min, max) => (e) => {
 	  const data = e.target.value;
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
@@ -407,7 +407,7 @@ function BusinessParameters(props) {
 	  }
   }
     
-  const onTextUpdatedx = (label, minValue, maxValue) => (e) => {
+  const onTextUpdated = (label) => (e) => {
 	const data = e.target.value
 	const regex = /^[\d\,]+$/g
 	if (data === '') {
@@ -631,7 +631,7 @@ function BusinessParameters(props) {
 			   <Form.Group as={Row} controlId={field.paramName}>
 				<Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
 				 <Col sm="6">
-				  <Form.Control type="text" isInvalid={fieldData.error} value={fieldData.data} autoComplete="off" onChange={onTextUpdated(fieldName, field.minValue, field.maxValue)} onBlur={removeUnwantedComma(fieldName, field.minValue, field.maxValue)} />
+				  <Form.Control type="text" isInvalid={fieldData.error} value={fieldData.data} autoComplete="off" onChange={onTextUpdated(fieldName)} />
 				  <Form.Control.Feedback type="invalid" tooltip>
                    {fieldData.error}
                   </Form.Control.Feedback>
@@ -854,7 +854,7 @@ function BusinessParameters(props) {
                <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
 			   <Button className={styles.referenceButton} variant="primary" disabled={checkReferenceData()} onClick={viewReferenceData(`${Service.getApiRoot()}/rbs/th/gp/generatelookup/${localStorage.getItem('userId')}/${state.customerDealSegmentId.data}/${state.pricingMethodId.data}/${setPricingMethod()}`)}>View Reference Data</Button>
 			   <div className={styles.urlForm}>
-				 {state.wsdlUrl.loader ? 
+				 { state.wsdlUrl.loader ? 
 				 <Button variant="primary" disabled>
 				  <Spinner
 				   as="span"
