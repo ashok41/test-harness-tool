@@ -670,6 +670,29 @@ function BusinessParameters(props) {
 		</Row>
 	)
   }
+	
+  function setPricingMethod() {
+    let pricingMethod = state.pricingMethodId.text
+    if (pricingMethod) {
+	  pricingMethod = pricingMethod.replace(/\s/g, '')
+	  pricingMethod = `${pricingMethod[0].toLowerCase() + pricingMethod.slice(1)}Id`
+	  pricingMethod = state[pricingMethod] && state[pricingMethod].data
+    }
+	return pricingMethod
+  }
+  
+  
+  function checkReferenceData() {
+	 if (state.customerDealSegmentId.data !== '' && state.pricingMethodId.data != '' && setPricingMethod() != '') {
+		return false
+	 } else {
+		return true
+	 }
+  }
+  
+  const viewReferenceData = (link) => () => {
+	window.open(link,'_blank');
+  }
  
   return (
    <div className={common.overlayContainer}>
@@ -829,7 +852,7 @@ function BusinessParameters(props) {
 			  <div>
 			   <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
                <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
-			   <Button className={styles.referenceButton} variant="primary" disabled="true">View Reference Data</Button>
+			   <Button className={styles.referenceButton} variant="primary" disabled={checkReferenceData()} onClick={viewReferenceData(`${Service.getApiRoot()}/rbs/th/gp/generatelookup/${localStorage.getItem('userId')}/${state.customerDealSegmentId.data}/${state.pricingMethodId.data}/${setPricingMethod()}`)}>View Reference Data</Button>
 			   <div className={styles.urlForm}>
 				 {state.wsdlUrl.loader ? 
 				 <Button variant="primary" disabled>
