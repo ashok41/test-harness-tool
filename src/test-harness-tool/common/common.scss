@@ -31,10 +31,15 @@ body, html {
 	color: #1e808f !important;
 }
 
+:global(.table-responsive) {
+	display: flex !important;
+	justify-content: center;
+}
 :global(.table) {
 	max-height: 400px;
     overflow: auto;
     display: block;
+	width: auto !important;
 	
 	thead th {
 	  background: none #002d64;
@@ -140,6 +145,6 @@ body, html {
 }
 .total-record {
 	float: right;
-	background-color: #1e808f  !important; 
+	background-color: #c51d79  !important; 
 	color: #fff;
 }
