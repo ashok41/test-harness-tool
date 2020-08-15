@@ -541,9 +541,19 @@ function BusinessParameters(props) {
 				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
 				const disabled = item.paramPropertyName === 'sicCode' ? true: false
+				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
 				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
 			}
 		    attrs[item.paramRefId].push(item)
+		  })
+		  attrs['null'] = attrs['null'].sort((a,b) => {
+			  if (a.paramFlag < b.paramFlag) {
+				return 1;
+			  }
+			  if (a.paramFlag > b.paramFlag){
+				return -1;
+			  }
+			  return 0;
 		  })
 		  dynamicFormFields.current = { ...dynamicFormFields.current, formfields: attrs }
 		  formData[label] = {...state[label], data: selectedData, error: '', valid: true}
@@ -627,7 +637,7 @@ function BusinessParameters(props) {
 		   fieldName = fieldName[0].toLowerCase() + fieldName.slice(1)
 		   const fieldData = state[fieldName]
 		   return (<Col md="6">
-			{field.paramRefId === null && field.paramFlag === null ? 
+			{field.paramRefId === null && field.paramFlag === 'N' ? 
 			   <Form.Group as={Row} controlId={field.paramName}>
 				<Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
 				 <Col sm="6">
