@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { Container, Row, Col, Card, ListGroup, Form, Button, Alert, Breadcrumb, OverlayTrigger, Tooltip, Spinner } from 'react-bootstrap'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import Service from '../../../common/service'
 import axios from 'axios'
 import ProfileList from '../../../common/profile-list'
@@ -10,13 +10,13 @@ import common from '../../../common/common.scss'
 function BusinessParameters(props) {
   const history = useHistory()
   const location = useLocation()
+  const params = useParams()
+  const {slug} = params
   const dynamicFormFields = useRef({methods: {}})
   const tempMethod = useRef('')
   const { state: backFormData } = location
-  const productMapDetails = { 3: [4, 5, 6], 7: [5,6] }
 
   const initial = {	
-	applicationIdentity: {data: 1, error: '', valid: true, errorMessage: 'Please select Application Identity', key: null},
 	productFamily: {data: '', error: '', valid: false, errorMessage: 'Please select Product Family', key: null},
 	productName: {data: '', error: '', valid: false, errorMessage: 'Please select Product Name', key: null},
 	bankDivision : {data: '', error: '', valid: false, errorMessage: 'Please select Bank Division', key: null},
@@ -64,6 +64,16 @@ function BusinessParameters(props) {
 			"isActive": 'Y',
 			"refDataDesc": "Generic Pricing Method",
 			"refDataKey": "AP001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"attributeId": 18,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": 'Y',
+			"refDataDesc": "Lombard",
+			"refDataKey": "AP002",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
 		},
@@ -238,9 +248,6 @@ function BusinessParameters(props) {
   
   function validation(forms) {
 	let errors = ''
-	if (forms.applicationIdentity.data === '') {
-		errors = initial.applicationIdentity.errorMessage;
-	} 
 	if (errors === '' && forms.bankDivision.data === '') {
 		errors = initial.bankDivision.errorMessage;
 	}
@@ -257,6 +264,17 @@ function BusinessParameters(props) {
 		errors = initial.wsdlUrl.errorMessage;
 	}
 	return errors
+  }
+  
+  function createApplicationIdentity() {
+    let appIdentity = ''
+	businessAttributes.data['AP'].forEach((item) => {
+		const field = item.refDataDesc.replace(/\s/g, '-').toLowerCase()
+		if (slug === field) {
+			appIdentity = item.attributeId
+		}
+	})
+	return appIdentity
   }
   
   function buildJSON(forms) {
@@ -280,6 +298,7 @@ function BusinessParameters(props) {
 		}
 	  })
 	  lists['userId'] = localStorage.getItem('logged');
+	  lists['applicationIdentity'] = 1
 	  Service.post('/rbs/th/gp/testdata', lists)
 	  .then((response) => {
 		  const { data } = response
@@ -498,9 +517,19 @@ function BusinessParameters(props) {
 				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
 				const disabled = item.paramPropertyName === 'sicCode' ? true: false
+				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
 				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
 			}
 		    attrs[item.paramRefId].push(item)
+		  })
+		  attrs['null'] = attrs['null'].sort((a,b) => {
+			  if (a.paramFlag < b.paramFlag) {
+				return 1;
+			  }
+			  if (a.paramFlag > b.paramFlag){
+				return -1;
+			  }
+			  return 0;
 		  })
 		  dynamicFormFields.current = { ...dynamicFormFields.current, formfields: attrs }
 		  formData[label] = {...state[label], data: selectedData, error: '', valid: true}
