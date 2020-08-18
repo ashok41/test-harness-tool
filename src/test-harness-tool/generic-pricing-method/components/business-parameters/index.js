@@ -449,7 +449,7 @@ function BusinessParameters(props) {
 		if (label === 'environment') {
 		  formData['wsdlUrl'] = state.wsdlUrl
 		}
-		if (label === 'sector') {
+		if (label === 'sector' && state['sICCode']) {
 			formData['sICCode'] = {...state['sICCode'], data: ''}
 		}
 		setState({...state, ...formData})
@@ -468,7 +468,7 @@ function BusinessParameters(props) {
 		  const productData = state.productFamily.data !== data ? '' : state['productName']
 		  formData['productName'] = {...state['productName'], valid: required, data: productData}
 		}
-		if (label === 'sector') {
+		if (label === 'sector' && state['sICCode']) {
 		    const required = (data === 'Health' || data === 'Other') ? false: true
 			formData['sICCode'] = {...state['sICCode'], valid: required, disabled: required, data: (required ? '' : state['sICCode'].data)}
 		}
@@ -522,7 +522,6 @@ function BusinessParameters(props) {
 			   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
 			   {paramId: 'P8', paramRefId: 'P5', paramName: 'Media', paramFlag: null},
 			   {paramId: 'P9', paramRefId: 'P5', paramName: 'Other', paramFlag: null},
-			   {paramId: 'P10', paramRefId: null, paramName: 'SIC Code', paramFlag: 'Y', paramPropertyName: 'sicCode'},
 			   {paramId: 'P11', paramRefId: 'P10', paramName: 'Code', paramFlag: null},
 			  ]
 		  } else {
