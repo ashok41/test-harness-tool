@@ -298,7 +298,7 @@ function BusinessParameters(props) {
 		}
 	  })
 	  lists['userId'] = localStorage.getItem('logged');
-	  lists['applicationIdentity'] = 1
+	  lists['applicationIdentity'] = createApplicationIdentity()
 	  Service.post('/rbs/th/gp/testdata', lists)
 	  .then((response) => {
 		  const { data } = response
@@ -379,7 +379,7 @@ function BusinessParameters(props) {
 	  setState({...state, [label]: {data: e.target.value, error: '', valid: false}})
   }
   
-  const xonTextUpdated = (label, min, max) => (e) => {
+  const onTextUpdated = (label, min, max) => (e) => {
 	  const data = e.target.value;
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
@@ -426,7 +426,7 @@ function BusinessParameters(props) {
 	  }
   }
     
-  const onTextUpdated = (label) => (e) => {
+  const xonTextUpdated = (label) => (e) => {
 	const data = e.target.value
 	const regex = /^[\d\,]+$/g
 	if (data === '') {
@@ -545,7 +545,7 @@ function BusinessParameters(props) {
 		  let data = []
 		  if (state.marginMethodId.data === 'MM1') {
 			  data = [
-			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: 50000, minValue: 500, tooltipDescription: 'Please enter the value min of 500'},
+			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
 			   {paramId: 'P5', paramRefId: null, paramName: 'Sector', paramFlag: 'Y', paramPropertyName: 'sector'},
 			   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
 			   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
@@ -555,8 +555,8 @@ function BusinessParameters(props) {
 			  ]
 		  } else {
 			  data = [
-			   {paramId: 'P1', paramRefId: null, paramName: 'Ballon %', paramFlag: null, paramPropertyName: 'ballonPercentage', maxValue: 50000, minValue: 500, tooltipDescription: 'Please enter the value min of 500'},
-			   {paramId: 'P2', paramRefId: null, paramName: 'Term', paramFlag: null, paramPropertyName: 'term', maxValue: 50000, minValue: 500, tooltipDescription: 'Please enter the value min of 500'},
+			   {paramId: 'P1', paramRefId: null, paramName: 'Ballon %', paramFlag: null, paramPropertyName: 'ballonPercentage', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
+			   {paramId: 'P2', paramRefId: null, paramName: 'Term', paramFlag: null, paramPropertyName: 'term', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
 			  ]
 		  }
 		  let attrs = {}
@@ -669,14 +669,14 @@ function BusinessParameters(props) {
 			   <Form.Group as={Row} controlId={field.paramName}>
 				<Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
 				 <Col sm="6">
-				  <Form.Control type="text" isInvalid={fieldData.error} value={fieldData.data} autoComplete="off" onChange={onTextUpdated(fieldName)} />
+				  <Form.Control type="text" isInvalid={fieldData.error} value={fieldData.data} autoComplete="off" onBlur={removeUnwantedComma(fieldName, field.minValue, field.maxValue)} onChange={onTextUpdated(fieldName, field.minValue, field.maxValue)} />
 				  <Form.Control.Feedback type="invalid" tooltip>
                    {fieldData.error}
                   </Form.Control.Feedback>
 				  <OverlayTrigger
 					  placement="right"	
 					  overlay={
-						<Tooltip>{field.tooltipDescription}</Tooltip>
+						<Tooltip>{field.toolTipDesc}</Tooltip>
 					  }
 					>
 					<div className={styles.tooltip}><div className={styles.qicon} /></div>

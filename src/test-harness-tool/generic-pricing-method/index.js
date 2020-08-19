@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Row, Col, Breadcrumb, Spinner, Tabs, Tab } from 'react-bootstrap'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import BusinessParameters from './components/business-parameters'
 import UpdateReferenceData from './components/update-reference-data'
 import ProcessSelectedTest from './components/process-selected-test'
@@ -11,7 +11,11 @@ import common from '../common/common.scss'
 function GenericPricingMethod() {
   const history = useHistory()
   const location = useLocation()
+  const params = useParams()
+  const {slug} = params
   const [key, setKey] = useState('business-parameters');
+  let breadCrumb = slug.replace(/(\-)/g, ' ')
+  breadCrumb = breadCrumb.replace( /(^|\s)([a-z])/g , function(m, p1, p2){ return p1+p2.toUpperCase(); } )
   return (
    <div className={common.overlayContainer}>
       <Row className={styles.section}>
@@ -20,7 +24,7 @@ function GenericPricingMethod() {
 		   <Col md="9">
 		    <Breadcrumb>
 		     <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
-		     <Breadcrumb.Item active>Generic Pricing Method</Breadcrumb.Item>
+		     <Breadcrumb.Item active>{breadCrumb}</Breadcrumb.Item>
 		    </Breadcrumb>
 		   </Col>
 		   <Col md="3">

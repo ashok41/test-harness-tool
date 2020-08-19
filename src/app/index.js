@@ -48,7 +48,7 @@ render((
 		 <PrivateRoute path="/generic-reports/:slug?/:slug1?" component={GenericReports}/>
 		 <PrivateRoute exact path="/" component={Dashboard}/>
 	     <PrivateRoute path="/pricing-tool/:slug?" component={PricingTool}/>
-		 <PrivateRoute path="/generic-pricing-method" component={GenericPricingMethod}/>
+		 <PrivateRoute path="/pricing-method/:slug?" component={GenericPricingMethod}/>
 	     <PrivateRoute path="/rules-processing/:slug" component={RulesProcessing}/>
 		 <PrivateRoute path="/generic-test-cases/:slug?" component={GenericTestCases}/>
 	    </Switch>
