@@ -7,6 +7,7 @@ import common from '../../../common/common.scss'
 
 function UpdateReferenceData(props) {
   const [showA, setShowA] = useState({ selectedFile: '', message: '', error: '', refresh: false, info: '' });
+  const [minimumFee, setMinimumFee] = useState(false)
   const fileInput = useRef()
   const onFileUpload = () => { 
 	  if (!fileInput.current.value) {
@@ -15,16 +16,20 @@ function UpdateReferenceData(props) {
 	  }
       const formData = new FormData();
       formData.append(
-        "uploadfile",
+        minimumFee ? "uploadMinimumFeeFile" : "uploadfile",
         showA.selectedFile,
         showA.selectedFile.name
+		
       )
 	  const config = {
         headers: {
           'content-type': 'multipart/form-data'
         }
       }
-      Service.post("/rbs/th/uploadFile", formData, config).then((res) => {
+	  
+	  const apiURL = minimumFee ? '/rbs/th/gp/uploadMinimumFeeFile' : '/rbs/th/gp/uploadFile'
+	  
+      Service.post(apiURL, formData, config).then((res) => {
 		fileInput.current.value = ''
 		setShowA({...showA, message: 'Upload successfully', error: '', info: '', selectedFile: '', refresh: true})
 	  }).catch((error) => {
@@ -62,7 +67,12 @@ function UpdateReferenceData(props) {
           </div> 
         ); 
       }
-    }  
+    }
+	
+  const onMinimumFee = (e) => {
+	setMinimumFee(e.target.checked)
+  }
+  
   return (
       <Row className={styles.section}>
 	  <Card>
@@ -70,6 +80,9 @@ function UpdateReferenceData(props) {
 	    {showA.error !== null && (
 		  <div className={styles.fileErrorMessage}>{showA.error}</div>
 	    )}
+		<div className={styles.minimumFee}>
+		  <Form.Check type='checkbox' label='Minimum Fee' onChange={onMinimumFee} />
+		</div>
 		<div className={common.uploadFile}>
          <input
 		  onChange={onFileChange}
