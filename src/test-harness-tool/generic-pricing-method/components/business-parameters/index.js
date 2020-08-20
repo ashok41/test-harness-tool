@@ -388,13 +388,14 @@ function BusinessParameters(props) {
 	  const regex = /^[\d\,]+$/g
 	  let valid = ''
 	  let validFlag = true
-	  if (lastBeforeData && (Number(lastBeforeData) < min || Number(lastBeforeData) > max)) {
+	  if (lastBeforeData && (Number(lastBeforeData) < min || (Number(lastBeforeData) > max && max))) {
 		  valid = errorMsg
 		  validFlag = false
 	  }
 	  if (data === '' || (data && regex.test(data) && eachData !== "0" && checkCommas[0] !== "")) {
 		if (data === '') {
-			valid = `Please check the value should be Min of ${min} and Max of ${max}`
+			const maxValue = max ? ` and Max of ${max}` : ''
+			valid = `Please check the value should be Min of ${min}${maxValue}`
 		}
 		setState({...state, [label]: {data: data, error: valid, valid: validFlag, type: 'commaSeperated'}})
 	  }
@@ -413,8 +414,9 @@ function BusinessParameters(props) {
 	  const eachData = Number(checkCommas[totCommas-1])
 	  let valid = ''
 	  let validFlag = true
-	  if (eachData && (Number(eachData) < min || Number(eachData) > max)) {
-		  valid = `Please check the value should be Min of ${min} and Max of ${max}`
+	  if (eachData && (Number(eachData) < min || (Number(eachData) > max && max))) {
+		  const maxValue = max ? ` and Max of ${max}` : ''
+		  valid = `Please check the value should be Min of ${min}${maxValue}`
 		  validFlag = false
 	  }
 	  if (valid) {
@@ -426,25 +428,6 @@ function BusinessParameters(props) {
 	  }
   }
     
-  const xonTextUpdated = (label) => (e) => {
-	const data = e.target.value
-	const regex = /^[\d\,]+$/g
-	if (data === '') {
-		let formData = {
-		  [label]: {...state[label], data: '', error: state[label].errorMessage, valid: false, type: 'commaSeperated'}
-		}
-		setState({...state, ...formData})
-	} else {
-		let formData = {
-		  [label]: {...state[label], data: data, error: '', valid: true, type: 'commaSeperated'}
-		}
-		if (!regex.test(data)) {
-			formData[label] = {...state[label], data: data, error: 'Please enter valid format', valid: false, type: 'commaSeperated'}
-		}
-		setState({...state, ...formData})
-	}
-  }
-  
   const customerDealSegementOptionChange = (label) => (e) => {
 	const data = e.target.value
 	const text = e.target.options[e.target.selectedIndex].text
@@ -543,9 +526,9 @@ function BusinessParameters(props) {
 	    })
 	    .catch((error) => {  
 		  let data = []
-		  if (state.marginMethodId.data === 'MM1') {
+		  if ((state.marginMethodId && state.marginMethodId.data === 'MM1') || (state.feeMethodId && state.feeMethodId.data === 'MM1')) {
 			  data = [
-			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
+			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
 			   {paramId: 'P5', paramRefId: null, paramName: 'Sector', paramFlag: 'Y', paramPropertyName: 'sector'},
 			   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
 			   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
@@ -630,7 +613,7 @@ function BusinessParameters(props) {
 	  setState({...state, ...formData})
 	} else {
 		  setState({...state, 'wsdlUrl': {data: state.wsdlUrl.data, error: '', valid: false, loader: true}})
-		  Service.post(`/rbs/th/validateUrl/?url=${state.wsdlUrl.data}`)
+		  Service.post(`/rbs/th/gp/validateUrl/?url=${state.wsdlUrl.data}`)
 		  .then((response) => {
 			const { data } = response
 			if (data === 'OK') {
@@ -882,6 +865,18 @@ function BusinessParameters(props) {
 				 <Form.Control.Feedback type="invalid" tooltip>
 				{state.wsdlUrl.error}
 				</Form.Control.Feedback>
+				<OverlayTrigger
+				  placement="top"	
+				  overlay={
+					<Tooltip>
+					  <div>NFT 11.158.4.85 9143</div>
+					  <div>UAT 11.158.4.156 9543</div>
+					  <div>DEV2 11.158.0.186 9443</div>
+					</Tooltip>
+				  }
+				>
+				  <div className={styles.tooltip}><div className={styles.qicon} /></div>
+			    </OverlayTrigger>
 				<div className={styles.mandatory}>Please enter URL appropriate to the selected Environment</div>
 				</Col>
 			   </Form.Group>
@@ -890,7 +885,7 @@ function BusinessParameters(props) {
 			  <div>
 			   <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
                <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
-			   <Button className={styles.referenceButton} variant="primary" disabled={checkReferenceData()} onClick={viewReferenceData(`${Service.getApiRoot()}/rbs/th/gp/generatelookup/${localStorage.getItem('userId')}/${state.customerDealSegmentId.data}/${state.pricingMethodId.data}/${setPricingMethod()}`)}>View Reference Data</Button>
+			   <Button className={styles.referenceButton} variant="primary" disabled={checkReferenceData()} onClick={viewReferenceData(`${Service.getApiRoot()}/rbs/th/gp/generatelookup/${localStorage.getItem('logged')}/${state.customerDealSegmentId.data}/${state.pricingMethodId.data}/${setPricingMethod()}`)}>View Reference Data</Button>
 			   <div className={styles.urlForm}>
 				 { state.wsdlUrl.loader ? 
 				 <Button variant="primary" disabled>
