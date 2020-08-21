@@ -451,8 +451,12 @@ function BusinessParameters(props) {
 		if (label === 'environment') {
 		  formData['wsdlUrl'] = state.wsdlUrl
 		}
-		if (label === 'sector' && state['sICCode']) {
+		if (label === 'sector' && (state['sICCode'] || state['borrowingAmount'])) {
 			formData['sICCode'] = {...state['sICCode'], data: ''}
+			formData['borrowingAmount'] = {...state['borrowingAmount'], data: ''}
+		}
+		if (label === 'slottingCategory' && state['masterGradingScale']) {
+			formData['masterGradingScale'] = {...state['masterGradingScale'], data: ''}
 		}
 		setState({...state, ...formData})
 	} else {
@@ -470,10 +474,16 @@ function BusinessParameters(props) {
 		  const productData = state.productFamily.data !== data ? '' : state['productName']
 		  formData['productName'] = {...state['productName'], valid: required, data: productData}
 		}
-		if (label === 'sector' && state['sICCode']) {
-		    const required = (data === 'Health' || data === 'Other') ? false: true
+		if (label === 'sector' && (state['sICCode'] || state['borrowingAmount'])) {
+			const required = (data === 'Health' || data === 'Other') ? false : true
 			formData['sICCode'] = {...state['sICCode'], valid: required, disabled: required, data: (required ? '' : state['sICCode'].data)}
+			formData['borrowingAmount'] = {...state['borrowingAmount'], valid: required, disabled: required, data: (required ? '' : state['borrowingAmount'].data)}
 		}
+		if (label === 'slottingCategory' && state['masterGradingScale']) {
+			const required = data === 'Otherwise' ? false : true
+			formData['masterGradingScale'] = {...state['masterGradingScale'], valid: required, disabled: required, data: (required ? '' : state['masterGradingScale'].data)}
+		}
+		
 		setState({...state, ...formData})
 	}
   }
@@ -499,7 +509,11 @@ function BusinessParameters(props) {
 			if (item.paramRefId === null) {
 				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
-				const disabled = item.paramPropertyName === 'sicCode' ? true: false
+				const disabled = (
+				  item.paramPropertyName === 'sicCode' ||
+				  item.paramPropertyName === 'borrowingAmount' ||
+				  item.paramPropertyName === 'masterGradingScale'
+				) ? true: false
 				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
 				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
 			}
@@ -529,6 +543,9 @@ function BusinessParameters(props) {
 		  if ((state.marginMethodId && state.marginMethodId.data === 'MM1') || (state.feeMethodId && state.feeMethodId.data === 'MM1')) {
 			  data = [
 			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
+			   {paramId: 'P2', paramRefId: null, paramName: 'SIC Code', paramFlag: 'Y', paramPropertyName: 'sicCode', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
+               {paramId: 'P92', paramRefId: 'P2', paramName: 'Sector', paramFlag: null, paramPropertyName: 'sector'},
+			   {paramId: 'P19', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null, paramPropertyName: 'borrowingAmount', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
 			   {paramId: 'P5', paramRefId: null, paramName: 'Sector', paramFlag: 'Y', paramPropertyName: 'sector'},
 			   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
 			   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
@@ -540,6 +557,11 @@ function BusinessParameters(props) {
 			  data = [
 			   {paramId: 'P1', paramRefId: null, paramName: 'Ballon %', paramFlag: null, paramPropertyName: 'ballonPercentage', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
 			   {paramId: 'P2', paramRefId: null, paramName: 'Term', paramFlag: null, paramPropertyName: 'term', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
+			   {paramId: 'P3', paramRefId: null, paramName: 'Term', paramFlag: null, paramPropertyName: 'term', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
+			   {paramId: 'P4', paramRefId: null, paramName: 'Master Grading Scale', paramFlag: null, paramPropertyName: 'masterGradingScale', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
+			   {paramId: 'P5', paramRefId: null, paramName: 'Slotting Category', paramFlag: 'Y', paramPropertyName: 'slottingCategory'},
+			   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
+			   {paramId: 'P7', paramRefId: 'P5', paramName: 'Otherwise', paramFlag: null},
 			  ]
 		  }
 		  let attrs = {}
@@ -551,7 +573,11 @@ function BusinessParameters(props) {
 			if (item.paramRefId === null) {
 				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
-				const disabled = item.paramPropertyName === 'sicCode' ? true: false
+				const disabled = (
+				  item.paramPropertyName === 'sicCode' ||
+				  item.paramPropertyName === 'borrowingAmount' ||
+				  item.paramPropertyName === 'masterGradingScale'
+				) ? true: false
 				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
 				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
 			}
@@ -647,7 +673,7 @@ function BusinessParameters(props) {
 		   let fieldName = field.paramName.replace(/\s/g, '')
 		   fieldName = fieldName[0].toLowerCase() + fieldName.slice(1)
 		   const fieldData = state[fieldName]
-		   return (<Col md="6">
+		   return (!fieldData.disabled ? <Col md="6">
 			{field.paramRefId === null && field.paramFlag === 'N' ? 
 			   <Form.Group as={Row} controlId={field.paramName}>
 				<Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
@@ -682,7 +708,7 @@ function BusinessParameters(props) {
 			     </Col>
 			   </Form.Group>
 			}
-		 </Col>)})}
+		 </Col>: '')})}
        </>)
     });
 	return (
