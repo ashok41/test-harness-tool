@@ -475,8 +475,9 @@ function BusinessParameters(props) {
 		  formData['productName'] = {...state['productName'], valid: required, data: productData}
 		}
 		if (label === 'sector' && (state['sICCode'] || state['borrowingAmount'])) {
-			const required = (data === 'Health' || data === 'Other') ? false : true
+			let required = (data === 'Health' || data === 'Other') ? false : true
 			formData['sICCode'] = {...state['sICCode'], valid: required, disabled: required, data: (required ? '' : state['sICCode'].data)}
+			required = (data === 'Health' || data === 'Agriculture') ? true : false
 			formData['borrowingAmount'] = {...state['borrowingAmount'], valid: required, disabled: required, data: (required ? '' : state['borrowingAmount'].data)}
 		}
 		if (label === 'slottingCategory' && state['masterGradingScale']) {
