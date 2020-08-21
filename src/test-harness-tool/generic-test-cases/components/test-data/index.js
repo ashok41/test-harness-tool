@@ -99,7 +99,9 @@ function TestData() {
 		  <div className={common.environment}>
 		    <div><span>Bank Division:</span> {dataLists.bankDivision}</div>
 			<div><span>Product Family:</span> {dataLists.productFamily}</div>
-			<div><span>Product Name:</span> {dataLists.productName}	</div>
+			{dataLists.productName && 
+			  <div><span>Product Name:</span> {dataLists.productName}</div>
+			}
 			<div><span>Pricing Method:</span> {dataLists.pricingMethodName}	</div>
 			<div><span>Customer Deal Segment:</span> {dataLists.customerDealSegmentName}</div>
 			<div><span>{dataLists.pricingMethodName}:</span> {dataLists[methodId]}</div>

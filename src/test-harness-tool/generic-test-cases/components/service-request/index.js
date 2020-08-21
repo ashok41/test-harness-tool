@@ -135,7 +135,9 @@ function ServiceRequest() {
 		  <div className={common.environment}>
 		    <div><span>Bank Division:</span> {state.bankDivision}</div>
 			<div><span>Product Family:</span> {state.productFamily}</div>
-			<div><span>Product Name:</span> {state.productName}	</div>
+			{state.productName && 
+			  <div><span>Product Name:</span> {state.productName}</div>
+			}
 			<div><span>Pricing Method:</span> {state.pricingMethodName}	</div>
 			<div><span>Customer Deal Segment:</span> {state.customerDealSegmentName}</div>
 			<div><span>{state.pricingMethodName}:</span> {state[methodId]}</div>
