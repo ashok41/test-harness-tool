@@ -10,7 +10,47 @@ function ServiceRequest() {
   const [loading, setLoading] = useState(false)
   const history = useHistory();
   const location = useLocation();
-  const {state} = location;
+  //const {state} = location;
+  const state = [
+        {
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 10,
+			"expectetAir": 6.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 2,
+			"termFactor": 1,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 1,
+			"testTransactionNo": "TH_001_001",
+			"totalRecord": 2,
+			"xmlDifference": "",
+			"environment": "NFT"
+		},
+		{
+			"actualAir": 0,
+			"actualApr": 0,
+			"applicationIdentity": "Ulster",
+			"bankDivision": "Business",
+			"borrowingAmount": 20,
+			"expectetAir": 12.69,
+			"expectetApr": 0,
+			"productFamily": "Small Business Loan",
+			"productName": "Loan",
+			"riskBand": 3,
+			"termFactor": 2,
+			"testSetId": 1,
+			"testTransactionFlag": {},
+			"testTransactionId": 2,
+			"testTransactionNo": "TH_001_002",
+			"totalRecord": 2,
+			"xmlDifference": ""
+		}]
   const testsetid = state[0].testSetId
   const createdby = state[0].createdBy
   const [sort, setSort] = useState({})

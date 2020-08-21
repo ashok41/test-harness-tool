@@ -14,6 +14,7 @@ function ServiceRequest() {
   const testsetid = state.testSetId
   const createdby = state.createdBy
   const [sort, setSort] = useState({})
+  const [error, setError] = useState('')
   const [confirmDisabled, setConfirmDisabled] = useState(false)
   
   function toTimeString(seconds) {
@@ -35,76 +36,10 @@ function ServiceRequest() {
 		})
 	  })
 	  .catch(() => {
-		  const seconds = Date.now() - start;
-		  const executionTime = toTimeString(seconds/1000)
-		  const data = {
-			"passed": 24,
-			"failed": 3,
-			"testSetId": 1169,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Commercial",
-			"productFamily": "Loans",
-			"productName": "Fixed Rate Loan",
-			"totalRecord": 2,
-			"environment": "NFT",
-			"marginMethodId": "MM5",
-			"marginMethodName": "CPB Trad Busi Loans",
-			"customerDealSegmentId": "CDS6",
-			"customerDealSegmentName": "CPB Trading Busi",
-			"pricingMethodId": 8,
-			"pricingMethodName": "Margin Method",
-			"genericPricingTestCaseList": [
-			{
-				"testTransactionId": 22846,
-				"testSetId": 1169,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4,
-				"testTransactionFlag": "Y"
-			},
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4,
-				"testTransactionFlag": "Y"
-			},
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4,
-				"testTransactionFlag": "N"
-			}
-		]
-		  }
-		  history.push({
-			pathname: '/generic-reports',
-			state: {data: data, executionTime: executionTime}
+		history.push({
+			pathname: '/error'
 		})
-	  }
-	  )
+	  })
   }
   const [page, setPage] = useState(1)
   const setPageItem = (number) => () => {
@@ -177,6 +112,8 @@ function ServiceRequest() {
 	  window.open(link,'_blank');
 	  setConfirmDisabled(true)
   }
+  let methodId = state.pricingMethodName.replace(/\s/g, '')
+  methodId = `${methodId[0].toLowerCase() + methodId.slice(1)}Id`
   return (
     <Card>
 	  <Row className={styles.wrapper}>
@@ -192,13 +129,16 @@ function ServiceRequest() {
 		    <ProfileList />
 		   </Col>	
 		  </Row>
+		  {error && 
+		    <div className={styles.error}>{error}</div>
+		  }
 		  <div className={common.environment}>
 		    <div><span>Bank Division:</span> {state.bankDivision}</div>
 			<div><span>Product Family:</span> {state.productFamily}</div>
 			<div><span>Product Name:</span> {state.productName}	</div>
 			<div><span>Pricing Method:</span> {state.pricingMethodName}	</div>
 			<div><span>Customer Deal Segment:</span> {state.customerDealSegmentName}</div>
-			<div><span>Margin Method:</span> {state.marginMethodName}</div>
+			<div><span>{state.pricingMethodName}:</span> {state[methodId]}</div>
 		    <div><span>Environment:</span> {state.environment}</div>
 			<div className={common.totalRecord}><span>Total Test Cases:</span> {state.totalRecord}</div>
 		  </div>
@@ -246,7 +186,7 @@ function ServiceRequest() {
 		    </Button>
 			: <Button variant="primary" onClick={handleSubmit} disabled={confirmDisabled} className={styles.handleConfirm}>Confirm & Execute</Button>
 		   }{' '}
-		   <Button variant="primary" disabled={confirmDisabled} onClick={downloadScenario(`${Service.getApiRoot()}/rbs/th/testdata/generatescenarioexcel/${testsetid}/${createdby}`)}>
+		   <Button variant="primary" disabled={confirmDisabled} onClick={downloadScenario(`${Service.getApiRoot()}/rbs/th/gp/generateselectivescenario/${testsetid}`)}>
 		    Download Test Scenarios
 		   </Button>
 		  </div> 

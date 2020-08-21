@@ -11,9 +11,60 @@ function TestData() {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
   const location = useLocation()
-  const {state: {postData, formData}} = location;
+ // const {state: {postData, formData}} = location;
+  const postData = 
+	{
+		"testSetId": 1169,
+		"applicationIdentity": "Ulster",
+		"bankDivision": "Commercial",
+		"productFamily": "Loans",
+		"productName": "Fixed Rate Loan",
+		"totalRecord": 2,
+		"environment": "NFT",
+		"marginMethodId": "MM5",
+		"marginMethodName": "CPB Trad Busi Loans",
+		"customerDealSegmentId": "CDS6",
+		"customerDealSegmentName": "CPB Trading Busi",
+		"pricingMethodId": 8,
+		"pricingMethodName": "Margin Method",
+     	"genericPricingTestCaseList": [
+        {
+			"testTransactionId": 22846,
+			"testTransactionNo": "TH_001_001",
+			"totalCustomerLimit": 100,
+			"turnOver": 1200,
+			"balanceSheetNetAsset": 1000,
+			"termFactor": 11,
+			"masterGradingScale": 10,
+			"sector": "Agriculture",
+			"securityCoverage": 55,
+	    },
+		{
+			"testTransactionId": 22846,
+			"testTransactionNo": "TH_001_001",
+			"totalCustomerLimit": 100,
+			"turnOver": 1200,
+			"balanceSheetNetAsset": 1000,
+			"termFactor": 11,
+			"masterGradingScale": 10,
+			"sector": "Agriculture",
+			"securityCoverage": 55,
+	    },
+		{
+			"testTransactionId": 22846,
+			"testTransactionNo": "TH_001_001",
+			"totalCustomerLimit": 100,
+			"turnOver": 1200,
+			"balanceSheetNetAsset": 1000,
+			"termFactor": 11,
+			"masterGradingScale": 10,
+			"sector": "Agriculture",
+			"securityCoverage": 55,
+	    }
+		]
+   }
   const [dataLists, setDataLists] = useState(postData);
-  const testsetid = dataLists[0].testSetId
+  const testsetid = dataLists.testSetId
   const [sort, setSort] = useState({})
   
   const [page, setPage] = useState(1)
@@ -233,6 +284,7 @@ function TestData() {
 			"expectetApr": 0,
 			"productFamily": "Small Business Loan",
 			"productName": "Loan",
+			"turnOver": 3,
 			"riskBand": 3,
 			"termFactor": 2,
 			"testSetId": 1,
@@ -285,24 +337,28 @@ function TestData() {
   
   const indexOfLastTodo = page * 10;
   const indexOfFirstTodo = indexOfLastTodo - 10;
-  const paginationData = dataLists.slice(indexOfFirstTodo, indexOfLastTodo);
-  const columns = [{
+  const paginationData = dataLists.genericPricingTestCaseList.slice(indexOfFirstTodo, indexOfLastTodo);
+  const columns = []
+  Object.keys(paginationData[0]).forEach((item) => {
+	let name = item.replace(/([A-Z])/g, ' $1')
+	name = name[0].toUpperCase() + name.slice(1)
+    columns.push({
+	  name: name,
+	  key: item
+    })
+  })
+  const columnsz = [{
 	  name: 'ID',
 	  key: 'id'
   }, {
-	  name: 'Application Identity',
-	  key: 'applicationIdentity',
-	  sortable: true,
-	  direction: 'asc'
+	  name: 'Total Customer Limit',
+	  key: 'totalCustomerLimit'
   }, {
-	  name: 'Bank Division',
-	  key: 'bankDivision'
+	  name: 'Turnover',
+	  key: 'Turnover'
   }, {
-	  name: 'Product Family',
-	  key: 'productFamily'
-  }, {
-	  name: 'Product Name',
-	  key: 'productName'
+	  name: 'Balance Sheet Net Assets',
+	  key: 'balanceSheetNetAssets'
   }, {
 	  name: 'Borrowing Amount(GBP)',
 	  key: 'borrowingAmount',
@@ -312,8 +368,14 @@ function TestData() {
 	  name: 'Term (Months)',
 	  key: 'termFactor'
   }, {
-	  name: 'Risk Band',
+	  name: 'Security Coverage',
 	  key: 'riskBand'
+  }, {
+	  name: 'Master Grading Scale',
+	  key: 'masterGradingScale'
+  }, {
+	  name: 'Sector',
+	  key: 'sector'
   }]
   
   const sortable = (sortKey, direction, isSortable) => () => {
@@ -345,14 +407,22 @@ function TestData() {
 		     <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
 		     <Breadcrumb.Item active>Generated Test Cases</Breadcrumb.Item>
 		    </Breadcrumb>
-		    <div className={common.environment}><span>Environment:</span> {paginationData[0].environment}</div>
-			<div><span>Total Test Cases:</span> {paginationData[0].totalRecord}</div>
 		   </Col>
 		   <Col md="3">
 		    <ProfileList />
 		   </Col>
 		  </Row>
-		  <Table responsive striped bordered hover size="md" className={styles.tableContainer}>
+		  <div className={common.environment}>
+		    <div><span>Bank Division:</span> {dataLists.bankDivision}</div>
+			<div><span>Product Family:</span> {dataLists.productFamily}</div>
+			<div><span>Product Name:</span> {dataLists.productName}	</div>
+			<div><span>Pricing Method:</span> {dataLists.pricingMethodName}	</div>
+			<div><span>Customer Deal Segment:</span> {dataLists.customerDealSegmentName}</div>
+			<div><span>Margin Method:</span> {dataLists.marginMethodName}</div>
+		    <div><span>Environment:</span> {dataLists.environment}</div>
+			<div className={common.totalRecord}><span>Total Test Cases:</span> {dataLists.totalRecord}</div>
+		  </div>
+		  <Table responsive striped bordered hover size="md">
 			  <thead>
 				<tr>
 				{columns.map((item) => {

@@ -134,8 +134,8 @@ function RoutingPage() {
   }
   const [reports, setReports] = useState(reportsData)
   if (Object.keys(reports.data).length > 0) {
-	reports.data['passedPercent'] = Math.round((reports.data.passed/reports.data.totalTestCases) * 100);
-	reports.data['failedPercent'] = Math.round((reports.data.failed/reports.data.totalTestCases) * 100);
+	reports.data['passedPercent'] = Math.round((reports.data.passed/reports.data.totalRecord) * 100);
+	reports.data['failedPercent'] = Math.round((reports.data.failed/reports.data.totalRecord) * 100);
   }
   
   const toDownloadLink = (link) => () => {

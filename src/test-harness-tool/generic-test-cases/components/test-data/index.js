@@ -13,7 +13,6 @@ function TestData() {
   const {state: {postData, formData}} = location;
   const [dataLists, setDataLists] = useState(postData);
   const testsetid = dataLists.testSetId
-  
   const [page, setPage] = useState(1)
   
   function handleSubmit() {
@@ -28,66 +27,8 @@ function TestData() {
 		})
 	 })
 	 .catch(() => {
-		 setLoading(false)
-		 const data = {
-		"testSetId": 1169,
-		"applicationIdentity": "Ulster",
-		"bankDivision": "Commercial",
-		"productFamily": "Loans",
-		"productName": "Fixed Rate Loan",
-		"totalRecord": 2,
-		"environment": "NFT",
-		"marginMethodId": "MM5",
-		"marginMethodName": "CPB Trad Busi Loans",
-		"customerDealSegmentId": "CDS6",
-		"customerDealSegmentName": "CPB Trading Busi",
-		"pricingMethodId": 8,
-		"pricingMethodName": "Margin Method",
-     	"genericPricingTestCaseList": [
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4
-			},
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4
-			},
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4
-			}
-		]
-		}
-		  history.push({
-			pathname: '/generic-test-cases/service-request',
-			state: data
+		history.push({
+			pathname: '/error',
 		})
 	 })
   }
@@ -138,7 +79,8 @@ function TestData() {
 		})
 	}
   })
-   
+  let methodId = dataLists.pricingMethodName.replace(/\s/g, '')
+  methodId = `${methodId[0].toLowerCase() + methodId.slice(1)}Id`
   return (
     <Card>
 	  <Row className={styles.wrapper}>
@@ -160,7 +102,7 @@ function TestData() {
 			<div><span>Product Name:</span> {dataLists.productName}	</div>
 			<div><span>Pricing Method:</span> {dataLists.pricingMethodName}	</div>
 			<div><span>Customer Deal Segment:</span> {dataLists.customerDealSegmentName}</div>
-			<div><span>Margin Method:</span> {dataLists.marginMethodName}</div>
+			<div><span>{dataLists.pricingMethodName}:</span> {dataLists[methodId]}</div>
 		    <div><span>Environment:</span> {dataLists.environment}</div>
 			<div className={common.totalRecord}><span>Total Test Cases:</span> {dataLists.totalRecord}</div>
 		  </div>
