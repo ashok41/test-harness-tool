@@ -481,7 +481,7 @@ function BusinessParameters(props) {
 			formData['borrowingAmount'] = {...state['borrowingAmount'], valid: required, disabled: required, data: (required ? '' : state['borrowingAmount'].data)}
 		}
 		if (label === 'slottingCategory' && state['masterGradingScale']) {
-			const required = data === 'Otherwise' ? false : true
+			const required = data === 'Otherwise' ? true : false
 			formData['masterGradingScale'] = {...state['masterGradingScale'], valid: required, disabled: required, data: (required ? '' : state['masterGradingScale'].data)}
 		}
 		
