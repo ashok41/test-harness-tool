@@ -238,7 +238,7 @@ function BusinessParameters(props) {
 	    .catch((error) => {
 		  const data = [
 		   {methodId: 'MM1', methodName: 'CPB Trad Busi PPFL Margin'},
-		   {methodId: 'MM2', methodName: 'CPB Trad Small Comm PPFL Margin'},
+		   {methodId: 'MM20', methodName: 'CPB Trad Small Comm PPFL Margin'},
 		   {methodId: 'MM3', methodName: 'CPB Trad Busi Loans Margin'}
 		  ]
 		  createDynamicMethod(data)
@@ -281,7 +281,11 @@ function BusinessParameters(props) {
 	  const lists = {}
 	  Object.keys(forms).map((item) => {
 		const formData = forms[item].data
-	    if (forms[item].paramPropertyName) {
+	    if (forms[item].disabled) {
+			lists[item] = null;
+			delete lists[item]
+		}
+		else if (forms[item].paramPropertyName) {
 			if (forms[item].type === 'commaSeperated') {
 				lists[forms[item].paramPropertyName] = forms[item].data.split(',').map(Number)
 			} else {
@@ -474,11 +478,15 @@ function BusinessParameters(props) {
 		  const productData = state.productFamily.data !== data ? '' : state['productName']
 		  formData['productName'] = {...state['productName'], valid: required, data: productData}
 		}
-		if (label === 'sector' && (state['sICCode'] || state['borrowingAmount'])) {
+		if (state.marginMethodId && state.marginMethodId.data !== 'MM20' && label === 'sector' && (state['sICCode'] || state['borrowingAmount'])) {
 			let required = (data === 'Health' || data === 'Other') ? false : true
-			formData['sICCode'] = {...state['sICCode'], valid: required, disabled: required, data: (required ? '' : state['sICCode'].data)}
+			if (state['sICCode']) {
+				formData['sICCode'] = {...state['sICCode'], valid: required, disabled: required, data: (required ? '' : state['sICCode'].data)}
+			}
 			required = (data === 'Health' || data === 'Agriculture') ? true : false
-			formData['borrowingAmount'] = {...state['borrowingAmount'], valid: required, disabled: required, data: (required ? '' : state['borrowingAmount'].data)}
+			if (state['borrowingAmount']) {
+				formData['borrowingAmount'] = {...state['borrowingAmount'], valid: required, disabled: required, data: (required ? '' : state['borrowingAmount'].data)}
+			}
 		}
 		if (label === 'slottingCategory' && state['masterGradingScale']) {
 			const required = data === 'Otherwise' ? true : false
@@ -518,7 +526,7 @@ function BusinessParameters(props) {
 				field = field[0].toLowerCase() + field.slice(1)
 				const disabled = (
 				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode') ||
-				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'borrowingAmount') ||
+				  (selectedData !== 'MM20' &&  checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'borrowingAmount') ||
 				  (checkFormFieldsDisabled['slottingCategory'] && item.paramPropertyName === 'masterGradingScale')
 				) ? true: false
 				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
@@ -588,7 +596,7 @@ function BusinessParameters(props) {
 				field = field[0].toLowerCase() + field.slice(1)
 				const disabled = (
 				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode') ||
-				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'borrowingAmount') ||
+				  (selectedData !== 'MM20' && checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'borrowingAmount') ||
 				  (checkFormFieldsDisabled['slottingCategory'] && item.paramPropertyName === 'masterGradingScale')
 				) ? true: false
 				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
@@ -899,7 +907,7 @@ function BusinessParameters(props) {
 			  <Form.Group as={Row} controlId="wsdlUrl">
 			   <Form.Label column sm="2">URL <span className={styles.mandatory}>*</span></Form.Label>
 			   <Col sm="9" className={styles.urlBox}>
-				<Form.Control as="textarea" isInvalid={state.wsdlUrl.error} disabled={state.wsdlUrl.disabled} value={state.wsdlUrl.data} autoComplete="off" onChange={onURLUpdated('wsdlUrl')} rows="1" />
+				<Form.Control as="textarea" isInvalid={state.wsdlUrl.error} disabled={state.wsdlUrl.disabled} value={state.wsdlUrl.data} autoComplete="off" onChange={onURLUpdated('wsdlUrl')} rows="2"/>
 				 {state.wsdlUrl.message && <div className={styles.tickIcon} />}
 				 <Form.Control.Feedback type="invalid" tooltip>
 				{state.wsdlUrl.error}
