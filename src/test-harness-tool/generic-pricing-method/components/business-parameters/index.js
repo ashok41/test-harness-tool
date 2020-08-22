@@ -503,6 +503,12 @@ function BusinessParameters(props) {
 		  const { data } = response
 		  let attrs = {}
 		  let formData = {}
+		  const checkFormFieldsDisabled = {}
+		  data.map((item) => {
+			if (item.paramPropertyName === 'sector' || item.paramPropertyName === 'slottingCategory') {
+				checkFormFieldsDisabled[item.paramPropertyName] = true
+			}
+		  })
 		  data.map((item) => {
 		    if (attrs[item.paramRefId] === undefined) {
 			  attrs[item.paramRefId] = []
@@ -511,9 +517,9 @@ function BusinessParameters(props) {
 				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
 				const disabled = (
-				  item.paramPropertyName === 'sicCode' ||
-				  item.paramPropertyName === 'borrowingAmount' ||
-				  item.paramPropertyName === 'masterGradingScale'
+				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode') ||
+				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'borrowingAmount') ||
+				  (checkFormFieldsDisabled['slottingCategory'] && item.paramPropertyName === 'masterGradingScale')
 				) ? true: false
 				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
 				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
@@ -567,6 +573,12 @@ function BusinessParameters(props) {
 		  }
 		  let attrs = {}
 		  let formData = {}
+		  const checkFormFieldsDisabled = {}
+		  data.map((item) => {
+			if (item.paramPropertyName === 'sector' || item.paramPropertyName === 'slottingCategory') {
+				checkFormFieldsDisabled[item.paramPropertyName] = true
+			}
+		  })
 		  data.map((item) => {
 		    if (attrs[item.paramRefId] === undefined) {
 			  attrs[item.paramRefId] = []
@@ -575,9 +587,9 @@ function BusinessParameters(props) {
 				let field = item.paramName.replace(/\s/g, '')
 				field = field[0].toLowerCase() + field.slice(1)
 				const disabled = (
-				  item.paramPropertyName === 'sicCode' ||
-				  item.paramPropertyName === 'borrowingAmount' ||
-				  item.paramPropertyName === 'masterGradingScale'
+				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode') ||
+				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'borrowingAmount') ||
+				  (checkFormFieldsDisabled['slottingCategory'] && item.paramPropertyName === 'masterGradingScale')
 				) ? true: false
 				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
 				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
@@ -755,7 +767,7 @@ function BusinessParameters(props) {
 			<div className={styles.mandatoryContainer}><span className={styles.mandatory}>*</span> Mandatory Fields</div>
             <Card.Body>
 			 <Form>
-			  <Row>
+			  <Row>	
 			    <Col md="6">
 			     <Form.Group as={Row} controlId="bankDivision">
                   <Form.Label column sm="5">Bank Division <span className={styles.mandatory}>*</span></Form.Label>
