@@ -10,7 +10,7 @@ function TestData() {
   const [loading, setLoading] = useState(false)
   const history = useHistory()
   const location = useLocation()
-  const {state: {postData, formData}} = location;
+  const {state: {postData, formData, dynamicFormFields, tempMethod}} = location;
   const [dataLists, setDataLists] = useState(postData);
   const testsetid = dataLists.testSetId
   const [page, setPage] = useState(1)
@@ -133,8 +133,8 @@ function TestData() {
 	      </div>}
 		  <div>
 		    <Button variant="primary" onClick={() => history.push({
-			pathname: '/generic-pricing-method',
-			state: formData
+			pathname: '/pricing-method/generic-pricing-method',
+			state: {formData: formData, dynamicFormFields: dynamicFormFields, tempMethod: tempMethod}
 		})}>Back</Button>{' '}
 		    {loading ? 
 		    <Button variant="primary" disabled>
