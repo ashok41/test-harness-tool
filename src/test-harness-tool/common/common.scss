@@ -31,15 +31,11 @@ body, html {
 	color: #1e808f !important;
 }
 
-:global(.table-responsive) {
-	display: flex !important;
-	justify-content: center;
-}
 :global(.table) {
 	max-height: 400px;
     overflow: auto;
     display: block;
-	width: auto !important;
+	width: 100%;
 	
 	thead th {
 	  background: none #002d64;

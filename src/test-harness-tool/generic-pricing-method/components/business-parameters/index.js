@@ -12,9 +12,13 @@ function BusinessParameters(props) {
   const location = useLocation()
   const params = useParams()
   const {slug} = params
+  const { state: backFormData } = location
   const dynamicFormFields = useRef({methods: {}})
   const tempMethod = useRef('')
-  const { state: backFormData } = location
+  
+  if (backFormData) {
+	dynamicFormFields.current = backFormData.dynamicFormFields
+  }
 
   const initial = {	
 	productFamily: {data: '', error: '', valid: false, errorMessage: 'Please select Product Family', key: null},
@@ -25,7 +29,7 @@ function BusinessParameters(props) {
 	customerDealSegmentId: {data: '', error: '', valid: false, errorMessage: 'Please select Customer Deal Segment', key: null},
     wsdlUrl: {data: '', error: '', valid: false, loader: false, disabled: true, message: '', errorMessage: 'Please enter URL', key: null}
   }
-  const [state, setState] = useState(backFormData ? backFormData : initial)
+  const [state, setState] = useState(backFormData ? backFormData.formData : initial)
   const [error, setError] = useState('')
   const [businessAttributes, setBusinessAttributes] = useState({data: {}, loader: false})
   const [customerDealSegmentId, setCustomerDealSegement] = useState({data: []})
@@ -220,9 +224,15 @@ function BusinessParameters(props) {
 		delete state[tempMethod.current]
 	  }
 	  tempMethod.current = fieldName
+	  let checkBackTempMethod = false
+	  if (backFormData && backFormData.tempMethod) {
+		  checkBackTempMethod = true;
+		  backFormData.tempMethod = null
+	  }
+      if (!checkBackTempMethod) {
+		formData[fieldName] = {data: '', error: '', valid: false, errorMessage: `Please select ${state.pricingMethodId.text}`, text: state.pricingMethodId.text}
+	  }
     }
-    formData[fieldName] = {data: '', error: '', valid: false, errorMessage: `Please select ${state.pricingMethodId.text}`, text: state.pricingMethodId.text}
-   
     dynamicFormFields.current = { methods: {[fieldName]: data} }
     setState({...state, ...formData})
   }
@@ -281,7 +291,7 @@ function BusinessParameters(props) {
 	  const lists = {}
 	  Object.keys(forms).map((item) => {
 		const formData = forms[item].data
-	    if (forms[item].disabled) {
+	    if (forms[item].disabled && item !== 'productFamily') {
 			lists[item] = null;
 			delete lists[item]
 		}
@@ -308,7 +318,7 @@ function BusinessParameters(props) {
 		  const { data } = response
 		  history.push({
 			pathname: '/generic-test-cases/test-data',
-			state: {postData: data, formData: forms}
+			state: {postData: data, formData: forms, dynamicFormFields: dynamicFormFields.current, tempMethod: true}
 		})
 	 })
 	 .catch(() => {
@@ -370,7 +380,7 @@ function BusinessParameters(props) {
 		  }
 		  history.push({
 			pathname: '/generic-test-cases/test-data',
-			state: {postData: data, formData: forms}
+			state: {postData: data, formData: forms, dynamicFormFields: dynamicFormFields.current, tempMethod: true}
 		})
 	 })
   }
