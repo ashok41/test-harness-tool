@@ -119,6 +119,15 @@ function BusinessParameters(props) {
 			"refDataKey": "PR001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
+		} , {
+			"attributeId": 14,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": {},
+			"refDataDesc": "Small Business Loan",
+			"refDataKey": "PR001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
 		}, {
 			"attributeId": 6,
 			"createdBy": "R123",
@@ -151,11 +160,7 @@ function BusinessParameters(props) {
 			"refDataKey": "MN001"
 		}, {
 			"attributeId": 11,
-			"refDataDesc": "AIR Method",
-			"refDataKey": "MN001"
-		}, {
-			"attributeId": 12,
-			"refDataDesc": "APR Method",
+			"refDataDesc": "AIR APR Method",
 			"refDataKey": "MN001"
 		}]
 		let attrs = {}
@@ -217,8 +222,9 @@ function BusinessParameters(props) {
   
   function createDynamicMethod(data) {
 	let formData = {}
-	let fieldName = state.pricingMethodId.text.replace(/\s/g, '')
-    fieldName = `${fieldName[0].toLowerCase() + fieldName.slice(1)}Id`
+	let fieldName = state.pricingMethodId.text.toLowerCase().replace( /(^|\s)([a-z])/g , function(m, p1, p2){ return p1+p2.toUpperCase(); } )
+	fieldName = fieldName.replace(/\s/g, '')
+	fieldName = `${fieldName[0].toLowerCase() + fieldName.slice(1)}Id`
 	if (!tempMethod.current || (tempMethod.current && fieldName !== tempMethod.current)) {
 	  if (tempMethod.current) {
 		delete state[tempMethod.current]
@@ -480,9 +486,15 @@ function BusinessParameters(props) {
 		if (label === 'environment') {
 		  formData['wsdlUrl'] = {...state.wsdlUrl, disabled: false, key: key}
 		}
+	    const text = e.target.options[e.target.selectedIndex].text
+		if (label === 'productName' && text === 'Small Business Loan') {
+			const pricingMethodOption = businessAttributes.data['MN'].filter((item) => {
+				return item.refDataDesc === 'AIR APR Method'
+			})
+			formData['pricingMethodId'] = {...state['pricingMethodId'], data: pricingMethodOption[0].attributeId, text: pricingMethodOption[0].refDataDesc, valid: true}
+		}
 		if (label === 'productFamily') {
 		  let refKey = data.split('|')
-		  const text = e.target.options[e.target.selectedIndex].text
 		  const required = text === 'Overdraft' ? true: false
 		  formData['productFamily'] = {...state[label], data: refKey[0], error: '', valid: true, key: refKey[1], disabled: required}
 		  const productData = state.productFamily.data !== data ? '' : state['productName']
