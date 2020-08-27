@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Tabs, Tab, Table, Pagination, Card, DropdownButton, Dropdown, Breadcrumb, Spinner } from 'react-bootstrap'
 import { useLocation, useParams } from 'react-router-dom'
 import ProfileList from '../common/profile-list'
@@ -142,6 +142,8 @@ function RoutingPage() {
     window.open(link,'_blank');
   }
   const resultsData = reports.data.genericPricingTestCaseList
+  let methodId = reports.data.pricingMethodName.replace(/\s/g, '')
+  methodId = `${methodId[0].toLowerCase() + methodId.slice(1)}Id`
   return (
 	<Row className={styles.container}>
 	{Object.keys(reports.data).length > 0 &&
@@ -163,7 +165,7 @@ function RoutingPage() {
 		 <div className={styles.download}>
 		    <DropdownButton id="dropdown-basic-button" className={styles.dropdown} title="Download Report">
 			  <Dropdown.Item onClick={toDownloadLink(`${Service.getApiRoot()}/rbs/th/testdata/generatepdf/${reports.data.testSetId}`)}>PDF</Dropdown.Item>
-			  <Dropdown.Item onClick={toDownloadLink(`${Service.getApiRoot()}/rbs/th/testdata/generateexcel/${reports.data.testSetId}/${reports.data.createdBy}`)} >Excel</Dropdown.Item>
+			  <Dropdown.Item onClick={toDownloadLink(`${Service.getApiRoot()}/rbs/th/gp/downloadtestcaseexcelreport/${reports.data.testSetId}/${localStorage.getItem('logged')}`)} >Excel</Dropdown.Item>
 			</DropdownButton>
 	     </div>
 		</Card.Header>
@@ -180,7 +182,7 @@ function RoutingPage() {
 			   <div><span>Product Name:</span> {reports.data.productName}	</div>
 			   <div><span>Pricing Method:</span> {reports.data.pricingMethodName}	</div>
 			   <div><span>Customer Deal Segment:</span> {reports.data.customerDealSegmentName}</div>
-			   <div><span>Margin Method:</span> {reports.data.marginMethodName}</div>
+			   <div><span>{reports.data.pricingMethodName}:</span> {reports.data[methodId]}</div>
 		       <div><span>Environment:</span> {reports.data.environment}</div>
 			   <div className={styles.totalRecord}><span>Total Test Cases:</span> {reports.data.totalRecord}</div>
 		      </div>
