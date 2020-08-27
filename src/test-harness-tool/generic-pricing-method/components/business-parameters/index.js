@@ -16,10 +16,6 @@ function BusinessParameters(props) {
   const dynamicFormFields = useRef({methods: {}})
   const tempMethod = useRef('')
   
-  if (backFormData) {
-	dynamicFormFields.current = backFormData.dynamicFormFields
-  }
-
   const initial = {	
 	productFamily: {data: '', error: '', valid: false, errorMessage: 'Please select Product Family', key: null},
 	productName: {data: '', error: '', valid: false, errorMessage: 'Please select Product Name', key: null},
@@ -124,7 +120,7 @@ function BusinessParameters(props) {
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": {},
-			"refDataDesc": "Small Business Loan",
+			"refDataDesc": "Small Business Loan (Fixed)",
 			"refDataKey": "PR001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
@@ -209,6 +205,15 @@ function BusinessParameters(props) {
 			"customerDealSegmentId": "CDS4",
 			"customerDealSegmentName": "CPB REF Large Commercial 2",
 			"isActive": "Y"
+		},
+		{
+			"customerDealSegmentId": "CDS12",
+			"customerDealSegmentName": "CPB Small Business",
+			"isActive": "Y"
+		},{
+			"customerDealSegmentId": "CDS13",
+			"customerDealSegmentName": "PBB Small Business",
+			"isActive": "Y"
 		}]
 		setCustomerDealSegement({data: data})
 	  })
@@ -233,13 +238,17 @@ function BusinessParameters(props) {
 	  let checkBackTempMethod = false
 	  if (backFormData && backFormData.tempMethod) {
 		  checkBackTempMethod = true;
-		  backFormData.tempMethod = null
 	  }
       if (!checkBackTempMethod) {
 		formData[fieldName] = {data: '', error: '', valid: false, errorMessage: `Please select ${state.pricingMethodId.text}`, text: state.pricingMethodId.text}
 	  }
     }
-    dynamicFormFields.current = { methods: {[fieldName]: data} }
+	if (backFormData && backFormData.tempMethod) {
+		dynamicFormFields.current = backFormData.dynamicFormFields
+	    backFormData.tempMethod = null
+	} else {
+		dynamicFormFields.current = { methods: {[fieldName]: data} }
+	}
     setState({...state, ...formData})
   }
   
@@ -412,7 +421,7 @@ function BusinessParameters(props) {
 		  valid = errorMsg
 		  validFlag = false
 	  }
-	  if (data === '' || (data && regex.test(data) && eachData !== "0" && checkCommas[0] !== "")) {
+	  if (data === '' || (data && regex.test(data) && checkCommas[0] !== "")) {
 		if (data === '') {
 			const maxValue = max ? ` and Max of ${max}` : ''
 			valid = `Please check the value should be Min of ${min}${maxValue}`
@@ -478,20 +487,30 @@ function BusinessParameters(props) {
 		if (label === 'slottingCategory' && state['masterGradingScale']) {
 			formData['masterGradingScale'] = {...state['masterGradingScale'], data: ''}
 		}
+		if (label === 'midTermFlag') {
+			formData['borrowingAmount'] = {...state['borrowingAmount'], valid: true, disabled: true, data: ''}
+			formData['increaseAmount'] = {...state['increaseAmount'], valid: true, disabled: true, data: ''}
+		}
 		setState({...state, ...formData})
 	} else {
+		const text = e.target.options[e.target.selectedIndex].text
 		let formData = {
-		  [label]: {...state[label], data: data, error: '', valid: true, key: key}
+		  [label]: {...state[label], data: data, error: '', valid: true, key: key, text: text}
 		}
 		if (label === 'environment') {
 		  formData['wsdlUrl'] = {...state.wsdlUrl, disabled: false, key: key}
 		}
-	    const text = e.target.options[e.target.selectedIndex].text
-		if (label === 'productName' && text === 'Small Business Loan') {
-			const pricingMethodOption = businessAttributes.data['MN'].filter((item) => {
-				return item.refDataDesc === 'AIR APR Method'
-			})
-			formData['pricingMethodId'] = {...state['pricingMethodId'], data: pricingMethodOption[0].attributeId, text: pricingMethodOption[0].refDataDesc, valid: true}
+		if (label === 'productName') {
+			formData['customerDealSegmentId'] = {...state['customerDealSegmentId'], data: '', valid: false}
+			dynamicFormFields.current = {methods: {}}
+			if (text === 'Small Business Loan (Fixed)') {
+				const pricingMethodOption = businessAttributes.data['MN'].filter((item) => {
+					return item.refDataDesc === 'AIR APR Method'
+				})
+				formData['pricingMethodId'] = {...state['pricingMethodId'], data: pricingMethodOption[0].attributeId, text: pricingMethodOption[0].refDataDesc, valid: true}
+			} else {
+				formData['pricingMethodId'] = {...state['pricingMethodId'], data: '', valid: false, text: ''}
+			}
 		}
 		if (label === 'productFamily') {
 		  let refKey = data.split('|')
@@ -499,6 +518,11 @@ function BusinessParameters(props) {
 		  formData['productFamily'] = {...state[label], data: refKey[0], error: '', valid: true, key: refKey[1], disabled: required}
 		  const productData = state.productFamily.data !== data ? '' : state['productName']
 		  formData['productName'] = {...state['productName'], valid: required, data: productData}
+		}
+		if (label === 'midTermFlag') {
+			let required = data === 'Yes' ? false : true
+			formData['borrowingAmount'] = {...state['borrowingAmount'], valid: required, disabled: required, data: ''}
+			formData['increaseAmount'] = {...state['increaseAmount'], valid: !required, disabled: !required, data: ''}
 		}
 		if (state.marginMethodId && state.marginMethodId.data !== 'MM20' && label === 'sector' && (state['sICCode'] || state['borrowingAmount'])) {
 			let required = (data === 'Health' || data === 'Other') ? false : true
@@ -535,7 +559,7 @@ function BusinessParameters(props) {
 		  let formData = {}
 		  const checkFormFieldsDisabled = {}
 		  data.map((item) => {
-			if (item.paramPropertyName === 'sector' || item.paramPropertyName === 'slottingCategory') {
+			if (item.paramPropertyName === 'sector' || item.paramPropertyName === 'slottingCategory' || item.paramPropertyName === 'midTermFlag') {
 				checkFormFieldsDisabled[item.paramPropertyName] = true
 			}
 		  })
@@ -549,7 +573,8 @@ function BusinessParameters(props) {
 				const disabled = (
 				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode') ||
 				  (selectedData !== 'MM20' &&  checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'borrowingAmount') ||
-				  (checkFormFieldsDisabled['slottingCategory'] && item.paramPropertyName === 'masterGradingScale')
+				  (checkFormFieldsDisabled['slottingCategory'] && item.paramPropertyName === 'masterGradingScale') ||
+				  (checkFormFieldsDisabled['midTermFlag'] && (item.paramPropertyName === 'borrowingAmount' || item.paramPropertyName === 'increaseAmount'))
 				) ? true: false
 				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
 				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
@@ -579,7 +604,7 @@ function BusinessParameters(props) {
 		  let data = []
 		  if ((state.marginMethodId && state.marginMethodId.data === 'MM1') || (state.feeMethodId && state.feeMethodId.data === 'MM1')) {
 			  data = [
-			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
+			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: null, minValue: 0, toolTipDesc: 'Please enter the value min of 500'},
 			   {paramId: 'P2', paramRefId: null, paramName: 'SIC Code', paramFlag: 'Y', paramPropertyName: 'sicCode', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
                {paramId: 'P92', paramRefId: 'P2', paramName: 'Sector', paramFlag: null, paramPropertyName: 'sector'},
 			   {paramId: 'P19', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null, paramPropertyName: 'borrowingAmount', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
@@ -592,20 +617,22 @@ function BusinessParameters(props) {
 			  ]
 		  } else {
 			  data = [
-			   {paramId: 'P1', paramRefId: null, paramName: 'Ballon %', paramFlag: null, paramPropertyName: 'ballonPercentage', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
-			   {paramId: 'P2', paramRefId: null, paramName: 'Term', paramFlag: null, paramPropertyName: 'term', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
-			   {paramId: 'P3', paramRefId: null, paramName: 'Term', paramFlag: null, paramPropertyName: 'term', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
+			   {paramId: 'P1', paramRefId: null, paramName: 'Increase Amount', paramFlag: null, paramPropertyName: 'increaseAmount', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
+			   {paramId: 'P19', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null, paramPropertyName: 'borrowingAmount', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
 			   {paramId: 'P4', paramRefId: null, paramName: 'Master Grading Scale', paramFlag: null, paramPropertyName: 'masterGradingScale', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
 			   {paramId: 'P5', paramRefId: null, paramName: 'Slotting Category', paramFlag: 'Y', paramPropertyName: 'slottingCategory'},
 			   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
 			   {paramId: 'P7', paramRefId: 'P5', paramName: 'Otherwise', paramFlag: null},
+			   {paramId: 'P8', paramRefId: null, paramName: 'Mid Term Flag', paramFlag: 'Y', paramPropertyName: 'midTermFlag'},
+			   {paramId: 'P9', paramRefId: 'P8', paramName: 'Yes', paramFlag: null},
+			   {paramId: 'P10', paramRefId: 'P8', paramName: 'No', paramFlag: null},
 			  ]
 		  }
 		  let attrs = {}
 		  let formData = {}
 		  const checkFormFieldsDisabled = {}
 		  data.map((item) => {
-			if (item.paramPropertyName === 'sector' || item.paramPropertyName === 'slottingCategory') {
+			if (item.paramPropertyName === 'sector' || item.paramPropertyName === 'slottingCategory' || item.paramPropertyName === 'midTermFlag') {
 				checkFormFieldsDisabled[item.paramPropertyName] = true
 			}
 		  })
@@ -619,7 +646,8 @@ function BusinessParameters(props) {
 				const disabled = (
 				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode') ||
 				  (selectedData !== 'MM20' && checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'borrowingAmount') ||
-				  (checkFormFieldsDisabled['slottingCategory'] && item.paramPropertyName === 'masterGradingScale')
+				  (checkFormFieldsDisabled['slottingCategory'] && item.paramPropertyName === 'masterGradingScale') ||
+				  (checkFormFieldsDisabled['midTermFlag'] && (item.paramPropertyName === 'borrowingAmount' || item.paramPropertyName === 'increaseAmount'))
 				) ? true: false
 				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
 				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
@@ -784,6 +812,30 @@ function BusinessParameters(props) {
 	window.open(link,'_blank');
   }
  
+  const handleCustomerDealSegment = () => {
+	const customerDealSegmentOptions = customerDealSegmentId.data && customerDealSegmentId.data.map(item => {
+		if (state.productName.text === "Small Business Loan (Fixed)" && (item.customerDealSegmentName === 'PBB Small Business' || item.customerDealSegmentName === 'CPB Small Business')) {
+			return(<option value={item.customerDealSegmentId}>{item.customerDealSegmentName}</option>)
+		}
+		if (state.productName.text !== "Small Business Loan (Fixed)" && (item.customerDealSegmentName !== 'PBB Small Business' && item.customerDealSegmentName !== 'CPB Small Business')) {
+			return(<option value={item.customerDealSegmentId}>{item.customerDealSegmentName}</option>)
+		}
+	})
+	return customerDealSegmentOptions
+  }
+  
+  const handlePricingMethod = () => {
+    const pricingMethodOptions = businessAttributes.data['MN'] && businessAttributes.data['MN'].map((item) => {
+	  if (state.productName.text === "Small Business Loan (Fixed)" && item.refDataDesc === 'AIR APR Method') {
+		return(<option value={item.attributeId}>{item.refDataDesc}</option>)
+	  }
+	  if (state.productName.text !== "Small Business Loan (Fixed)") {
+		return(<option value={item.attributeId}>{item.refDataDesc}</option>)
+	  }
+	})
+	return pricingMethodOptions
+  }
+ 
   return (
    <div className={common.overlayContainer}>
       <Row>
@@ -852,9 +904,7 @@ function BusinessParameters(props) {
 					<Col sm="6">
 					  <Form.Control as="select" isInvalid={state.pricingMethodId.error} value={state.pricingMethodId.data} onChange={customerDealSegementOptionChange('pricingMethodId')}>
 						<option value="">Please Select</option>
-						{businessAttributes.data['MN'] && businessAttributes.data['MN'].map((item) => {
-						  return (<option value={item.attributeId}>{item.refDataDesc}</option>)
-					    })}
+						{handlePricingMethod()}
 					  </Form.Control>
 					  <Form.Control.Feedback type="invalid" tooltip>
 					   {state.pricingMethodId.error}
@@ -870,9 +920,7 @@ function BusinessParameters(props) {
 					<Col sm="6">
 					  <Form.Control as="select" isInvalid={state.customerDealSegmentId.error} value={state.customerDealSegmentId.data} onChange={customerDealSegementOptionChange('customerDealSegmentId')}>
 						<option value="">Please Select</option>
-						{customerDealSegmentId.data.map((item) => {
-						  return (<option value={item.customerDealSegmentId}>{item.customerDealSegmentName}</option>)
-					    })}
+						{handleCustomerDealSegment()}
 					  </Form.Control>
 					  <Form.Control.Feedback type="invalid" tooltip>
 					   {state.customerDealSegmentId.error}
