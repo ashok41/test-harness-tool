@@ -792,13 +792,24 @@ function BusinessParameters(props) {
   function setPricingMethod() {
     let pricingMethod = state.pricingMethodId.text
     if (pricingMethod) {
+	  pricingMethod = pricingMethod.toLowerCase().replace( /(^|\s)([a-z])/g , function(m, p1, p2){ return p1+p2.toUpperCase(); } )
 	  pricingMethod = pricingMethod.replace(/\s/g, '')
-	  pricingMethod = `${pricingMethod[0].toLowerCase() + pricingMethod.slice(1)}Id`
+      pricingMethod = `${pricingMethod[0].toLowerCase() + pricingMethod.slice(1)}Id`
 	  pricingMethod = state[pricingMethod] && state[pricingMethod].data
     }
-	return pricingMethod
+    return pricingMethod
   }
-  
+
+  function setPricingMethodOption() {
+	  let pricingMethod = state.pricingMethodId.text
+	  if (pricingMethod === 'AIR APR Method') {
+		const methodOption = businessAttributes.data['MN'] && businessAttributes.data['MN'].filter((item) => {
+			return item.refDataDesc === 'Margin Method'
+		})
+		return methodOption[0].attributeId 
+	  }
+	  return state.pricingMethodId.data
+  }
   
   function checkReferenceData() {
 	 if (state.customerDealSegmentId.data !== '' && state.pricingMethodId.data != '' && setPricingMethod() != '') {
@@ -1002,7 +1013,7 @@ function BusinessParameters(props) {
 			  <div>
 			   <Button variant="danger" onClick={handleReset}>Reset</Button>{' '}
                <Button variant="primary" disabled={checkSubmitButton()} onClick={handleSubmit}>Next</Button>
-			   <Button className={styles.referenceButton} variant="primary" disabled={checkReferenceData()} onClick={viewReferenceData(`${Service.getApiRoot()}/rbs/th/gp/generatelookup/${localStorage.getItem('logged')}/${state.customerDealSegmentId.data}/${state.pricingMethodId.data}/${setPricingMethod()}`)}>View Reference Data</Button>
+			   <Button className={styles.referenceButton} variant="primary" disabled={checkReferenceData()} onClick={viewReferenceData(`${Service.getApiRoot()}/rbs/th/gp/generatelookup/${localStorage.getItem('logged')}/${state.customerDealSegmentId.data}/${setPricingMethodOption()}/${setPricingMethod()}`)}>View Reference Data</Button>
 			   <div className={styles.urlForm}>
 				 { state.wsdlUrl.loader ? 
 				 <Button variant="primary" disabled>

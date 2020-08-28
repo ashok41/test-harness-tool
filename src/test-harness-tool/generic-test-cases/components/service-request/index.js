@@ -15,7 +15,6 @@ function ServiceRequest() {
   const createdby = state.createdBy
   const [sort, setSort] = useState({})
   const [error, setError] = useState('')
-  const [confirmDisabled, setConfirmDisabled] = useState(false)
   
   function toTimeString(seconds) {
 	return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
@@ -24,7 +23,6 @@ function ServiceRequest() {
   function handleSubmit() {
 	  const start = Date.now();
 	  setLoading(true)
-	  setConfirmDisabled(true)
 	  Service.get(`/rbs/th/testdata/result/${testsetid}`)
 	  .then((response) => {
 		  const seconds = Date.now() - start;
@@ -82,6 +80,9 @@ function ServiceRequest() {
 		if (item === 'testTransactionNo') {
 			name = 'ID'
 		}
+		if (item === 'expectedAIRAPRMethod') {
+			name = 'Expected AIR APR Method'
+		}
 		firstColumns.push({
 		  name: name,
 		  key: item
@@ -110,9 +111,9 @@ function ServiceRequest() {
   
   const downloadScenario = (link) => () => {
 	  window.open(link,'_blank');
-	  setConfirmDisabled(true)
   }
-  let methodId = state.pricingMethodName.replace(/\s/g, '')
+  let methodId = state.pricingMethodName.toLowerCase().replace( /(^|\s)([a-z])/g , function(m, p1, p2){ return p1+p2.toUpperCase(); } )
+  methodId = methodId.replace(/\s/g, '')
   methodId = `${methodId[0].toLowerCase() + methodId.slice(1)}Id`
   return (
     <Card>
@@ -186,9 +187,9 @@ function ServiceRequest() {
 			/>
 			Inprogress...
 		    </Button>
-			: <Button variant="primary" onClick={handleSubmit} disabled={confirmDisabled} className={styles.handleConfirm}>Confirm & Execute</Button>
+			: <Button variant="primary" onClick={handleSubmit} className={styles.handleConfirm}>Confirm & Execute</Button>
 		   }{' '}
-		   <Button variant="primary" disabled={confirmDisabled} onClick={downloadScenario(`${Service.getApiRoot()}/rbs/th/gp/generateselectivescenario/${testsetid}`)}>
+		   <Button variant="primary" onClick={downloadScenario(`${Service.getApiRoot()}/rbs/th/gp/generateselectivescenario/${testsetid}`)}>
 		    Download Test Scenarios
 		   </Button>
 		  </div> 

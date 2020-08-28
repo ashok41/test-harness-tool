@@ -29,6 +29,7 @@ function TestData() {
 	 .catch(() => {
 		history.push({
 			pathname: '/error',
+			
 		})
 	 })
   }
@@ -79,7 +80,8 @@ function TestData() {
 		})
 	}
   })
-  let methodId = dataLists.pricingMethodName.replace(/\s/g, '')
+  let methodId = dataLists.pricingMethodName.toLowerCase().replace( /(^|\s)([a-z])/g , function(m, p1, p2){ return p1+p2.toUpperCase(); } )
+  methodId = methodId.replace(/\s/g, '')
   methodId = `${methodId[0].toLowerCase() + methodId.slice(1)}Id`
   return (
     <Card>
