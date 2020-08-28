@@ -520,7 +520,7 @@ function BusinessParameters(props) {
 		  formData['productName'] = {...state['productName'], valid: required, data: productData}
 		}
 		if (label === 'midTermFlag') {
-			let required = data === 'Yes' ? false : true
+			let required = data === 'Yes' ? true : false
 			formData['borrowingAmount'] = {...state['borrowingAmount'], valid: required, disabled: required, data: ''}
 			formData['increaseAmount'] = {...state['increaseAmount'], valid: !required, disabled: !required, data: ''}
 		}
