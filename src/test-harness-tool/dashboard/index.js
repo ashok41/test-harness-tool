@@ -109,7 +109,7 @@ function Dashboard() {
 			    <i />
 				<span>
 				 <DropdownButton id="dropdown-basic-button" drop="right" className={styles.dropdown} title="Pricing Tool">
-			      <Dropdown.Item href="#pricing-method/generic-pricing-method">Generic Pricing Method</Dropdown.Item>
+			      <Dropdown.Item href="#pricing-method/generic-pricing-method">RM and Digital Method</Dropdown.Item>
 			      <Dropdown.Item href="#pricing-tool">Ulster</Dropdown.Item>
 				  <Dropdown.Item href="#/">CBIL</Dropdown.Item>
 				  <Dropdown.Item href="#pricing-method/lombard">Lombard</Dropdown.Item>
@@ -120,7 +120,15 @@ function Dashboard() {
 			    <i /><span><a href="#pricing-tool/product-finder">Lending Finder</a></span>
 			  </li>
 			  <li>
-			    <i /><i /><span><a href="#report-lists">Reports</a></span>
+			    <i />
+				<span>
+				<DropdownButton id="dropdown-basic-button" drop="right" className={styles.dropdown} title="Reports">
+			      <Dropdown.Item href="#generic-report-lists">RM and Digital Method</Dropdown.Item>
+			      <Dropdown.Item href="#report-lists">Ulster</Dropdown.Item>
+				  <Dropdown.Item href="#/">CBIL</Dropdown.Item>
+				  <Dropdown.Item href="#/">Lombard</Dropdown.Item>
+			     </DropdownButton>
+				</span>
 			  </li>
 			 </ul>
 			</div>

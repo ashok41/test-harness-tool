@@ -24,7 +24,7 @@ function GenericPricingMethod() {
 		   <Col md="9">
 		    <Breadcrumb>
 		     <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
-		     <Breadcrumb.Item active>{breadCrumb}</Breadcrumb.Item>
+		     <Breadcrumb.Item active>{breadCrumb === "Generic Pricing Method" ? 'RM and Digital Method' : breadCrumb}</Breadcrumb.Item>
 		    </Breadcrumb>
 		   </Col>
 		   <Col md="3">

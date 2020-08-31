@@ -1,0 +1,98 @@
+.section {
+  background-color: #eeeeee;
+  padding: 20px 0;
+}
+.card-wrapper {
+	height: 495px;
+}
+
+.list-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.table-wrapper {
+	padding-top: 20px;
+}
+
+.logout {
+	cursor: pointer;
+	color: #d81a36;
+	font-weight: 500 !important;
+}
+
+th.rate, th.actual,th.rate-head, th.actual-head {
+	color: #000 !important;
+	font-weight: bold !important;
+}
+.rate, .rate-head {
+	background-color: #9ad8f9 !important;
+}
+.rate-head, .actual-head {
+	text-align: center;
+}
+.actual, .actual-head {
+	background-color: #ca4a9b !important;
+}
+
+.profile-list {
+	position: absolute;
+	right: 0px;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+    margin-right: 10px;
+	padding: 0 30px 0 20px;
+	
+	span {
+		font-weight: 700;
+	}
+}
+
+:global(.card) {
+	border-radius: 0px !important;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14);
+	border: none !important;
+}
+:global(.card-header:first-child) {
+	border-radius: 0px !important
+}
+:global(.list-group-item.active) {
+	background-color: #005093 !important;
+    border-color: #005093 !important;
+	color: #fff !important;
+}
+:global(.list-group-item) {
+	color: #005093 !important;
+}
+.date-box {
+	padding-bottom: 20px;
+}
+.list-box {
+	display: inline-block;
+	padding-right: 90px;
+}
+.from-box {
+	display: inline-block;
+	padding-right: 82px;
+}
+.to-box {
+	display: inline-block;
+	padding-right: 30px;
+}
+.button-box {
+	float: right;
+	padding-bottom: 10px;
+	.dropdown {
+		display: inline-block;
+	}
+	button {
+		margin-left: 10px;
+	}
+}
+.table-container {
+	display: table !important;
+}
+.react-date-picker__inputGroup__input react-date-picker__inputGroup__month {
+	width: 10px !important;
+}

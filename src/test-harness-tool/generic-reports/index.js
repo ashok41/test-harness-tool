@@ -138,12 +138,61 @@ function RoutingPage() {
 	reports.data['failedPercent'] = Math.round((reports.data.failed/reports.data.totalRecord) * 100);
   }
   
+  useEffect(() => {
+	if (slug) {
+	  Service.get(`/rbs/th/gp/generic-reports/${slug}`)
+		.then((response) => {
+		  const { data } = response
+	      setReports({...reports, data: data})
+		})
+		.catch((error) => {
+		  const data = {
+			"totalRecord": 27,
+			"passed": 24,
+			"failed": 3,
+			"bankDivision": "Commercial",
+			"productFamily": "Overdraft",
+			"productName": "",
+			"pricingMethodName": "Fee Method",
+			"pricingMethodId": "9",
+			"feeMethodId": "FM23",
+			"environment": "NFT",
+			"customerDealSegmentName": "CPB REF Large Commercial 2",
+			"genericPricingTestCaseList": [
+			{
+					"actualAir": 7.6,
+					"actualApr": 0.6,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 6,
+					"expectetApr": 0,
+					"productFamily": "Loan",
+					"productName": "Small Business Loan (Fixed)",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_001",
+					"totalRecord": 2,
+				}
+			]
+		  } 
+	      setReports({...reports, data: data})
+		})
+	}
+  }, slug)
+  
   const toDownloadLink = (link) => () => {
     window.open(link,'_blank');
   }
   const resultsData = reports.data.genericPricingTestCaseList
-  let methodId = reports.data.pricingMethodName.replace(/\s/g, '')
-  methodId = `${methodId[0].toLowerCase() + methodId.slice(1)}Id`
+  let methodId = reports.data.pricingMethodName
+  if (methodId) {
+	methodId.replace(/\s/g, '')
+	methodId = `${methodId[0].toLowerCase() + methodId.slice(1)}Id`
+  }
   return (
 	<Row className={styles.container}>
 	{Object.keys(reports.data).length > 0 &&
@@ -175,7 +224,7 @@ function RoutingPage() {
 			<Col md="5">
 		     <TestLog testCasesRun={reports.data.totalTestCases} executionTime={reports.executionTime} logData={createLogData(reports.data)} />
 			</Col>
-			<Col md="7">
+			 <Col md="7">
 			  <div className={common.environment}>
 		       <div><span>Bank Division:</span> {reports.data.bankDivision}</div>
 			   <div><span>Product Family:</span> {reports.data.productFamily}</div>
