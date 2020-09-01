@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Row, Col, Card, Form, Button, Alert } from 'react-bootstrap'
 import { useHistory } from 'react-router-dom'
+import Service from '../common/service'
 import common from '../common/common.scss'
 import styles from './login.scss'
 	
@@ -9,6 +10,7 @@ function Login() {
   const history = useHistory()
   const initial = {username: '', password:''}
   const [state, setState] = useState(initial)
+  const [version, setVersion] = useState('')
   const [error, setError] = useState('')
   const date = new Date();
 
@@ -27,6 +29,17 @@ function Login() {
 	  }
 	  
   }
+  
+  useEffect(() => {
+	Service.get('/rbs/th/gp/version')
+		.then((response) => {
+		  const { data } = response
+	      setVersion(data)
+		})
+		.catch((error) => {
+			setVersion('1.1.0')
+		})
+  }, [])
   
   function validation(forms) {
 	let errors = ''
@@ -55,6 +68,7 @@ function Login() {
 		  }
 		  <Card className={styles.cardWrapper}>
             <Card.Body className={styles.relative}>
+			<div>Release Version: {version}</div>
             <div className={styles.listWrapper}>
 			 <Form className={styles.listGroup}>
 			  <Form.Group controlId="formUsername">
