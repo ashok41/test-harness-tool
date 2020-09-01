@@ -5,8 +5,10 @@ import { Container } from 'react-bootstrap'
 import Header from './header'
 import Footer from './footer'
 import Reports from '../test-harness-tool/reports'
+import Error from '../test-harness-tool/error'
 import GenericReports from '../test-harness-tool/generic-reports'
 import ReportLists from '../test-harness-tool/report-lists'
+import GenericReportLists from '../test-harness-tool/generic-report-lists'
 import Dashboard from '../test-harness-tool/dashboard'
 import Login from '../test-harness-tool/login'
 import PricingTool from '../test-harness-tool/pricing-tool'
@@ -44,10 +46,12 @@ render((
 	    <Switch>
 	     <Route path="/login" component={Login}/>
 		 <PrivateRoute path="/report-lists" component={ReportLists}/>
+		 <PrivateRoute path="/generic-report-lists" component={GenericReportLists}/>
 	     <PrivateRoute path="/reports/:slug?/:slug1?" component={Reports}/>
 		 <PrivateRoute path="/generic-reports/:slug?/:slug1?" component={GenericReports}/>
 		 <PrivateRoute exact path="/" component={Dashboard}/>
 	     <PrivateRoute path="/pricing-tool/:slug?" component={PricingTool}/>
+		 <PrivateRoute path="/error" component={Error}/>
 		 <PrivateRoute path="/pricing-method/:slug?" component={GenericPricingMethod}/>
 	     <PrivateRoute path="/rules-processing/:slug" component={RulesProcessing}/>
 		 <PrivateRoute path="/generic-test-cases/:slug?" component={GenericTestCases}/>
