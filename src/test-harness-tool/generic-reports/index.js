@@ -190,8 +190,9 @@ function RoutingPage() {
   const resultsData = reports.data.genericPricingTestCaseList
   let methodId = reports.data.pricingMethodName
   if (methodId) {
-	methodId.replace(/\s/g, '')
-	methodId = `${methodId[0].toLowerCase() + methodId.slice(1)}Id`
+    methodId = methodId.toLowerCase().replace( /(^|\s)([a-z])/g , function(m, p1, p2){ return p1+p2.toUpperCase(); } )
+    methodId = methodId.replace(/\s/g, '')
+    methodId = `${methodId[0].toLowerCase() + methodId.slice(1)}Name`
   }
   return (
 	<Row className={styles.container}>

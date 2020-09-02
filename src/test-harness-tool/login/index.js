@@ -68,7 +68,10 @@ function Login() {
 		  }
 		  <Card className={styles.cardWrapper}>
             <Card.Body className={styles.relative}>
-			<div>Release Version: {version}</div>
+			<div className={styles.release}>
+			 <div><span>Release Version:</span> {version}</div>
+			 <div><span>Release Date:</span> {version}</div>
+			</div>
             <div className={styles.listWrapper}>
 			 <Form className={styles.listGroup}>
 			  <Form.Group controlId="formUsername">
