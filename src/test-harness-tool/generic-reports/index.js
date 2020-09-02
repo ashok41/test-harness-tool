@@ -156,6 +156,7 @@ function RoutingPage() {
 			"pricingMethodName": "Fee Method",
 			"pricingMethodId": "9",
 			"feeMethodId": "FM23",
+			"feeMethodName": "FM23",
 			"environment": "NFT",
 			"customerDealSegmentName": "CPB REF Large Commercial 2",
 			"genericPricingTestCaseList": [
@@ -196,7 +197,7 @@ function RoutingPage() {
   }
   return (
 	<Row className={styles.container}>
-	{Object.keys(reports.data).length > 0 &&
+	{Object.keys(reports.data).length > 0 ?
 	<Col md="12">
 	  <Row>
 	   <Col md="9">
@@ -248,7 +249,13 @@ function RoutingPage() {
 		</Card.Body>
 	   </Card>
 	  </div>
-	</Col>}
+	</Col> :
+	<div className={styles.overlayContainer}>
+	  <Spinner animation="border" role="status">
+		<span className="sr-only">Loading...</span>
+	  </Spinner>
+	</div>
+	}
 	</Row>
   );
 }

@@ -68,3 +68,11 @@
 	background-color: #1e808f  !important; 
 	color: #fff;
 }
+.overlay-container {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    height: 80%;
+    width: 80%;
+}
