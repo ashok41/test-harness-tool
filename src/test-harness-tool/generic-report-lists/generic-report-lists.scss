@@ -96,3 +96,10 @@ th.rate, th.actual,th.rate-head, th.actual-head {
 .react-date-picker__inputGroup__input react-date-picker__inputGroup__month {
 	width: 10px !important;
 }
+.no-records {
+	padding: 5px 0px;
+	text-align: center;
+	border: 1px solid #dee2e6;
+	font-weight: 500;
+	margin-top: 30px;
+}
