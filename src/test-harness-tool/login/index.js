@@ -37,7 +37,7 @@ function Login() {
 	      setVersion(data)
 		})
 		.catch((error) => {
-			setVersion('1.1.0')
+			setVersion({versionNo: '1.1.0', versionDate: '2020-03-10'})
 		})
   }, [])
   
@@ -56,7 +56,10 @@ function Login() {
 	  const data = e.target.value;
 	  setState({...state, [label]: data})
   }
-  
+  function formatDate(date) {
+    const d = new Date(date);
+    return d.toLocaleString("en-US");
+   }
   return (
     <>
       <Row className={styles.section}>
@@ -69,8 +72,8 @@ function Login() {
 		  <Card className={styles.cardWrapper}>
             <Card.Body className={styles.relative}>
 			<div className={styles.release}>
-			 <div><span>Release Version:</span> {version}</div>
-			 <div><span>Release Date:</span> {version}</div>
+			 <div><span>Release Version:</span> {version.versionNo}</div>
+			 <div><span>Release Date:</span> {formatDate(version.versionDate)}</div>
 			</div>
             <div className={styles.listWrapper}>
 			 <Form className={styles.listGroup}>

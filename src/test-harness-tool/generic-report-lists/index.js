@@ -905,7 +905,7 @@ function ReportLists() {
   }
   
   const onTextUpdated = (label) => (e) => {
-	setState({...state, [label]: {...state[label], data: e.target.value}})
+	setState({...state, [label]: {...state[label], data: e}})
   }
 
   function formatDate(date) {
@@ -952,7 +952,7 @@ function ReportLists() {
 		   <Col md="9">
 		    <Breadcrumb>
 		     <Breadcrumb.Item href="#/">Home</Breadcrumb.Item>
-		     <Breadcrumb.Item active>Generic Report</Breadcrumb.Item>
+		     <Breadcrumb.Item active>RM and Digital Report</Breadcrumb.Item>
 		    </Breadcrumb>
 		   </Col>
 		   <Col md="3">
@@ -1041,7 +1041,7 @@ function ReportLists() {
 				   <Col md="6">
 					{Object.keys(dynamicFormFields.current.methods).map((method) => {
 					 return (<Form.Group as={Row} controlId={method}>
-					   <Form.Label column sm="4">{state[method].text}</Form.Label>
+					   <Form.Label column sm="4">{state['pricingMethodId'].text}</Form.Label>
 					   <Col sm="5">
 						 <Form.Control as="select" value={state[method].data} onChange={onSelectedSingleOptionChange(method)}>
 						   <option value="">Please Select</option>
