@@ -440,10 +440,10 @@ function BusinessParameters(props) {
 	  }
 	  const checkCommas = data.split(',')
 	  const totCommas = checkCommas.length
-	  const eachData = Number(checkCommas[totCommas-1])
+	  const eachData = checkCommas[totCommas-1]
 	  let valid = ''
 	  let validFlag = true
-	  if (eachData && (Number(eachData) < min || (Number(eachData) > max && max))) {
+	  if (eachData !== '' && (Number(eachData) < min || (Number(eachData) > max && max))) {
 		  const maxValue = max ? ` and Max of ${max}` : ''
 		  valid = `Please check the value should be Min of ${min}${maxValue}`
 		  validFlag = false
@@ -524,13 +524,13 @@ function BusinessParameters(props) {
 			formData['borrowingAmount'] = {...state['borrowingAmount'], valid: required, disabled: required, data: ''}
 			formData['increaseAmount'] = {...state['increaseAmount'], valid: !required, disabled: !required, data: ''}
 		}
-		if (state.marginMethodId && state.marginMethodId.data !== 'MM20' && label === 'sector' && (state['sICCode'] || state['borrowingAmount'])) {
+		if (label === 'sector' && (state['sICCode'] || state['borrowingAmount'])) {
 			let required = (data === 'Health' || data === 'Other') ? false : true
 			if (state['sICCode']) {
 				formData['sICCode'] = {...state['sICCode'], valid: required, disabled: required, data: (required ? '' : state['sICCode'].data)}
 			}
 			required = (data === 'Health' || data === 'Agriculture') ? true : false
-			if (state['borrowingAmount']) {
+			if (state['borrowingAmount'] && state.marginMethodId && state.marginMethodId.data !== 'MM20') {
 				formData['borrowingAmount'] = {...state['borrowingAmount'], valid: required, disabled: required, data: (required ? '' : state['borrowingAmount'].data)}
 			}
 		}
@@ -604,7 +604,7 @@ function BusinessParameters(props) {
 		  let data = []
 		  if ((state.marginMethodId && state.marginMethodId.data === 'MM1') || (state.feeMethodId && state.feeMethodId.data === 'MM1')) {
 			  data = [
-			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: null, minValue: 0, toolTipDesc: 'Please enter the value min of 500'},
+			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: null, minValue: 1, toolTipDesc: 'Please enter the value min of 0'},
 			   {paramId: 'P2', paramRefId: null, paramName: 'SIC Code', paramFlag: 'Y', paramPropertyName: 'sicCode', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
                {paramId: 'P92', paramRefId: 'P2', paramName: 'Sector', paramFlag: null, paramPropertyName: 'sector'},
 			   {paramId: 'P19', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null, paramPropertyName: 'borrowingAmount', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
@@ -754,7 +754,7 @@ function BusinessParameters(props) {
                    {fieldData.error}
                   </Form.Control.Feedback>
 				  <OverlayTrigger
-					  placement="right"	
+					  placement="top"	
 					  overlay={
 						<Tooltip>{field.toolTipDesc}</Tooltip>
 					  }
@@ -974,7 +974,7 @@ function BusinessParameters(props) {
 				 {state.environment.error}
 				</Form.Control.Feedback>
 				<OverlayTrigger
-				  placement="right"	
+				  placement="top"	
 				  overlay={
 					<Tooltip>Choose environment to run test cases</Tooltip>
 				  }
