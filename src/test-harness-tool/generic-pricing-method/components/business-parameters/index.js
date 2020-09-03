@@ -535,7 +535,7 @@ function BusinessParameters(props) {
 			}
 		}
 		if (label === 'slottingCategory' && state['masterGradingScale']) {
-			const required = data === 'Otherwise' ? true : false
+			const required = data === 'Otherwise' ? false : true
 			formData['masterGradingScale'] = {...state['masterGradingScale'], valid: required, disabled: required, data: (required ? '' : state['masterGradingScale'].data)}
 		}
 		
