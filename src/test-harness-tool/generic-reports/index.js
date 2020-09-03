@@ -224,7 +224,7 @@ function RoutingPage() {
 		  <div>
 			<Row>
 			<Col md="5">
-		     <TestLog testCasesRun={reports.data.totalTestCases} executionTime={reports.executionTime} logData={createLogData(reports.data)} />
+		     <TestLog testCasesRun={reports.data.totalRecord} executionTime={reports.executionTime} logData={createLogData(reports.data)} />
 			</Col>
 			 <Col md="7">
 			  <div className={common.environment}>
@@ -245,7 +245,7 @@ function RoutingPage() {
 	  <div className={styles.tabWrapper}>
 	   <Card>
 	    <Card.Body>
-	     <ControlledTabs data={createLogData(reports.data)} testCasesRun={reports.data.totalTestCases} testDataList={resultsData} />
+	     <ControlledTabs data={createLogData(reports.data)} testCasesRun={reports.data.totalRecord} testDataList={resultsData} />
 		</Card.Body>
 	   </Card>
 	  </div>
