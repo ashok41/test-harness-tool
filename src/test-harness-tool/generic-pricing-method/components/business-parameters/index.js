@@ -29,6 +29,7 @@ function BusinessParameters(props) {
   const [error, setError] = useState('')
   const [businessAttributes, setBusinessAttributes] = useState({data: {}, loader: false})
   const [customerDealSegmentId, setCustomerDealSegement] = useState({data: []})
+  const applicationIdentity = createApplicationIdentity()
   function handleSubmit(e) {
 	  e.preventDefault();
 	  const error = validation(state)
@@ -42,7 +43,7 @@ function BusinessParameters(props) {
   
   function getBusinessAttributes() {
 	  setBusinessAttributes({...businessAttributes, loader: true})
-	  Service.get('/rbs/th/gp/businessAttributes')
+	  Service.get(`/rbs/th/gp/businessAttributes/${applicationIdentity}`)
 	  .then((response) => {
 		const { data } = response
 		let attrs = {}
@@ -179,7 +180,7 @@ function BusinessParameters(props) {
   }, [businessAttributes.data])
   
   function getCustomerDealSegement() {
-	  Service.get('/rbs/th/gp/customerdealsegment')
+	  Service.get(`/rbs/th/gp/customerdealsegment/${applicationIdentity}/${state.pricingMethodId.data}`)
 	  .then((response) => {
 		const { data } = response
 		setCustomerDealSegement({data: data})
@@ -220,10 +221,10 @@ function BusinessParameters(props) {
   }
   
   useEffect(() => {
-	 if (customerDealSegmentId.data.length === 0) {
+	 if (state.pricingMethodId && state.pricingMethodId.data) {
 		getCustomerDealSegement()
 	 }
-  }, [customerDealSegmentId.data])
+  }, [state.pricingMethodId.data])
   
   function createDynamicMethod(data) {
 	let formData = {}
@@ -261,12 +262,7 @@ function BusinessParameters(props) {
 		  createDynamicMethod(data)
 	    })
 	    .catch((error) => {
-		  const data = [
-		   {methodId: 'MM1', methodName: 'CPB Trad Busi PPFL Margin'},
-		   {methodId: 'MM20', methodName: 'CPB Trad Small Comm PPFL Margin'},
-		   {methodId: 'MM3', methodName: 'CPB Trad Busi Loans Margin'}
-		  ]
-		  createDynamicMethod(data)
+		  createDynamicMethod([])
 	    })
 	  }
   }, [state.customerDealSegmentId.data, state.pricingMethodId.data])
@@ -292,16 +288,9 @@ function BusinessParameters(props) {
   }
   
   function createApplicationIdentity() {
-    let appIdentity = ''
-	businessAttributes.data['AP'].forEach((item) => {
-		const field = item.refDataDesc.replace(/\s/g, '-').toLowerCase()
-		if (slug === field) {
-			appIdentity = item.attributeId
-		}
-	})
-	return appIdentity
+    let appIdentity = {'lombard': 17, 'generic-pricing-method': 1}
+	return appIdentity[slug]
   }
-  
   function buildJSON(forms) {
 	  const lists = {}
 	  Object.keys(forms).map((item) => {
@@ -337,65 +326,8 @@ function BusinessParameters(props) {
 		})
 	 })
 	 .catch(() => {
-		 const data = {
-			"testSetId": 1169,
-			"applicationIdentity": "Ulster",
-			"bankDivision": "Commercial",
-			"productFamily": "Loans",
-			"productName": "Fixed Rate Loan",
-			"totalRecord": 2,
-			"environment": "NFT",
-			"marginMethodId": "MM5",
-			"marginMethodName": "CPB Trad Busi Loans",
-			"customerDealSegmentId": "CDS6",
-			"customerDealSegmentName": "CPB Trading Busi",
-			"pricingMethodId": 8,
-			"pricingMethodName": "Margin Method",
-			"genericPricingTestCaseList": [
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": null,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4
-			},
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4
-			},
-			{
-				"testTransactionId": 22846,
-				"testTransactionNo": "TH_001_001",
-				"totalCustomerLimit": 100,
-				"turnOver": 1200,
-				"balanceSheetNetAsset": 1000,
-				"termFactor": 11,
-				"masterGradingScale": 10,
-				"sector": "Agriculture",
-				"securityCoverage": 55,
-				"expectedMarginRate": 55.1,
-				"actualMarginRate": 33.4
-			}
-			]
-		  }
-		  history.push({
-			pathname: '/generic-test-cases/test-data',
-			state: {postData: data, formData: forms, dynamicFormFields: dynamicFormFields.current, tempMethod: true}
+		history.push({
+			pathname: '/error'
 		})
 	 })
   }
