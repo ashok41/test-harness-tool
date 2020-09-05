@@ -183,10 +183,10 @@ function BusinessParameters(props) {
 	  Service.get(`/rbs/th/gp/customerdealsegment/${applicationIdentity}/${state.pricingMethodId.data}`)
 	  .then((response) => {
 		const { data } = response
-		setCustomerDealSegement({data: data})
+		setCustomerDealSegement({data: data, noRecords: ''})
 	  })
 	  .catch(() => {
-		const data = [
+		  const data = [
 		{
 			"customerDealSegmentId": "CDS1",
 			"customerDealSegmentName": "CPB REF Business",
@@ -216,7 +216,7 @@ function BusinessParameters(props) {
 			"customerDealSegmentName": "PBB Small Business",
 			"isActive": "Y"
 		}]
-		setCustomerDealSegement({data: data})
+		setCustomerDealSegement({data: data, noRecords: ''})
 	  })
   }
   
@@ -248,7 +248,7 @@ function BusinessParameters(props) {
 		dynamicFormFields.current = backFormData.dynamicFormFields
 	    backFormData.tempMethod = null
 	} else {
-		dynamicFormFields.current = { methods: {[fieldName]: data} }
+		dynamicFormFields.current = { methods: {[fieldName]: data}, noRecords: data.length }
 	}
     setState({...state, ...formData})
   }
@@ -262,7 +262,12 @@ function BusinessParameters(props) {
 		  createDynamicMethod(data)
 	    })
 	    .catch((error) => {
-		  createDynamicMethod([])
+			const data = [
+		   {methodId: 'MM1', methodName: 'CPB Trad Busi PPFL Margin'},
+		   {methodId: 'MM20', methodName: 'CPB Trad Small Comm PPFL Margin'},
+		   {methodId: 'MM3', methodName: 'CPB Trad Busi Loans Margin'}
+		  ]
+		  createDynamicMethod(data)
 	    })
 	  }
   }, [state.customerDealSegmentId.data, state.pricingMethodId.data])
@@ -533,77 +538,10 @@ function BusinessParameters(props) {
 		  setState({...newState, ...formData})
 	    })
 	    .catch((error) => {  
-		  let data = []
-		  if ((state.marginMethodId && state.marginMethodId.data === 'MM1') || (state.feeMethodId && state.feeMethodId.data === 'MM1')) {
-			  data = [
-			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: null, minValue: 1, toolTipDesc: 'Please enter the value min of 0'},
-			   {paramId: 'P2', paramRefId: null, paramName: 'SIC Code', paramFlag: 'Y', paramPropertyName: 'sicCode', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
-               {paramId: 'P92', paramRefId: 'P2', paramName: 'Sector', paramFlag: null, paramPropertyName: 'sector'},
-			   {paramId: 'P19', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null, paramPropertyName: 'borrowingAmount', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
-			   {paramId: 'P5', paramRefId: null, paramName: 'Sector', paramFlag: 'Y', paramPropertyName: 'sector'},
-			   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
-			   {paramId: 'P7', paramRefId: 'P5', paramName: 'Agriculture', paramFlag: null},
-			   {paramId: 'P8', paramRefId: 'P5', paramName: 'Media', paramFlag: null},
-			   {paramId: 'P9', paramRefId: 'P5', paramName: 'Other', paramFlag: null},
-			   {paramId: 'P11', paramRefId: 'P10', paramName: 'Code', paramFlag: null},
-			  ]
-		  } else {
-			  data = [
-			   {paramId: 'P1', paramRefId: null, paramName: 'Increase Amount', paramFlag: null, paramPropertyName: 'increaseAmount', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
-			   {paramId: 'P19', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null, paramPropertyName: 'borrowingAmount', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
-			   {paramId: 'P4', paramRefId: null, paramName: 'Master Grading Scale', paramFlag: null, paramPropertyName: 'masterGradingScale', maxValue: 50000, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
-			   {paramId: 'P5', paramRefId: null, paramName: 'Slotting Category', paramFlag: 'Y', paramPropertyName: 'slottingCategory'},
-			   {paramId: 'P6', paramRefId: 'P5', paramName: 'Health', paramFlag: null},
-			   {paramId: 'P7', paramRefId: 'P5', paramName: 'Otherwise', paramFlag: null},
-			   {paramId: 'P8', paramRefId: null, paramName: 'Mid Term Flag', paramFlag: 'Y', paramPropertyName: 'midTermFlag'},
-			   {paramId: 'P9', paramRefId: 'P8', paramName: 'Yes', paramFlag: null},
-			   {paramId: 'P10', paramRefId: 'P8', paramName: 'No', paramFlag: null},
-			  ]
-		  }
-		  let attrs = {}
 		  let formData = {}
-		  const checkFormFieldsDisabled = {}
-		  data.map((item) => {
-			if (item.paramPropertyName === 'sector' || item.paramPropertyName === 'slottingCategory' || item.paramPropertyName === 'midTermFlag') {
-				checkFormFieldsDisabled[item.paramPropertyName] = true
-			}
-		  })
-		  data.map((item) => {
-		    if (attrs[item.paramRefId] === undefined) {
-			  attrs[item.paramRefId] = []
-		    }
-			if (item.paramRefId === null) {
-				let field = item.paramName.replace(/\s/g, '')
-				field = field[0].toLowerCase() + field.slice(1)
-				const disabled = (
-				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode') ||
-				  (selectedData !== 'MM20' && checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'borrowingAmount') ||
-				  (checkFormFieldsDisabled['slottingCategory'] && item.paramPropertyName === 'masterGradingScale') ||
-				  (checkFormFieldsDisabled['midTermFlag'] && (item.paramPropertyName === 'borrowingAmount' || item.paramPropertyName === 'increaseAmount'))
-				) ? true: false
-				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
-				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
-			}
-		    attrs[item.paramRefId].push(item)
-		  })
-		  attrs['null'] = attrs['null'].sort((a,b) => {
-			  if (a.paramFlag < b.paramFlag) {
-				return 1;
-			  }
-			  if (a.paramFlag > b.paramFlag){
-				return -1;
-			  }
-			  return 0;
-		  })
-		  dynamicFormFields.current = { ...dynamicFormFields.current, formfields: attrs }
+		  dynamicFormFields.current = { ...dynamicFormFields.current, formfields: {'null': []}, formfieldsNoRecords: true }
 		  formData[label] = {...state[label], data: selectedData, error: '', valid: true}
-		  let newState = {}
-		  for (const item in state) {
-			if (!state[item].dynamicFields) {
-			  newState[item] = state[item]
-			}
-		  }
-		  setState({...newState, ...formData})
+		  setState({...state, ...formData})
 	  })
 	}
   }
@@ -868,6 +806,9 @@ function BusinessParameters(props) {
 					  <Form.Control.Feedback type="invalid" tooltip>
 					   {state.customerDealSegmentId.error}
 					  </Form.Control.Feedback>
+					  {customerDealSegmentId.noRecords && 
+						<div className={styles.mandatory}>{customerDealSegmentId.noRecords}</div>
+					  }
 					</Col>
 				  </Form.Group>
 				</Col>
@@ -885,6 +826,12 @@ function BusinessParameters(props) {
 						  <Form.Control.Feedback type="invalid" tooltip>
 						   {state[method].error}
 						  </Form.Control.Feedback>
+						  {dynamicFormFields.current.noRecords === 0 && 
+							<div className={styles.mandatory}>No Records Found</div>
+				          }
+						  {dynamicFormFields.current.formfieldsNoRecords && 
+							<div className={styles.mandatory}>{`No ${state[method].text} Records Found`}</div>
+						  }
 						</Col>
 						</Form.Group>)
 				   })}
