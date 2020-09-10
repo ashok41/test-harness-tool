@@ -109,10 +109,19 @@ function Dashboard() {
 			    <i />
 				<span>
 				 <DropdownButton id="dropdown-basic-button" drop="right" className={styles.dropdown} title="Pricing Tool">
-			      <Dropdown.Item href="#pricing-method/generic-pricing-method">RM and Digital Method</Dropdown.Item>
+			      <Dropdown.Item href="#pricing-method/generic-pricing-method">RM and Digital</Dropdown.Item>
 			      <Dropdown.Item href="#pricing-tool">Ulster</Dropdown.Item>
 				  <Dropdown.Item href="#/">CBIL</Dropdown.Item>
 				  <Dropdown.Item href="#pricing-method/lombard">Lombard</Dropdown.Item>
+			     </DropdownButton>
+			    </span>
+			  </li>
+			  <li>
+			    <i />
+				<span>
+				 <DropdownButton id="dropdown-basic-button" drop="right" className={styles.dropdown} title="Pricing Assessment">
+			      <Dropdown.Item href="#pricing-assessment/RM and Digital Assessment">RM and Digital Assessment</Dropdown.Item>
+				  <Dropdown.Item href="#pricing-assessment/Lombard Assessment">Lombard Assessment</Dropdown.Item>
 			     </DropdownButton>
 			    </span>
 			  </li>
@@ -123,7 +132,7 @@ function Dashboard() {
 			    <i />
 				<span>
 				<DropdownButton id="dropdown-basic-button" drop="right" className={styles.dropdown} title="Reports">
-			      <Dropdown.Item href="#generic-report-lists">RM and Digital Method</Dropdown.Item>
+			      <Dropdown.Item href="#generic-report-lists">RM and Digital</Dropdown.Item>
 			      <Dropdown.Item href="#report-lists">Ulster</Dropdown.Item>
 				  <Dropdown.Item href="#/">CBIL</Dropdown.Item>
 				  <Dropdown.Item href="#/">Lombard</Dropdown.Item>

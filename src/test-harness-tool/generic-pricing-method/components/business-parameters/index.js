@@ -358,7 +358,7 @@ function BusinessParameters(props) {
 		  valid = errorMsg
 		  validFlag = false
 	  }
-	  if (data === '' || (data && regex.test(data) && checkCommas[0] !== "")) {
+	  if (data === '' || (data && regex.test(data) && totCommas <= 10 && checkCommas[0] !== "")) {
 		if (data === '') {
 			const maxValue = max ? ` and Max of ${max}` : ''
 			valid = `Please check the value should be Min of ${min}${maxValue}`
