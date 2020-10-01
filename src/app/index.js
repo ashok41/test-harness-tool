@@ -13,6 +13,7 @@ import Dashboard from '../test-harness-tool/dashboard'
 import Login from '../test-harness-tool/login'
 import PricingTool from '../test-harness-tool/pricing-tool'
 import GenericPricingMethod from '../test-harness-tool/generic-pricing-method'
+import LendingFinder from  '../test-harness-tool/lending-finder'
 import PricingAssessment from '../test-harness-tool/pricing-assessment'
 import RulesProcessing from '../test-harness-tool/rules-processing'
 import GenericTestCases from '../test-harness-tool/generic-test-cases'
@@ -54,6 +55,7 @@ render((
 	     <PrivateRoute path="/pricing-tool/:slug?" component={PricingTool}/>
 		 <PrivateRoute path="/error" component={Error}/>
 		 <PrivateRoute path="/pricing-method/:slug?" component={GenericPricingMethod}/>
+		 <PrivateRoute path="/lending-finder/:slug?" component={LendingFinder}/>
 		 <PrivateRoute path="/pricing-assessment/:slug?" component={PricingAssessment}/>
 	     <PrivateRoute path="/rules-processing/:slug" component={RulesProcessing}/>
 		 <PrivateRoute path="/generic-test-cases/:slug?" component={GenericTestCases}/>

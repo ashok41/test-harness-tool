@@ -105,45 +105,33 @@ function ControlledTabs(props) {
 	  rowSpan: 2,
 	}])
   }
-  Array.prototype.push.apply(firstColumns, [{
-	  name: 'Expected',
-	  key: 'expected',
-	  className: styles.rateHead,
-	  colSpan: 2,
-	}, {
-	  name: 'Actual',
-	  key: 'actual',
-	  className: styles.actualHead,
-	  colSpan: 2,
-  }])
-  const secondColumns = []
   if (paginationData[0] && paginationData[0].productName === 'Small Business Loan (Fixed)') {
-	Array.prototype.push.apply(secondColumns, [{
-	  name: 'AIR(%)',
+	Array.prototype.push.apply(firstColumns, [{
+	  name: 'Expected AIR(%)',
 	  key: 'air'
 	}, {
-	  name: 'APR(%)',
+	  name: 'Expected APR(%)',
 	  key: 'apr'
 	}, {
-	  name: 'AIR(%)',
+	  name: 'Expected AIR(%)',
 	  key: 'air'
 	}, {
-	  name: 'APR(%)',
+	  name: 'Expected APR(%)',
 	  key: 'apr'
 	}])
   }
   if (paginationData[0] && (paginationData[0].productName === 'Overdraft' || paginationData[0].productName === 'Agri Facility')) {
-	Array.prototype.push.apply(secondColumns, [{
-	  name: 'Margin Fee',
+	Array.prototype.push.apply(firstColumns, [{
+	  name: 'Expected Margin Fee',
 	  key: 'marginFee'
 	}, {
-	  name: 'Arrangement Fee',
+	  name: 'Expected Arrangement Fee',
 	  key: 'arrangementFee'
 	}, {
-	  name: 'Margin Fee',
+	  name: 'Expected Margin Fee',
 	  key: 'marginFee'
 	}, {
-	  name: 'Arrangement Fee',
+	  name: 'Expected Arrangement Fee',
 	  key: 'arrangementFee'
 	}])
   }
@@ -161,23 +149,16 @@ function ControlledTabs(props) {
 			<div className={styles.noRecords}>No Records to Display</div>
 		}
 		{filteredData.length > 0 &&
-		<div className={common.tableContainer}>
-		<table className={common.tableConatiner}>
+		<div>
+		<Table responsive striped bordered hover size="md">
 		  <thead>
 			<tr>
 			  {firstColumns.map((item) => {
 				const colSpan = item.colSpan ? { colSpan: item.colSpan } : {}
 				const rowSpan = item.rowSpan ? { rowSpan: item.rowSpan } : {}
 				const className = item.className ? { className: item.className } : {}
-				return <th {...rowSpan} {...colSpan} {...className}>
+				return <th {...className}>
 				  <div>{item.name}</div>
-				</th>
-		      })}
-			</tr>
-			<tr>
-			  {secondColumns.map((item2) => {
-				return <th>
-				  {item2.name}
 				</th>
 		      })}
 			</tr>
@@ -222,7 +203,7 @@ function ControlledTabs(props) {
 			  </tr>
 			))}
 		  </tbody>
-		</table></div>}
+		</Table></div>}
 		  {filteredData.length > 10 && <div>
 		    <Pagination>{items}</Pagination>
 	      </div>}

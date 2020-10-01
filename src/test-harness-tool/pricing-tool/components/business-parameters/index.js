@@ -1021,7 +1021,7 @@ function BusinessParameters(props) {
 			}
 		  })
 		  .catch(() => {
-			  setState({...state, 'url': {data: state.url.data, error: '', valid: true, loader: false, message: 'ok'}})
+			  setState({...state, 'url': {data: state.url.data, error: 'Please enter valid URL', valid: false, loader: false, message: ''}})
 		  })
 	  }
   }

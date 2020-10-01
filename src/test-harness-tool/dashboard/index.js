@@ -126,7 +126,7 @@ function Dashboard() {
 			    </span>
 			  </li>
 			  <li>
-			    <i /><span><a href="#pricing-tool/product-finder">Lending Finder</a></span>
+			    <i /><span><a href="#lending-finder">Lending Finder</a></span>
 			  </li>
 			  <li>
 			    <i />

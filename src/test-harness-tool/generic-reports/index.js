@@ -64,7 +64,7 @@ function ControlledTabs(props) {
   Object.keys(paginationData[0]).forEach((item) => {
 	let name = item.replace(/([A-Z])/g, ' $1')
 	name = name[0].toUpperCase() + name.slice(1)
-    if (item !== 'testTransactionId' && item !== 'testTransactionFlag') {
+    if (item !== 'testTransactionId' && item !== 'testTransactionFlag' && item !== 'color') {
 		if (item === 'testTransactionNo') {
 			name = 'ID'
 		}
@@ -106,7 +106,11 @@ function ControlledTabs(props) {
 		  {paginationData.map((item) => (
 		    <tr>
 			  {firstColumns.map((data) => {
-				return (<td>{item[data.key]}</td>)
+				let color = {}
+				if (data.key === 'expectetAir') {
+					color = {backgroundColor: item['color'], fontWeight: 'bold', color: '#fff'}
+				}
+				return (<td style={color}>{item[data.key]}</td>)
 			  })}
 			  </tr>
 			))}
@@ -143,10 +147,10 @@ function RoutingPage() {
 	  Service.get(`/rbs/th/gp/generic-reports/${slug}`)
 		.then((response) => {
 		  const { data } = response
-	      setReports({...reports, data: data})
+	      setReports({...reports, data: data, noRecords: false})
 		})
 		.catch((error) => {
-		  const data = {
+	      const data = {
 			"totalRecord": 27,
 			"passed": 24,
 			"failed": 3,
@@ -177,6 +181,45 @@ function RoutingPage() {
 					"testTransactionId": 2,
 					"testTransactionNo": "TH_001_001",
 					"totalRecord": 2,
+					"color": "#ff0000"
+				},
+				{
+					"actualAir": 7.6,
+					"actualApr": 0.6,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 6,
+					"expectetApr": 0,
+					"productFamily": "Loan",
+					"productName": "Small Business Loan (Fixed)",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_001",
+					"totalRecord": 2,
+					"color": "#002d64"
+				},
+				{
+					"actualAir": 7.6,
+					"actualApr": 0.6,
+					"applicationIdentity": "Ulster",
+					"bankDivision": "Business",
+					"borrowingAmount": 100,
+					"expectetAir": 6,
+					"expectetApr": 0,
+					"productFamily": "Loan",
+					"productName": "Small Business Loan (Fixed)",
+					"riskBand": 3,
+					"termFactor": 2,
+					"testSetId": 1,
+					"testTransactionFlag": "Y",
+					"testTransactionId": 2,
+					"testTransactionNo": "TH_001_001",
+					"totalRecord": 2,
+					"color": "#00c21e"
 				}
 			]
 		  } 
@@ -197,6 +240,9 @@ function RoutingPage() {
   }
   return (
 	<Row className={styles.container}>
+	{reports.noRecords &&
+		<div>No records found</div>
+	}
 	{Object.keys(reports.data).length > 0 ?
 	<Col md="12">
 	  <Row>

@@ -15,10 +15,10 @@ function BusinessParameters(props) {
   const { state: backFormData } = location
   const dynamicFormFields = useRef({methods: {}})
   const tempMethod = useRef('')
-  
+ 
   const initial = {	
 	productFamily: {data: '', error: '', valid: false, errorMessage: 'Please select Product Family', key: null},
-	productName: {data: '', error: '', valid: false, errorMessage: 'Please select Product Name', key: null},
+	productName: {data: '', error: '', valid: false, disabled: false, errorMessage: 'Please select Product Name', key: null},
 	bankDivision : {data: '', error: '', valid: false, errorMessage: 'Please select Bank Division', key: null},
  	pricingMethodId: {data: '', error: '', valid: false, errorMessage: 'Please select Pricing Method', key: null},
 	environment: {data: '', error: '', valid: false, errorMessage: 'Please enter Environment', key: null},
@@ -221,16 +221,14 @@ function BusinessParameters(props) {
   }
   
   useEffect(() => {
-	 if (state.pricingMethodId && state.pricingMethodId.data) {
+	 if (customerDealSegmentId.data.length === 0) {
 		getCustomerDealSegement()
 	 }
-  }, [state.pricingMethodId.data])
+  }, [customerDealSegmentId.data])
   
   function createDynamicMethod(data) {
 	let formData = {}
-	let fieldName = state.pricingMethodId.text.toLowerCase().replace( /(^|\s)([a-z])/g , function(m, p1, p2){ return p1+p2.toUpperCase(); } )
-	fieldName = fieldName.replace(/\s/g, '')
-	fieldName = `${fieldName[0].toLowerCase() + fieldName.slice(1)}Id`
+	let fieldName = 'assessmentMethod'
 	if (!tempMethod.current || (tempMethod.current && fieldName !== tempMethod.current)) {
 	  if (tempMethod.current) {
 		delete state[tempMethod.current]
@@ -241,7 +239,7 @@ function BusinessParameters(props) {
 		  checkBackTempMethod = true;
 	  }
       if (!checkBackTempMethod) {
-		formData[fieldName] = {data: '', error: '', valid: false, errorMessage: `Please select ${state.pricingMethodId.text}`, text: state.pricingMethodId.text}
+		formData[fieldName] = {data: '', error: '', valid: false, errorMessage: `Please select ${state.pricingMethodId.text}`, text: 'Assessment Method'}
 	  }
     }
 	if (backFormData && backFormData.tempMethod) {
@@ -254,9 +252,8 @@ function BusinessParameters(props) {
   }
   
   useEffect(() => {
-	  if (state.customerDealSegmentId.data && state.pricingMethodId.data) {
-		const method = state.pricingMethodId.text.replace(/\s/gi, '').toLowerCase()
-		Service.get(`/rbs/th/gp/${method}/${state.customerDealSegmentId.data}`)
+	  if (state.customerDealSegmentId.data) {
+		Service.get(`/rbs/th/gp/${state.customerDealSegmentId.data}`)
 	    .then((response) => {
 		  const { data } = response
 		  createDynamicMethod(data)
@@ -270,7 +267,7 @@ function BusinessParameters(props) {
 		  createDynamicMethod(data)
 	    })
 	  }
-  }, [state.customerDealSegmentId.data, state.pricingMethodId.data])
+  }, [state.customerDealSegmentId.data])
   
   function validation(forms) {
 	let errors = ''
@@ -300,7 +297,7 @@ function BusinessParameters(props) {
 	  const lists = {}
 	  Object.keys(forms).map((item) => {
 		const formData = forms[item].data
-	    if (((forms[item].disabled && item !== 'productFamily') || (forms[item].validField && forms[item].data === ''))) {
+	    if (forms[item].disabled && item !== 'productFamily') {
 			lists[item] = null;
 			delete lists[item]
 		}
@@ -351,7 +348,7 @@ function BusinessParameters(props) {
 	  const totCommas = checkCommas.length
 	  const eachData = checkCommas[totCommas-1]
 	  const lastBeforeData = checkCommas[totCommas-2]
-	  const regex = /^[\d\,\.]+$/g
+	  const regex = /^[\d\,]+$/g
 	  let valid = ''
 	  let validFlag = true
 	  if (lastBeforeData && (Number(lastBeforeData) < min || (Number(lastBeforeData) > max && max))) {
@@ -363,13 +360,7 @@ function BusinessParameters(props) {
 			const maxValue = max ? ` and Max of ${max}` : ''
 			valid = `Please check the value should be Min of ${min}${maxValue}`
 		}
-	    const dotSeperated = eachData.split('.')
-		const dotregex = /\./
-		const paramLists = ['proposedMarginRate', 'proposedOneOffFeeRate', 'proposedOutFeeRate', 'proposedYield', 'guidelineMarginRate',
-		'guidelineOneOffFeeRate', 'guidelineOutFeeRate', 'guidelineYield']
-		if ((dotregex.test(eachData) && dotSeperated.length < 3 && dotSeperated[1].length <= 15 && paramLists.indexOf(label) !== -1) || !dotregex.test(eachData)) {
-			setState({...state, [label]: {data: data, error: valid, valid: validFlag, type: 'commaSeperated'}})
-		}
+		setState({...state, [label]: {data: data, error: valid, valid: validFlag, type: 'commaSeperated'}})
 	  }
   }
   
@@ -459,8 +450,6 @@ function BusinessParameters(props) {
 		  let refKey = data.split('|')
 		  const required = text === 'Overdraft' ? true: false
 		  formData['productFamily'] = {...state[label], data: refKey[0], error: '', valid: true, key: refKey[1], disabled: required}
-		  const productData = state.productFamily.data !== data ? '' : state['productName']
-		  formData['productName'] = {...state['productName'], valid: required, data: productData}
 		}
 		if (label === 'midTermFlag') {
 			let required = data === 'Yes' ? true : false
@@ -548,9 +537,6 @@ function BusinessParameters(props) {
 		  if ((state.marginMethodId && state.marginMethodId.data === 'MM1') || (state.feeMethodId && state.feeMethodId.data === 'MM1')) {
 			  data = [
 			   {paramId: 'P12', paramRefId: null, paramName: 'Deposit %', paramFlag: null, paramPropertyName: 'depositPercentage', maxValue: null, minValue: 1, toolTipDesc: 'Please enter the value min of 0'},
-			   {paramId: 'P13', paramRefId: null, paramName: 'Deal Regulated', paramFlag: null, paramPropertyName: 'dealRegulated', maxValue: null, minValue: 1, toolTipDesc: 'Please enter the value min of 1'},
-			   			   {paramId: 'P14', paramRefId: null, paramName: 'Proposed Fee Amount', paramFlag: null, paramPropertyName: 'proposedFeeAmount', maxValue: null, minValue: 1, toolTipDesc: 'Please enter the value min of 1'},
-
 			   {paramId: 'P2', paramRefId: null, paramName: 'SIC Code', paramFlag: 'Y', paramPropertyName: 'sicCode', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
                {paramId: 'P92', paramRefId: 'P2', paramName: 'Sector', paramFlag: null, paramPropertyName: 'sector'},
 			   {paramId: 'P19', paramRefId: null, paramName: 'Borrowing Amount', paramFlag: null, paramPropertyName: 'borrowingAmount', maxValue: null, minValue: 500, toolTipDesc: 'Please enter the value min of 500'},
@@ -596,8 +582,7 @@ function BusinessParameters(props) {
 				  (checkFormFieldsDisabled['midTermFlag'] && (item.paramPropertyName === 'borrowingAmount' || item.paramPropertyName === 'increaseAmount'))
 				) ? true: false
 				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
-				item.validField = ((item.paramPropertyName === 'proposedFeeAmount' || item.paramPropertyName === 'dealRegulated')  ? true: false)
-				formData[field] = {data: '', error: '', valid: item.validField, validField: item.validField, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
+				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
 			}
 		    attrs[item.paramRefId].push(item)
 		  })
@@ -667,7 +652,7 @@ function BusinessParameters(props) {
 			}
 		  })
 		  .catch(() => {
-			  setState({...state, 'wsdlUrl': {data: state.wsdlUrl.data, error: '', valid: true, loader: false, message: 'ok'}})
+			  setState({...state, 'wsdlUrl': {data: state.wsdlUrl.data, error: 'Please enter valid URL', valid: false, loader: false, message: ''}})
 		  })
 	  }
   }
@@ -694,7 +679,7 @@ function BusinessParameters(props) {
 		   return (!fieldData.disabled ? <Col md="6">
 			{field.paramRefId === null && field.paramFlag === 'N' ? 
 			   <Form.Group as={Row} controlId={field.paramName}>
-				<Form.Label column sm="5">{field.paramName} {!field.validField ? <span className={styles.mandatory}>*</span> : ''}</Form.Label>
+				<Form.Label column sm="5">{field.paramName} <span className={styles.mandatory}>*</span></Form.Label>
 				 <Col sm="6">
 				  <Form.Control type="text" isInvalid={fieldData.error} value={fieldData.data} autoComplete="off" onBlur={removeUnwantedComma(fieldName, field.minValue, field.maxValue)} onChange={onTextUpdated(fieldName, field.minValue, field.maxValue)} />
 				  <Form.Control.Feedback type="invalid" tooltip>
@@ -712,7 +697,7 @@ function BusinessParameters(props) {
 				</Form.Group>
 				:
 		       <Form.Group as={Row} controlId={field.paramName}>
-			    <Form.Label column sm="5">{field.paramName} {(!fieldData.disabled || !field.validField) ? <span className={styles.mandatory}>*</span>: ''}</Form.Label>
+			    <Form.Label column sm="5">{field.paramName} {!fieldData.disabled ? <span className={styles.mandatory}>*</span>: ''}</Form.Label>
 			     <Col sm="6">
 			      <Form.Control as="select" isInvalid={fieldData.error} disabled={fieldData.disabled} value={fieldData.data} onChange={onSelectedSingleOptionChange(fieldName)}>
 				   <option value="">Please Select</option>
@@ -729,8 +714,33 @@ function BusinessParameters(props) {
 		 </Col>: '')})}
        </>)
     });
+	
 	return (
 		<Row>
+		  <Col md="6">
+		    {Object.keys(dynamicFormFields.current.methods).map((method) => {
+			  return (<Form.Group as={Row} controlId={method}>
+			   <Form.Label column sm="5">{state[method].text} <span className={styles.mandatory}>*</span></Form.Label>
+			   <Col sm="6">
+				 <Form.Control as="select" isInvalid={state[method].error} value={state[method].data} onChange={onSelectedMethodChange(method)}>
+				   <option value="">Please Select</option>
+				   {dynamicFormFields.current.methods[method].map((item) => {
+					 return (<option value={item.methodId}>{item.methodName}</option>)
+				   })}
+				  </Form.Control>
+				  <Form.Control.Feedback type="invalid" tooltip>
+				   {state[method].error}
+				  </Form.Control.Feedback>
+				  {dynamicFormFields.current.noRecords === 0 && 
+					<div className={styles.mandatory}>No Records Found</div>
+				  }
+				  {dynamicFormFields.current.formfieldsNoRecords && 
+					<div className={styles.mandatory}>{`No ${state[method].text} Records Found`}</div>
+				  }
+				</Col>
+			   </Form.Group>)
+		    })}
+		  </Col>
 	      {formFields}
 		</Row>
 	)
@@ -787,12 +797,20 @@ function BusinessParameters(props) {
 	  if (state.productName.text === "Small Business Loan (Fixed)" && item.refDataDesc === 'AIR APR Method') {
 		return(<option value={item.attributeId}>{item.refDataDesc}</option>)
 	  }
-	  if (state.productName.text !== "Small Business Loan (Fixed)" && item.refDataDesc !== 'AIR APR Method') {
+	  if (state.productName.text !== "Small Business Loan (Fixed)") {
 		return(<option value={item.attributeId}>{item.refDataDesc}</option>)
 	  }
 	})
 	return pricingMethodOptions
   }
+  
+  useEffect(() => {
+	 if (!state.productName.disabled && slug === 'RM and Digital Assessment') {
+		const formData = {}
+		formData['productName'] = {...state.productName, valid: true, disabled: true}
+		setState({...state, ...formData})
+	 }
+  }, [state.productName.disabled])
  
   return (
    <div className={common.overlayContainer}>
@@ -844,9 +862,9 @@ function BusinessParameters(props) {
 			  <Row>
 			    <Col md="6">
 				  <Form.Group as={Row} controlId="productName">
-					<Form.Label column sm="5">Product Name {!state.productFamily.disabled ? <span className={styles.mandatory}>*</span>: ''}</Form.Label>
+					<Form.Label column sm="5">Product Name {!state.productName.disabled ? <span className={styles.mandatory}>*</span>: ''}</Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" disabled={state.productFamily.disabled} isInvalid={state.productName.error} value={state.productName.data} onChange={onSelectedSingleOptionChange('productName')}>
+					  <Form.Control as="select" disabled={state.productName.disabled} isInvalid={state.productName.error} value={state.productName.data} onChange={onSelectedSingleOptionChange('productName')}>
 						<option value="">Please Select</option>
 						{createProductName()}
 					  </Form.Control>
@@ -857,22 +875,6 @@ function BusinessParameters(props) {
 				  </Form.Group>
 			    </Col>
 				<Col md="6">
-				  <Form.Group as={Row} controlId="pricingMethodId">
-					<Form.Label column sm="5">Pricing Method <span className={styles.mandatory}>*</span></Form.Label>
-					<Col sm="6">
-					  <Form.Control as="select" isInvalid={state.pricingMethodId.error} value={state.pricingMethodId.data} onChange={customerDealSegementOptionChange('pricingMethodId')}>
-						<option value="">Please Select</option>
-						{handlePricingMethod()}
-					  </Form.Control>
-					  <Form.Control.Feedback type="invalid" tooltip>
-					   {state.pricingMethodId.error}
-					  </Form.Control.Feedback>
-					</Col>
-				  </Form.Group>
-				</Col>
-			  </Row>
-			  <Row>
-			    <Col md="6">
 				  <Form.Group as={Row} controlId="customerDealSegmentId">
 					<Form.Label column sm="5">Customer Deal Segment <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
@@ -888,30 +890,6 @@ function BusinessParameters(props) {
 					  }
 					</Col>
 				  </Form.Group>
-				</Col>
-				<Col sm="6">
-				   {Object.keys(dynamicFormFields.current.methods).map((method) => {
-					 return (<Form.Group as={Row} controlId={method}>
-					   <Form.Label column sm="5">{state[method].text} <span className={styles.mandatory}>*</span></Form.Label>
-					   <Col sm="6">
-						 <Form.Control as="select" isInvalid={state[method].error} value={state[method].data} onChange={onSelectedMethodChange(method)}>
-						   <option value="">Please Select</option>
-						   {dynamicFormFields.current.methods[method].map((item) => {
-							 return (<option value={item.methodId}>{item.methodName}</option>)
-						   })}
-						  </Form.Control>
-						  <Form.Control.Feedback type="invalid" tooltip>
-						   {state[method].error}
-						  </Form.Control.Feedback>
-						  {dynamicFormFields.current.noRecords === 0 && 
-							<div className={styles.mandatory}>No Records Found</div>
-				          }
-						  {dynamicFormFields.current.formfieldsNoRecords && 
-							<div className={styles.mandatory}>{`No ${state[method].text} Records Found`}</div>
-						  }
-						</Col>
-						</Form.Group>)
-				   })}
 				</Col>
 			  </Row>
 		      {renderDynamicFormFields()}

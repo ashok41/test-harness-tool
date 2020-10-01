@@ -20,8 +20,8 @@ function ServiceRequest() {
 			"borrowingAmount": 10,
 			"expectetAir": 6.69,
 			"expectetApr": 0,
-			"productFamily": "Small Business Loan",
-			"productName": "Loan",
+			"productFamily": "Small Business Loan (Fixed)",
+			"productName": "Small Business Loan (Fixed)",
 			"riskBand": 2,
 			"termFactor": 1,
 			"testSetId": 1,
@@ -75,114 +75,8 @@ function ServiceRequest() {
 		})
 	  })
 	  .catch(() => {
-		  const seconds = Date.now() - start;
-		  const executionTime = toTimeString(seconds/1000)
-		  const data = {
-			"totalTestCases": 27,
-			"passed": 24,
-			"failed": 3,
-			"environment": "NFT",
-			"testcasesResultList": [
-			{
-					"actualAir": 7.6,
-					"actualApr": 0.6,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 6,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_001",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 7.2,
-					"actualApr": 0.2,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 7,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_002",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 1.3,
-					"actualApr": 2,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 12.69,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_003",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 0,
-					"actualApr": 0,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 12.69,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_004",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				},
-				{
-					"actualAir": 0,
-					"actualApr": 0,
-					"applicationIdentity": "Ulster",
-					"bankDivision": "Business",
-					"borrowingAmount": 100,
-					"expectetAir": 12.69,
-					"expectetApr": 0,
-					"productFamily": "Small Business Loan",
-					"productName": "Loan",
-					"riskBand": 3,
-					"termFactor": 2,
-					"testSetId": 1,
-					"testTransactionFlag": "Y",
-					"testTransactionId": 2,
-					"testTransactionNo": "TH_001_005",
-					"totalRecord": 2,
-					"xmlDifference": ""
-				}
-			]
-		  }
-		  history.push({
-			pathname: '/reports',
-			state: {data: data, executionTime: executionTime}
+		history.push({
+			pathname: '/error'
 		})
 	  }
 	  )
@@ -270,30 +164,22 @@ function ServiceRequest() {
 	}])
   }
   
-  Array.prototype.push.apply(firstColumns, [{
-	  name: 'Expected',
-	  key: 'expected',
-	  className: styles.rate,
-	  colSpan: 2
-  }])
-  
-  const secondColumns = []
   if (paginationData[0].productName === 'Small Business Loan (Fixed)') {
-	Array.prototype.push.apply(secondColumns, [{
-	  name: 'AIR(%)',
+	Array.prototype.push.apply(firstColumns, [{
+	  name: 'Expected AIR(%)',
 	  key: 'air'
 	}, {
-	  name: 'APR(%)',
+	  name: 'Expected APR(%)',
 	  key: 'apr'
 	}])
   }
     
   if (paginationData[0].productName === 'Overdraft' || paginationData[0].productName === 'Agri Facility') {
-	  Array.prototype.push.apply(secondColumns, [{
-	  name: 'Margin Fee',
+	  Array.prototype.push.apply(firstColumns, [{
+	  name: 'Expected Margin Fee',
 	  key: 'marginFee'
 	}, {
-	  name: 'Arrangement Fee',
+	  name: 'Expected Arrangement Fee',
 	  key: 'arrangementFee'
 	}])
   }
@@ -342,23 +228,14 @@ function ServiceRequest() {
 			  <thead>
 				<tr>
 				  {firstColumns.map((item) => {
-					const colSpan = item.colSpan ? { colSpan: item.colSpan } : {}
-				    const rowSpan = item.rowSpan ? { rowSpan: item.rowSpan } : {}
 					const itemClassName = item.className ? ` ${item.className}`: ''
 					//const className = styles.sortHeader.concat(itemClassName)
-					return <th {...rowSpan} {...colSpan} className={itemClassName} onClick={sortable(item.key, item.direction, item.sortable)}>
+					return <th className={itemClassName} onClick={sortable(item.key, item.direction, item.sortable)}>
 					  <span>{item.name}</span>
 					  {item.sortable ? <span className={styles.arrow}><div className={getSortDirection(item.key)} /></span> : ''}
 					</th>
 				  })}
 				</tr>
-				<tr>
-			    {secondColumns.map((item2) => {
-				  return <th>
-				    {item2.name}
-				  </th>
-		        })}
-			    </tr>
 			  </thead>
 			  <tbody>
 				{paginationData.map((item) => (
