@@ -50,7 +50,7 @@ function BusinessParameters(props) {
 		{
 			"rulePackageId": "RP1",
 			"rulePackageName": "Asset Purchase",
-			"subRulePackageId": 1,
+			"subRulePackageId": "SRP1,SRP2",
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": 'Y',
@@ -62,7 +62,7 @@ function BusinessParameters(props) {
 		{
 			"rulePackageId": "RP2",
 			"rulePackageName": "Cash Release",
-			"subRulePackageId": 1,
+			"subRulePackageId": "SRP3,SRP4",
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": 'Y',
@@ -87,7 +87,7 @@ function BusinessParameters(props) {
 		{
 			"subRulePackageId": "RP1",
 			"packageName": "Method Name",
-			"subRulePackageId": 1,
+			"subRulePackageId": "SRP5",
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"isActive": 'Y',
@@ -120,9 +120,9 @@ function BusinessParameters(props) {
 	  .catch(() => {
 		const data = [
 		{
-			"subRulePackageId": "RP1",
+			"subRulePackageId": "SRP1",
 			"subRulePackageName": "Business Banking",
-			"subRulePackageId": 1,
+			"subRulePackageRefId": null,
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"subRulePackageFlag": 'Y',
@@ -132,9 +132,43 @@ function BusinessParameters(props) {
 			"updatedTs": "2020-06-09T04:38:41.688Z"
 		},
 		{
-			"subRulePackageId": "RP2",
+			"subRulePackageId": "SRP2",
 			"subRulePackageName": "Commercial Banking",
-			"subRulePackageId": 1,
+			"subRulePackageRefId": null,
+			"subRulePackageFlag": 'Y',
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"refDataDesc": "Lombard",
+			"refDataKey": "AP002",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"subRulePackageId": "SRP3",
+			"subRulePackageName": "Ulster",
+			"subRulePackageRefId": null,
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"refDataDesc": "Lombard",
+			"refDataKey": "AP002",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"subRulePackageId": "SRP4",
+			"subRulePackageName": "Universal",
+			"subRulePackageRefId": "SRP1",
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"refDataDesc": "Lombard",
+			"refDataKey": "AP002",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"subRulePackageId": "SRP5",
+			"subRulePackageName": "Restricted",
+			"subRulePackageRefId": "SRP2",
 			"createdBy": "R123",
 			"createdTs": "2020-06-09T04:38:41.688Z",
 			"refDataDesc": "Lombard",
@@ -142,7 +176,15 @@ function BusinessParameters(props) {
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
 		}]
-		setSubRulePackage(data)
+		let attrs = {}
+		data.map((item) => {
+		  const key = item.subRulePackageRefId
+		  if (attrs[key] === undefined) {
+			attrs[key] = []
+		  }
+		  attrs[key].push(item)
+		})
+		setSubRulePackage(attrs)
 	  })
   }
   
@@ -159,138 +201,69 @@ function BusinessParameters(props) {
 	 }
   }, [subRulePackageState.data])
   
-  useEffect(() => {
-	 if (state.subPackageNameId && state.subPackageNameId.data) {
-		Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackage.data}/${state.subPackageNameId.data}`)
-		  .then((response) => {
-			const { data } = response
-			createDynamicMethod(data, 'methods')
-		  })
-		  .catch(() => {
-			const data = [
-			{
-				"paramId": "P25",
-				"paramName": "Method Name",
-				"createdBy": "R123",
-				"createdTs": "2020-06-09T04:38:41.688Z",
-				"isActive": 'Y',
-				"refDataDesc": "Generic Pricing Method",
-				"refDataKey": "AP001",
-				"updatedBy": "R123",
-				"updatedTs": "2020-06-09T04:38:41.688Z"
-			},
-			{
-				"paramId": "P26",
-				"paramName": "For Asset Purchase",
-				"createdBy": "R123",
-				"createdTs": "2020-06-09T04:38:41.688Z",
-				"refDataDesc": "Lombard",
-				"refDataKey": "AP002",
-				"updatedBy": "R123",
-				"updatedTs": "2020-06-09T04:38:41.688Z"
-			},
-			{
-				"paramId": "P27",
-				"paramName": "For a Vehicle",
-				"createdBy": "R123",
-				"createdTs": "2020-06-09T04:38:41.688Z",
-				"refDataDesc": "Lombard",
-				"refDataKey": "AP002",
-				"updatedBy": "R123",
-				"updatedTs": "2020-06-09T04:38:41.688Z"
-			}]
-			createDynamicMethod(data, 'methods')
-		  })
-	 }
-  }, [state.subPackageNameId && state.subPackageNameId.data])
+  function loadMethodName() {
+    Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackage.data}/${state.subRulePackage.data}`)
+    .then((response) => {
+	  const { data } = response
+	  createDynamicMethod(data, 'methods', 'nonMethods')
+    })
+	.catch(() => {
+		const data = [
+		{
+			"paramId": "P25",
+			"paramName": "Method Name",
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"isActive": 'Y',
+			"refDataDesc": "Generic Pricing Method",
+			"refDataKey": "AP001",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"paramId": "P26",
+			"paramName": "For Asset Purchase",
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"refDataDesc": "Lombard",
+			"refDataKey": "AP002",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		},
+		{
+			"paramId": "P27",
+			"paramName": "For a Vehicle",
+			"createdBy": "R123",
+			"createdTs": "2020-06-09T04:38:41.688Z",
+			"refDataDesc": "Lombard",
+			"refDataKey": "AP002",
+			"updatedBy": "R123",
+			"updatedTs": "2020-06-09T04:38:41.688Z"
+		}]
+		createDynamicMethod(data, 'methods', 'nonMethods')
+    })
+  }
   
   useEffect(() => {
-	 const subRule = state.subRulePackage.data.split('|')
-	 if (subRule[0] && subRule[1] !== 'Y') {
-		Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackage.data}/${subRule[0]}`)
-		  .then((response) => {
-			const { data } = response
-			createDynamicMethod(data, 'methods', 'nonMethods')
-		  })
-		  .catch(() => {
-			const data = [
-			{
-				"paramId": "P25",
-				"paramName": "Method Name",
-				"createdBy": "R123",
-				"createdTs": "2020-06-09T04:38:41.688Z",
-				"isActive": 'Y',
-				"refDataDesc": "Generic Pricing Method",
-				"refDataKey": "AP001",
-				"updatedBy": "R123",
-				"updatedTs": "2020-06-09T04:38:41.688Z"
-			},
-			{
-				"paramId": "P26",
-				"paramName": "For Asset Purchase",
-				"createdBy": "R123",
-				"createdTs": "2020-06-09T04:38:41.688Z",
-				"refDataDesc": "Lombard",
-				"refDataKey": "AP002",
-				"updatedBy": "R123",
-				"updatedTs": "2020-06-09T04:38:41.688Z"
-			},
-			{
-				"paramId": "P27",
-				"paramName": "For a Vehicle",
-				"createdBy": "R123",
-				"createdTs": "2020-06-09T04:38:41.688Z",
-				"refDataDesc": "Lombard",
-				"refDataKey": "AP002",
-				"updatedBy": "R123",
-				"updatedTs": "2020-06-09T04:38:41.688Z"
-			}]
-			createDynamicMethod(data, 'methods', 'nonMethods')
-		  })
+	 if (state.subRulePackage.data && state.subRulePackage.active !== 'Y') {
+		loadMethodName()
 	 }
-	 if (subRule[0] && subRule[1] === 'Y') {
-		Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackage.data}/${subRule[0]}`)
-		  .then((response) => {
-			const { data } = response
-			createDynamicMethod(data, 'nonMethods', 'methods')
-		  })
-		  .catch(() => {
-			const data = [
-			{
-				"paramId": "P25",
-				"paramName": "Sub Package Name Id",
-				"createdBy": "R123",
-				"createdTs": "2020-06-09T04:38:41.688Z",
-				"isActive": 'Y',
-				"refDataDesc": "Generic Pricing Method",
-				"refDataKey": "AP001",
-				"updatedBy": "R123",
-				"updatedTs": "2020-06-09T04:38:41.688Z"
-			},
-			{
-				"paramId": "P26",
-				"paramName": "For Asset Purchase",
-				"createdBy": "R123",
-				"createdTs": "2020-06-09T04:38:41.688Z",
-				"refDataDesc": "Lombard",
-				"refDataKey": "AP002",
-				"updatedBy": "R123",
-				"updatedTs": "2020-06-09T04:38:41.688Z"
-			},
-			{
-				"paramId": "P27",
-				"paramName": "For a Vehicle",
-				"createdBy": "R123",
-				"createdTs": "2020-06-09T04:38:41.688Z",
-				"refDataDesc": "Lombard",
-				"refDataKey": "AP002",
-				"updatedBy": "R123",
-				"updatedTs": "2020-06-09T04:38:41.688Z"
-			}]
-			createDynamicMethod(data, 'nonMethods', 'methods')
-		  })
+	 if (state.subRulePackage.data && state.subRulePackage.active === 'Y') {
+		const data = subRulePackageState[state.subRulePackage.data]
+		const formData = {}
+		const fieldLabel = 'Sub Rule Package2'
+		const fieldName = 'subRulePackage2'
+		formData[fieldName] = {data: '', error: '', valid: false, errorMessage: `Please select ${fieldLabel}`, text: fieldLabel}
+		dynamicFormFields.current = {...dynamicFormFields.current, ['methods']: {}, ['nonMethods']: {[fieldName]: data}, formfields: '', noRecords: data.length }
+		setState({...state, ...formData})
 	 }
   }, [state.subRulePackage.data])
+  
+  useEffect(() => {
+	 if (state.subRulePackage2 && state.subRulePackage2.data) {
+		loadMethodName()
+	 }
+  }, [state.subRulePackage2 && state.subRulePackage2.data])
   
 
   function createDynamicMethod(data, type1, type2) {
@@ -299,7 +272,7 @@ function BusinessParameters(props) {
     fieldName = fieldName.replace(/\s/g, '')
     fieldName = `${fieldName[0].toLowerCase() + fieldName.slice(1)}`
 	formData[fieldName] = {data: '', error: '', valid: false, errorMessage: `Please select ${data[0].paramName}`, text: data[0].paramName}
-	dynamicFormFields.current = {...dynamicFormFields.current, [type2]: {}, [type1]: {[fieldName]: data}, formfields: '', noRecords: data.length }
+	dynamicFormFields.current = {...dynamicFormFields.current, [type1]: {[fieldName]: data}, formfields: '', noRecords: data.length }
     setState({...state, ...formData})
   }
   
@@ -339,7 +312,7 @@ function BusinessParameters(props) {
 		}
 	  })
 	  lists['userId'] = localStorage.getItem('logged');
-	  Service.post('/rbs/th/gp/testdata', lists)
+	  Service.post('/rbs/th/lf/testdata', lists)
 	  .then((response) => {
 		  const { data } = response
 		  history.push({
@@ -424,12 +397,7 @@ function BusinessParameters(props) {
 	if (data === '') {
 		formData[label] = {...state[label], data: '', error: state[label].errorMessage, valid: false}
 	} else {
-	  if (label === 'subRulePackage') {
-	    const refKey = data.split('|')
-		formData[label] = {...state[label], data: refKey[0], error: '', valid: true, active: refKey[1] }
-	  } else {
-		formData[label] = {...state[label], data: data, error: '', valid: true}
-	  }
+      formData[label] = {...state[label], data: data, error: '', valid: true}
 	}
 	setState({...state, ...formData})
   }
@@ -443,7 +411,17 @@ function BusinessParameters(props) {
 		if (label === 'environment') {
 		  formData['wsdlUrl'] = state.wsdlUrl
 		}
+		if (label === 'rulePackage' || label === 'subRulePackage') {
+			if (state['subRulePackage2']) {
+				delete state['subRulePackage2']
+		    }
+			if (label === 'rulePackage') {
+				formData['subRulePackage'] = {...state['subRulePackage'], data: '', error: '', valid: false}
+			}
+			dynamicFormFields.current = {...dynamicFormFields.current, nonMethods: {}, methods: {}, formfields:''}
+		}
 		setState({...state, ...formData})
+		
 	} else {
 		const text = e.target.options[e.target.selectedIndex].text
 		let formData = {
@@ -454,11 +432,21 @@ function BusinessParameters(props) {
 		}
 		if (label === 'subRulePackage') {
 			const refKey = data.split('|')
-		    if (state['subPackageNameId'] && refKey[1] !== 'Y') {
-				delete state['subPackageNameId']
+			formData[label] = {...state[label], data: refKey[0], error: '', valid: true, active: refKey[1] }
+		    if (state['subRulePackage2'] && refKey[1] !== 'Y') {
+				delete state['subRulePackage2']
 				dynamicFormFields.current = {...dynamicFormFields.current, nonMethods: {}}
 		    }
 		}
+		else if(label === 'rulePackage') {
+			const refKey = data.split('|')
+			formData[label] = {...state[label], data: refKey[0], error: '', valid: true, active: refKey[1] }
+			formData['subRulePackage'] = {...state['subRulePackage'], data: '', error: '', valid: false}
+			if (state['subRulePackage2']) {
+				delete state['subRulePackage2']
+		    }
+			dynamicFormFields.current = {...dynamicFormFields.current, nonMethods: {}, methods: {}, formfields:''}
+	    } 
 		setState({...state, ...formData})
 	}
   }
@@ -473,7 +461,7 @@ function BusinessParameters(props) {
 	  setState({...state, ...formData})
 	} else {
 	  const subRule = state.subRulePackage.data.split('|')
-	  Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackage.data}/${subRule[0]}/${state.methodName.data}`)
+	  Service.get(`/rbs/th/lf/parameter-mappings/subRulePackage2${state.rulePackage.data}/${subRule[0]}/${state.methodName.data}`)
 	    .then((response) => {
 		  const { data } = response
 		  let attrs = {}
@@ -671,6 +659,7 @@ function BusinessParameters(props) {
 		 </Col>: '')})}
        </>)
     });
+	console.log('state', state)
 	return (
 		<Row>
 			{Object.keys(dynamicFormFields.current.nonMethods).map((method) => {
@@ -679,8 +668,8 @@ function BusinessParameters(props) {
 			   <Col sm="6">
 				 <Form.Control as="select" isInvalid={state[method].error} value={state[method].data} onChange={rulePackageOptionChange(method)}>
 				   <option value="">Please Select</option>
-				   {dynamicFormFields.current.nonMethods[method].slice(1).map((item) => {
-					 return (<option value={item.paramId}>{item.paramName}</option>)
+				   {dynamicFormFields.current.nonMethods[method].map((item) => {
+					 return (<option value={item.subRulePackageId}>{item.subRulePackageName}</option>)
 				   })}
 				  </Form.Control>
 				  <Form.Control.Feedback type="invalid" tooltip>
@@ -713,6 +702,18 @@ function BusinessParameters(props) {
   const viewReferenceData = (link) => () => {
 	window.open(link,'_blank');
   }
+  
+  function loadSubRulePackage() {
+	if (state.rulePackage.data) {
+		const subRuleData = state.rulePackage.active.split(',')
+		return subRulePackageState && subRulePackageState['null'].map((item) => {
+		  if (item.subRulePackageRefId === null && subRuleData.indexOf(item.subRulePackageId) !== -1) {
+			return (<option value={`${item.subRulePackageId}|${item.subRulePackageFlag}`}>{item.subRulePackageName}</option>)
+		  }
+		})
+	}
+	return []
+  }
  
   return (
    <div className={common.overlayContainer}>
@@ -732,10 +733,10 @@ function BusinessParameters(props) {
 			     <Form.Group as={Row} controlId="rulePackage">
                   <Form.Label column sm="5">Rule Package <span className={styles.mandatory}>*</span></Form.Label>
                   <Col sm="6">
-				    <Form.Control as="select" isInvalid={state.rulePackage.error} value={state.rulePackage.data} onChange={onSelectedSingleOptionChange('rulePackage')}>
+				    <Form.Control as="select" isInvalid={state.rulePackage.error} value={`${state.rulePackage.data}|${state.rulePackage.active}`} onChange={onSelectedSingleOptionChange('rulePackage')}>
                       <option value="">Please Select</option>
 					  {rulePackageState && rulePackageState.map((item) => {
-						return (<option value={item.rulePackageId}>{item.rulePackageName}</option>)
+						return (<option value={`${item.rulePackageId}|${item.subRulePackageId}`}>{item.rulePackageName}</option>)
 					  })}
                     </Form.Control>
 					<Form.Control.Feedback type="invalid" tooltip>
@@ -748,11 +749,9 @@ function BusinessParameters(props) {
 				  <Form.Group as={Row} controlId="subRulePackage">
 					<Form.Label column sm="5">Sub Rule Package <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" isInvalid={state.subRulePackage.error} value={`${state.subRulePackage.data}`} onChange={onSelectedSingleOptionChange('subRulePackage')}>
+					  <Form.Control as="select" isInvalid={state.subRulePackage.error} value={`${state.subRulePackage.data}|${state.subRulePackage.active}`} onChange={onSelectedSingleOptionChange('subRulePackage')}>
 						<option value="">Please Select</option>
-						{subRulePackageState && subRulePackageState.map((item) => {
-						  return (<option value={`${item.subRulePackageId}|${item.subRulePackageFlag}`}>{item.subRulePackageName}</option>)
-						})}
+						{loadSubRulePackage()}
 					  </Form.Control>
 					  <Form.Control.Feedback type="invalid" tooltip>
 					   {state.subRulePackage.error}
