@@ -482,19 +482,21 @@ function BusinessParameters(props) {
 			}
 		  })
 		  data.map((item) => {
-		    if (attrs[item.paramRefId] === undefined) {
-			  attrs[item.paramRefId] = []
-		    }
-			if (item.paramRefId === null) {
-				let field = item.paramName.replace(/\s/g, '')
-				field = field[0].toLowerCase() + field.slice(1)
-				const disabled = (
-				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode')
-				) ? true: false
-				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
-				formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
+			if (item.expectedField !== 'Y') {
+				if (attrs[item.paramRefId] === undefined) {
+				  attrs[item.paramRefId] = []
+				}
+				if (item.paramRefId === null ) {
+					let field = item.paramName.replace(/\s/g, '')
+					field = field[0].toLowerCase() + field.slice(1)
+					const disabled = (
+					  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode')
+					) ? true: false
+					item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
+					formData[field] = {data: '', error: '', valid: false, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
+				}
+				attrs[item.paramRefId].push(item)
 			}
-		    attrs[item.paramRefId].push(item)
 		  })
 		  attrs['null'] = attrs['null'].sort((a,b) => {
 			  if (a.paramFlag < b.paramFlag) {
@@ -537,20 +539,22 @@ function BusinessParameters(props) {
 			}
 		  })
 		  data.map((item) => {
-		    if (attrs[item.paramRefId] === undefined) {
-			  attrs[item.paramRefId] = []
+		    if (item.expectedField !== 'Y') {
+				if (attrs[item.paramRefId] === undefined) {
+				  attrs[item.paramRefId] = []
+				}
+				if (item.paramRefId === null) {
+					let field = item.paramName.replace(/\s/g, '')
+					field = field[0].toLowerCase() + field.slice(1)
+					const disabled = (
+					  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode')
+					) ? true: false
+					item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
+					item.validField = ((item.paramPropertyName === 'proposedFeeAmount' || item.paramPropertyName === 'dealRegulated')  ? true: false)
+					formData[field] = {data: '', error: '', valid: item.validField, validField: item.validField, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
+				}
+				attrs[item.paramRefId].push(item)
 		    }
-			if (item.paramRefId === null) {
-				let field = item.paramName.replace(/\s/g, '')
-				field = field[0].toLowerCase() + field.slice(1)
-				const disabled = (
-				  (checkFormFieldsDisabled['sector'] && item.paramPropertyName === 'sicCode')
-				) ? true: false
-				item.paramFlag = item.paramFlag === null ? 'N': item.paramFlag 
-				item.validField = ((item.paramPropertyName === 'proposedFeeAmount' || item.paramPropertyName === 'dealRegulated')  ? true: false)
-				formData[field] = {data: '', error: '', valid: item.validField, validField: item.validField, dynamicFields: true, disabled: disabled, errorMessage: `Please select ${item.paramName}`, paramPropertyName: item.paramPropertyName}
-			}
-		    attrs[item.paramRefId].push(item)
 		  })
 		  attrs['null'] = attrs['null'].sort((a,b) => {
 			  if (a.paramFlag < b.paramFlag) {
