@@ -115,7 +115,15 @@ function BusinessParameters(props) {
 	  Service.get('/rbs/th/lf/sub-rulepackage')
 	  .then((response) => {
 		const { data } = response
-		setSubRulePackage(data)
+		let attrs = {}
+		data.map((item) => {
+		  const key = item.subRulePackageRefId
+		  if (attrs[key] === undefined) {
+			attrs[key] = []
+		  }
+		  attrs[key].push(item)
+		})
+		setSubRulePackage(attrs)
 	  })
 	  .catch(() => {
 		const data = [
@@ -659,7 +667,6 @@ function BusinessParameters(props) {
 		 </Col>: '')})}
        </>)
     });
-	console.log('state', state)
 	return (
 		<Row>
 			{Object.keys(dynamicFormFields.current.nonMethods).map((method) => {
