@@ -225,6 +225,7 @@ function BusinessParameters(props) {
 			"isActive": 'Y',
 			"refDataDesc": "Generic Pricing Method",
 			"refDataKey": "AP001",
+			"refDataKey": "AP001",
 			"updatedBy": "R123",
 			"updatedTs": "2020-06-09T04:38:41.688Z"
 		},
@@ -469,7 +470,7 @@ function BusinessParameters(props) {
 	  setState({...state, ...formData})
 	} else {
 	  const subRule = state.subRulePackage.data.split('|')
-	  Service.get(`/rbs/th/lf/parameter-mappings/subRulePackage2${state.rulePackage.data}/${subRule[0]}/${state.methodName.data}`)
+	  Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackage.data}/${subRule[0]}/${selectedData}`)
 	    .then((response) => {
 		  const { data } = response
 		  let attrs = {}
