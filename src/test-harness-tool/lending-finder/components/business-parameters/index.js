@@ -17,8 +17,8 @@ function BusinessParameters(props) {
   const tempMethod = useRef('')
   
   const initial = {	
-	subRulePackage: {data: '', error: '', valid: false, errorMessage: 'Please select Sub Rule Package', key: null},
-	rulePackage : {data: '', error: '', valid: false, errorMessage: 'Please select Rule Package', key: null},
+	subRulePackageId: {data: '', error: '', valid: false, errorMessage: 'Please select Sub Rule Package', key: null},
+	rulePackageId : {data: '', error: '', valid: false, errorMessage: 'Please select Rule Package', key: null},
 	environment: {data: '', error: '', valid: false, errorMessage: 'Please enter Environment', key: null},
     wsdlUrl: {data: '', error: '', valid: false, loader: false, disabled: true, message: '', errorMessage: 'Please enter URL', key: null}
   }
@@ -76,8 +76,8 @@ function BusinessParameters(props) {
   }
   
   function getMethodName() {
-	const subRule = state.subRulePackage.data.split('|')
-	Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackage.data}/${subRule[0]}`)
+	const subRule = state.subRulePackageId.data.split('|')
+	Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackageId.data}/${subRule[0]}`)
 	  .then((response) => {
 		const { data } = response
 		setMethodName(data)
@@ -210,7 +210,8 @@ function BusinessParameters(props) {
   }, [subRulePackageState.data])
   
   function loadMethodName() {
-    Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackage.data}/${state.subRulePackage.data}`)
+	const subRulePackage = state.subRulePackageId2 && state.subRulePackageId2.data ? state.subRulePackageId2.data : state.subRulePackageId.data
+    Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackageId.data}/${subRulePackage}`)
     .then((response) => {
 	  const { data } = response
 	  createDynamicMethod(data, 'methods', 'nonMethods')
@@ -254,25 +255,25 @@ function BusinessParameters(props) {
   }
   
   useEffect(() => {
-	 if (state.subRulePackage.data && state.subRulePackage.active !== 'Y') {
+	 if (state.subRulePackageId.data && state.subRulePackageId.active !== 'Y') {
 		loadMethodName()
 	 }
-	 if (state.subRulePackage.data && state.subRulePackage.active === 'Y') {
-		const data = subRulePackageState[state.subRulePackage.data]
+	 if (state.subRulePackageId.data && state.subRulePackageId.active === 'Y') {
+		const data = subRulePackageState[state.subRulePackageId.data]
 		const formData = {}
 		const fieldLabel = 'Sub Rule Package2'
-		const fieldName = 'subRulePackage2'
+		const fieldName = 'subRulePackageId2'
 		formData[fieldName] = {data: '', error: '', valid: false, errorMessage: `Please select ${fieldLabel}`, text: fieldLabel}
 		dynamicFormFields.current = {...dynamicFormFields.current, ['methods']: {}, ['nonMethods']: {[fieldName]: data}, formfields: '', noRecords: data.length }
 		setState({...state, ...formData})
 	 }
-  }, [state.subRulePackage.data])
+  }, [state.subRulePackageId.data])
   
   useEffect(() => {
-	 if (state.subRulePackage2 && state.subRulePackage2.data) {
+	 if (state.subRulePackageId2 && state.subRulePackageId2.data) {
 		loadMethodName()
 	 }
-  }, [state.subRulePackage2 && state.subRulePackage2.data])
+  }, [state.subRulePackageId2 && state.subRulePackageId2.data])
   
 
   function createDynamicMethod(data, type1, type2) {
@@ -367,7 +368,9 @@ function BusinessParameters(props) {
 		const paramLists = ['proposedMarginRate', 'proposedOneOffFeeRate', 'proposedOutFeeRate', 'proposedYield', 'guidelineMarginRate',
 		'guidelineOneOffFeeRate', 'guidelineOutFeeRate', 'guidelineYield']
 		if ((dotregex.test(eachData) && dotSeperated.length < 3 && dotSeperated[1].length <= 15 && paramLists.indexOf(label) !== -1) || !dotregex.test(eachData)) {
-			setState({...state, [label]: {data: data, error: valid, valid: validFlag, type: 'commaSeperated'}})
+			let formData = {}
+			formData[label] = {...state[label], data: data, error: valid, valid: validFlag, type: 'commaSeperated'}
+			setState({...state, ...formData})
 		}
 	  }
   }
@@ -390,12 +393,14 @@ function BusinessParameters(props) {
 		  valid = `Please check the value should be Min of ${min}${maxValue}`
 		  validFlag = false
 	  }
+	  let formData = {}
 	  if (valid) {
-		  setState({...state, [label]: {
-			  data: data, error: valid, valid: validFlag, type: 'commaSeperated'}})
+		  formData[label] = {...state[label], data: data, error: valid, valid: validFlag, type: 'commaSeperated'}
+		  setState({...state, ...formData})
 	  }
 	  if (isCommaLast && !valid) {
-		  setState({...state, [label]: {data: data, error: '', valid: true, type: 'commaSeperated'}})
+		  formData[label] = {...state[label], data: data, error: '', valid: true, type: 'commaSeperated'}
+		  setState({...state, ...formData})
 	  }
   }
   
@@ -420,12 +425,12 @@ function BusinessParameters(props) {
 		if (label === 'environment') {
 		  formData['wsdlUrl'] = state.wsdlUrl
 		}
-		if (label === 'rulePackage' || label === 'subRulePackage') {
-			if (state['subRulePackage2']) {
-				delete state['subRulePackage2']
+		if (label === 'rulePackageId' || label === 'subRulePackageId') {
+			if (state['subRulePackageId2']) {
+				delete state['subRulePackageId2']
 		    }
-			if (label === 'rulePackage') {
-				formData['subRulePackage'] = {...state['subRulePackage'], data: '', error: '', valid: false}
+			if (label === 'rulePackageId') {
+				formData['subRulePackageId'] = {...state['subRulePackageId'], data: '', error: '', valid: false}
 			}
 			dynamicFormFields.current = {...dynamicFormFields.current, nonMethods: {}, methods: {}, formfields:''}
 		}
@@ -439,20 +444,20 @@ function BusinessParameters(props) {
 		if (label === 'environment') {
 		  formData['wsdlUrl'] = {...state.wsdlUrl, disabled: false, key: key}
 		}
-		if (label === 'subRulePackage') {
+		if (label === 'subRulePackageId') {
 			const refKey = data.split('|')
 			formData[label] = {...state[label], data: refKey[0], error: '', valid: true, active: refKey[1] }
-		    if (state['subRulePackage2'] && refKey[1] !== 'Y') {
-				delete state['subRulePackage2']
+		    if (state['subRulePackageId2'] && refKey[1] !== 'Y') {
+				delete state['subRulePackageId2']
 				dynamicFormFields.current = {...dynamicFormFields.current, nonMethods: {}}
 		    }
 		}
-		else if(label === 'rulePackage') {
+		else if(label === 'rulePackageId') {
 			const refKey = data.split('|')
 			formData[label] = {...state[label], data: refKey[0], error: '', valid: true, active: refKey[1] }
-			formData['subRulePackage'] = {...state['subRulePackage'], data: '', error: '', valid: false}
-			if (state['subRulePackage2']) {
-				delete state['subRulePackage2']
+			formData['subRulePackageId'] = {...state['subRulePackageId'], data: '', error: '', valid: false}
+			if (state['subRulePackageId2']) {
+				delete state['subRulePackageId2']
 		    }
 			dynamicFormFields.current = {...dynamicFormFields.current, nonMethods: {}, methods: {}, formfields:''}
 	    } 
@@ -469,8 +474,9 @@ function BusinessParameters(props) {
 	  dynamicFormFields.current = {...dynamicFormFields.current, formfields: ''}
 	  setState({...state, ...formData})
 	} else {
-	  const subRule = state.subRulePackage.data.split('|')
-	  Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackage.data}/${subRule[0]}/${selectedData}`)
+	  const subRule = state.subRulePackageId.data.split('|')
+	  const subRulePackage = state.subRulePackageId2 && state.subRulePackageId2.data ? state.subRulePackageId2.data : subRule[0]
+	  Service.get(`/rbs/th/lf/parameter-mappings/${state.rulePackageId.data}/${subRulePackage}/${selectedData}`)
 	    .then((response) => {
 		  const { data } = response
 		  let attrs = {}
@@ -716,8 +722,8 @@ function BusinessParameters(props) {
   }
   
   function loadSubRulePackage() {
-	if (state.rulePackage.data) {
-		const subRuleData = state.rulePackage.active.split(',')
+	if (state.rulePackageId.data) {
+		const subRuleData = state.rulePackageId.active.split(',')
 		return subRulePackageState && subRulePackageState['null'].map((item) => {
 		  if (item.subRulePackageRefId === null && subRuleData.indexOf(item.subRulePackageId) !== -1) {
 			return (<option value={`${item.subRulePackageId}|${item.subRulePackageFlag}`}>{item.subRulePackageName}</option>)
@@ -745,14 +751,14 @@ function BusinessParameters(props) {
 			     <Form.Group as={Row} controlId="rulePackage">
                   <Form.Label column sm="5">Rule Package <span className={styles.mandatory}>*</span></Form.Label>
                   <Col sm="6">
-				    <Form.Control as="select" isInvalid={state.rulePackage.error} value={`${state.rulePackage.data}|${state.rulePackage.active}`} onChange={onSelectedSingleOptionChange('rulePackage')}>
+				    <Form.Control as="select" isInvalid={state.rulePackageId.error} value={`${state.rulePackageId.data}|${state.rulePackageId.active}`} onChange={onSelectedSingleOptionChange('rulePackageId')}>
                       <option value="">Please Select</option>
 					  {rulePackageState && rulePackageState.map((item) => {
 						return (<option value={`${item.rulePackageId}|${item.subRulePackageId}`}>{item.rulePackageName}</option>)
 					  })}
                     </Form.Control>
 					<Form.Control.Feedback type="invalid" tooltip>
-					   {state.rulePackage.error}
+					   {state.rulePackageId.error}
 					</Form.Control.Feedback>
 				   </Col>
                   </Form.Group>
@@ -761,12 +767,12 @@ function BusinessParameters(props) {
 				  <Form.Group as={Row} controlId="subRulePackage">
 					<Form.Label column sm="5">Sub Rule Package <span className={styles.mandatory}>*</span></Form.Label>
 					<Col sm="6">
-					  <Form.Control as="select" isInvalid={state.subRulePackage.error} value={`${state.subRulePackage.data}|${state.subRulePackage.active}`} onChange={onSelectedSingleOptionChange('subRulePackage')}>
+					  <Form.Control as="select" isInvalid={state.subRulePackageId.error} value={`${state.subRulePackageId.data}|${state.subRulePackageId.active}`} onChange={onSelectedSingleOptionChange('subRulePackageId')}>
 						<option value="">Please Select</option>
 						{loadSubRulePackage()}
 					  </Form.Control>
 					  <Form.Control.Feedback type="invalid" tooltip>
-					   {state.subRulePackage.error}
+					   {state.subRulePackageId.error}
 					  </Form.Control.Feedback>
 					</Col>
 				  </Form.Group>
