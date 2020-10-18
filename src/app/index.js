@@ -9,6 +9,7 @@ import Error from '../test-harness-tool/error'
 import GenericReports from '../test-harness-tool/generic-reports'
 import ReportLists from '../test-harness-tool/report-lists'
 import GenericReportLists from '../test-harness-tool/generic-report-lists'
+import LendingReportLists from '../test-harness-tool/lending-report-lists'
 import Dashboard from '../test-harness-tool/dashboard'
 import Login from '../test-harness-tool/login'
 import PricingTool from '../test-harness-tool/pricing-tool'
@@ -49,6 +50,7 @@ render((
 	     <Route path="/login" component={Login}/>
 		 <PrivateRoute path="/report-lists" component={ReportLists}/>
 		 <PrivateRoute path="/generic-report-lists" component={GenericReportLists}/>
+		 <PrivateRoute path="/lending-report-lists" component={LendingReportLists}/>
 	     <PrivateRoute path="/reports/:slug?/:slug1?" component={Reports}/>
 		 <PrivateRoute path="/generic-reports/:slug?/:slug1?" component={GenericReports}/>
 		 <PrivateRoute exact path="/" component={Dashboard}/>

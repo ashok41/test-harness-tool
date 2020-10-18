@@ -135,7 +135,7 @@ function Dashboard() {
 			      <Dropdown.Item href="#generic-report-lists">RM and Digital</Dropdown.Item>
 			      <Dropdown.Item href="#report-lists">Ulster</Dropdown.Item>
 				  <Dropdown.Item href="#/">CBIL</Dropdown.Item>
-				  <Dropdown.Item href="#/">Lombard</Dropdown.Item>
+				  <Dropdown.Item href="#lending-report-lists">Lombard</Dropdown.Item>
 			     </DropdownButton>
 				</span>
 			  </li>
